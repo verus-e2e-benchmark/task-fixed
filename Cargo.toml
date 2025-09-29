@@ -32,7 +32,7 @@ typenum = "1.14"
 arbitrary = ["dep:arbitrary"]
 borsh = ["dep:borsh"]
 # enable if target does not support mutable statics.
-no-mut-static = []
+compat-readonly-static = []
 serde = ["dep:serde"]
 serde-str = ["serde", "serde/std", "std"]
 std = []
