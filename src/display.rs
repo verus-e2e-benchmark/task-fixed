@@ -484,7 +484,7 @@ where
             let (q, r) = Self::div_rem_10(int);
             int = q;
             *b = r;
-            if r != 0 || sig != 0 {
+            if r != 0 || int != Self::ZERO {
                 sig += 1;
             }
         }
@@ -829,6 +829,9 @@ impl Mul10 for u128 {
 
 #[cfg(test)]
 mod tests {
+    use typenum::U28;
+
+    use crate::FixedU32;
     use crate::display;
     use crate::types::*;
     use std::format;
@@ -1189,5 +1192,18 @@ mod tests {
         assert_eq!(format!("{:e}", I0F64::DELTA * 2), "1e-19");
         assert_eq!(format!("{:e}", I0F64::DELTA * 3), "1.6e-19");
         assert_eq!(format!("{:e}", I0F64::DELTA * 4), "2e-19");
+    }
+
+    #[test]
+    fn decimal_formatting_with_precision() {
+        for i in 0..100000 {
+            let n = i as f32 / 10000.0;
+            let f = FixedU32::<U28>::from_num(n);
+            assert_eq!(
+                format!("{:.2e}", f),
+                format!("{:.2e}", n),
+                "fixed: {f}, float: {n}"
+            );
+        }
     }
 }
