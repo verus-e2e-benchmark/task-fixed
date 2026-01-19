@@ -5,6 +5,16 @@ modification, are permitted in any medium without royalty provided the
 copyright notice and this notice are preserved. This file is offered
 as-is, without any warranty. -->
 
+# Version 1.30.0 (unreleased)
+
+  * Bug fix: the `compat-readonly-static` [optional feature][feat-1-30] was
+    added to fix an issue on some platforms where statics are readonly ([issue
+    74], [merge request 14]).
+
+[feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
+[issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
+[merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
+
 # Version 1.29.0 (2025-02-26)
 
   * The crate now requires rustc version 1.83.0 or later.

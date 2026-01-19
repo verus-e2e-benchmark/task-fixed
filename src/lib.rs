@@ -198,11 +198,16 @@ The *fixed* crate has these optional feature:
     [*arbitrary* crate].
  2. `borsh`, disabled by default. This implements serialization and
     deserialization using the [*borsh* crate].
- 3. `serde`, disabled by default. This provides serialization support for the
+ 3. `compat-readonly-static`, disabled by default. This enables compatibility
+    with platforms where statics are read-only by disabling caching of
+    formatting flags in atomic statics. Note that this may incur a small
+    performance overhead when formatting many numbers using the hexadecimal
+    debug specifiers `{:x?}` or `{:X?}`.
+ 4. `serde`, disabled by default. This provides serialization support for the
     fixed-point types. This feature requires the [*serde* crate].
- 4. `std`, disabled by default. This is for features that are not possible under
+ 5. `std`, disabled by default. This is for features that are not possible under
     `no_std`: currently this is only required for the `serde-str` feature.
- 5. `serde-str`, disabled by default. Fixed-point numbers are serialized as
+ 6. `serde-str`, disabled by default. Fixed-point numbers are serialized as
     strings showing the value when using human-readable formats. This feature
     requires the `serde` and the `std` optional features. **Warning:** numbers
     serialized when this feature is enabled cannot be deserialized when this

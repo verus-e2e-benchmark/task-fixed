@@ -94,6 +94,16 @@ The conversions supported cover the following cases.
 
 ## What’s new
 
+### Version 1.30.0 news (unreleased)
+
+  * Bug fix: the `compat-readonly-static` [optional feature][feat-1-30] was
+    added to fix an issue on some platforms where statics are readonly ([issue
+    74], [merge request 14]).
+
+[feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
+[issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
+[merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
+
 ### Version 1.29.0 news (2025-02-26)
 
   * The crate now requires rustc version 1.83.0 or later.
@@ -273,11 +283,16 @@ The *fixed* crate has these optional feature:
     [*arbitrary* crate].
  2. `borsh`, disabled by default. This implements serialization and
     deserialization using the [*borsh* crate].
- 3. `serde`, disabled by default. This provides serialization support for the
+ 3. `compat-readonly-static`, disabled by default. This enables compatibility
+    with platforms where statics are read-only by disabling caching of
+    formatting flags in atomic statics. Note that this may incur a small
+    performance overhead when formatting many numbers using the hexadecimal
+    debug specifiers `{:x?}` or `{:X?}`.
+ 4. `serde`, disabled by default. This provides serialization support for the
     fixed-point types. This feature requires the [*serde* crate].
- 4. `std`, disabled by default. This is for features that are not possible under
+ 5. `std`, disabled by default. This is for features that are not possible under
     `no_std`: currently this is only required for the `serde-str` feature.
- 5. `serde-str`, disabled by default. Fixed-point numbers are serialized as
+ 6. `serde-str`, disabled by default. Fixed-point numbers are serialized as
     strings showing the value when using human-readable formats. This feature
     requires the `serde` and the `std` optional features. **Warning:** numbers
     serialized when this feature is enabled cannot be deserialized when this
