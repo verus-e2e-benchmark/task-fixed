@@ -99,10 +99,13 @@ The conversions supported cover the following cases.
   * Bug fix: the `compat-readonly-static` [optional feature][feat-1-30] was
     added to fix an issue on some platforms where statics are readonly ([issue
     74], [merge request 14]).
+  * Bug fix: some numbers were being formatted incorrectly when using a defined
+    precision ([merge request 15]).
 
 [feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
 [issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
 [merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
+[merge request 15]: https://gitlab.com/tspiteri/fixed/-/merge_requests/15
 
 ### Version 1.29.0 news (2025-02-26)
 
