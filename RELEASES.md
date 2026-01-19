@@ -7,12 +7,15 @@ as-is, without any warranty. -->
 
 # Version 1.30.0 (unreleased)
 
+  * The crate now requires rustc version 1.85.0 or later.
   * Bug fix: the `compat-readonly-static` [optional feature][feat-1-30] was
     added to fix an issue on some platforms where statics are readonly ([issue
     74], [merge request 14]).
   * Bug fix: some numbers were being formatted incorrectly when using a defined
     precision ([merge request 15]).
+  * The [*az* crate] dependency was updated to [version 1.3][az-1-3].
 
+[az-1-2]: https://docs.rs/az/~1.2/az/index.html
 [feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
 [issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
 [merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
