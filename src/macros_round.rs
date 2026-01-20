@@ -680,7 +680,7 @@ assert_eq!(Fix::MAX.wrapping_round_ties_even(), Fix::MIN);
         }
 
         comment! {
-            "Unwrapped ceil. Rounds to the next integer towards +∞,
+            "Strict ceil. Rounds to the next integer towards +∞,
 panicking on overflow.
 
 # Panics
@@ -693,11 +693,11 @@ Panics if the result does not fit.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(2.5).unwrapped_ceil(), Fix::from_num(3));
+assert_eq!(Fix::from_num(2.5).strict_ceil(), Fix::from_num(3));
 ",
             if_signed_else_empty_str! {
                 $Signedness;
-                "assert_eq!(Fix::from_num(-2.5).unwrapped_ceil(), Fix::from_num(-2));
+                "assert_eq!(Fix::from_num(-2.5).strict_ceil(), Fix::from_num(-2));
 ",
             },
             "```
@@ -708,13 +708,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MAX.unwrapped_ceil();
+let _overflow = Fix::MAX.strict_ceil();
 ```
 ";
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_ceil(self) -> $Self<Frac> {
+            pub const fn strict_ceil(self) -> $Self<Frac> {
                 match self.checked_ceil() {
                     Some(s) => s,
                     None => panic!("overflow"),
@@ -723,7 +723,7 @@ let _overflow = Fix::MAX.unwrapped_ceil();
         }
 
         comment! {
-            "Unwrapped floor. Rounds to the next integer towards &minus;∞",
+            "Strict floor. Rounds to the next integer towards &minus;∞",
             if_signed_unsigned!(
                 $Signedness,
                 ", panicking on overflow.
@@ -743,11 +743,11 @@ Panics if the result does not fit.",
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(2.5).unwrapped_floor(), Fix::from_num(2));
+assert_eq!(Fix::from_num(2.5).strict_floor(), Fix::from_num(2));
 ",
             if_signed_else_empty_str! {
                 $Signedness;
-                "assert_eq!(Fix::from_num(-2.5).unwrapped_floor(), Fix::from_num(-3));
+                "assert_eq!(Fix::from_num(-2.5).strict_floor(), Fix::from_num(-3));
 ```
 
 The following panics because of overflow.
@@ -756,7 +756,7 @@ The following panics because of overflow.
 use fixed::types::extra::U", $n, ";
 use fixed::", stringify!($Self), ";
 type AllFrac = ", stringify!($Self), "<U", $n, ">;
-let _overflow = AllFrac::MIN.unwrapped_floor();
+let _overflow = AllFrac::MIN.strict_floor();
 ",
             },
             "```
@@ -764,7 +764,7 @@ let _overflow = AllFrac::MIN.unwrapped_floor();
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_floor(self) -> $Self<Frac> {
+            pub const fn strict_floor(self) -> $Self<Frac> {
                 match self.checked_floor() {
                     Some(s) => s,
                     None => panic!("overflow"),
@@ -773,7 +773,7 @@ let _overflow = AllFrac::MIN.unwrapped_floor();
         }
 
         comment! {
-            "Unwrapped round. Rounds to the next integer to the
+            "Strict round. Rounds to the next integer to the
 nearest, with ties rounded away from zero, and panicking on overflow.
 
 # Panics
@@ -786,11 +786,11 @@ Panics if the result does not fit.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(2.5).unwrapped_round(), Fix::from_num(3));
+assert_eq!(Fix::from_num(2.5).strict_round(), Fix::from_num(3));
 ",
             if_signed_else_empty_str! {
                 $Signedness;
-                "assert_eq!(Fix::from_num(-2.5).unwrapped_round(), Fix::from_num(-3));
+                "assert_eq!(Fix::from_num(-2.5).strict_round(), Fix::from_num(-3));
 ",
             },
             "```
@@ -801,13 +801,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MAX.unwrapped_round();
+let _overflow = Fix::MAX.strict_round();
 ```
 ";
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_round(self) -> $Self<Frac> {
+            pub const fn strict_round(self) -> $Self<Frac> {
                 match self.checked_round() {
                     Some(s) => s,
                     None => panic!("overflow"),
@@ -816,7 +816,7 @@ let _overflow = Fix::MAX.unwrapped_round();
         }
 
         comment! {
-            "Unwrapped round. Rounds to the next integer to the nearest, with
+            "Strict round. Rounds to the next integer to the nearest, with
 ties rounded to even, and panicking on overflow.
 
 # Panics
@@ -829,8 +829,8 @@ Panics if the result does not fit.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(2.5).unwrapped_round_ties_even(), Fix::from_num(2));
-assert_eq!(Fix::from_num(3.5).unwrapped_round_ties_even(), Fix::from_num(4));
+assert_eq!(Fix::from_num(2.5).strict_round_ties_even(), Fix::from_num(2));
+assert_eq!(Fix::from_num(3.5).strict_round_ties_even(), Fix::from_num(4));
 ```
 
 The following panics because of overflow.
@@ -839,13 +839,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MAX.unwrapped_round_ties_even();
+let _overflow = Fix::MAX.strict_round_ties_even();
 ```
 ";
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_round_ties_even(self) -> $Self<Frac> {
+            pub const fn strict_round_ties_even(self) -> $Self<Frac> {
                 match self.checked_round_ties_even() {
                     Some(s) => s,
                     None => panic!("overflow"),
@@ -1095,14 +1095,14 @@ assert_eq!(Fix::MAX.overflowing_round_ties_even(), (Fix::MIN, true));
             self.wrapping_round_ties_even()
         }
 
-        /// Unwrapped round. Rounds to the next integer to the nearest, with
+        /// Strict round. Rounds to the next integer to the nearest, with
         /// ties rounded to even, and panicking on overflow.
         #[inline]
         #[track_caller]
         #[must_use]
         #[deprecated(since = "1.28.0", note = "renamed to `unwrapped_round_ties_even`")]
         pub const fn unwrapped_round_ties_to_even(self) -> $Self<Frac> {
-            self.unwrapped_round_ties_even()
+            self.strict_round_ties_even()
         }
 
         /// Overflowing round. Rounds to the next integer to the nearest, with
@@ -1112,6 +1112,61 @@ assert_eq!(Fix::MAX.overflowing_round_ties_even(), (Fix::MIN, true));
         #[deprecated(since = "1.28.0", note = "renamed to `overflowing_round_ties_even`")]
         pub const fn overflowing_round_ties_to_even(self) -> ($Self<Frac>, bool) {
             self.overflowing_round_ties_even()
+        }
+
+        /// Strict ceil. Rounds to the next integer towards +∞, panicking on
+        /// overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the result does not fit.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_ceil`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_ceil(self) -> $Self<Frac> {
+            self.strict_ceil()
+        }
+
+        /// Strict floor. Rounds to the next integer towards &minus;∞, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the result does not fit.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_floor`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_floor(self) -> $Self<Frac> {
+            self.strict_floor()
+        }
+
+        /// Strict round. Rounds to the next integer to the nearest, with
+        /// ties rounded away from zero, and panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the result does not fit.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_round`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_round(self) -> $Self<Frac> {
+            self.strict_round()
+        }
+
+        /// Strict round. Rounds to the next integer to the nearest, with
+        /// ties rounded to even, and panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the result does not fit.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_round_ties_even`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_round_ties_even(self) -> $Self<Frac> {
+            self.strict_round_ties_even()
         }
     };
 }

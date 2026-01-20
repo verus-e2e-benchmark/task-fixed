@@ -1628,62 +1628,59 @@ where
     #[must_use]
     fn wrapping_round_ties_even(self) -> Self;
 
-    /// Unwrapped ceil. Rounds to the next integer towards +∞,
+    /// Strict ceil. Rounds to the next integer towards +∞,
     /// panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_ceil][FixedI32::unwrapped_ceil]</code> and
-    /// <code>FixedU32::[unwrapped\_ceil][FixedU32::unwrapped_ceil]</code>.
+    /// See also <code>FixedI32::[strict\_ceil][FixedI32::strict_ceil]</code>
+    /// and <code>FixedU32::[strict\_ceil][FixedU32::strict_ceil]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use]
-    fn unwrapped_ceil(self) -> Self;
+    fn strict_ceil(self) -> Self;
 
-    /// Unwrapped floor. Rounds to the next integer towards &minus;∞,
+    /// Strict floor. Rounds to the next integer towards &minus;∞,
     /// panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_floor][FixedI32::unwrapped_floor]</code> and
-    /// <code>FixedU32::[unwrapped\_floor][FixedU32::unwrapped_floor]</code>.
+    /// See also <code>FixedI32::[strict\_floor][FixedI32::strict_floor]</code>
+    /// and <code>FixedU32::[strict\_floor][FixedU32::strict_floor]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use]
-    fn unwrapped_floor(self) -> Self;
+    fn strict_floor(self) -> Self;
 
-    /// Unwrapped round. Rounds to the next integer to the nearest,
+    /// Strict round. Rounds to the next integer to the nearest,
     /// with ties rounded away from zero, and panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_round][FixedI32::unwrapped_round]</code> and
-    /// <code>FixedU32::[unwrapped\_round][FixedU32::unwrapped_round]</code>.
+    /// See also <code>FixedI32::[strict\_round][FixedI32::strict_round]</code>
+    /// and <code>FixedU32::[strict\_round][FixedU32::strict_round]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use]
-    fn unwrapped_round(self) -> Self;
+    fn strict_round(self) -> Self;
 
-    /// Unwrapped round. Rounds to the next integer to the nearest, with ties
+    /// Strict round. Rounds to the next integer to the nearest, with ties
     /// rounded to even, and panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_round\_ties\_even][FixedI32::unwrapped_round_ties_even]</code>
+    /// <code>FixedI32::[strict\_round\_ties\_even][FixedI32::strict_round_ties_even]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_round\_ties\_even][FixedU32::unwrapped_round_ties_even]</code>.
+    /// <code>FixedU32::[strict\_round\_ties\_even][FixedU32::strict_round_ties_even]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use]
-    fn unwrapped_round_ties_even(self) -> Self;
+    fn strict_round_ties_even(self) -> Self;
 
     /// Overflowing ceil. Rounds to the next integer towards +∞.
     ///
@@ -2691,298 +2688,283 @@ where
     #[must_use]
     fn wrapping_inv_lerp(self, start: Self, end: Self) -> Self;
 
-    /// Unwrapped negation. Returns the negated value, panicking on overflow.
+    /// Strict negation. Returns the negated value, panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_neg][FixedI32::unwrapped_neg]</code> and
-    /// <code>FixedU32::[unwrapped\_neg][FixedU32::unwrapped_neg]</code>.
+    /// See also <code>FixedI32::[strict\_neg][FixedI32::strict_neg]</code> and
+    /// <code>FixedU32::[strict\_neg][FixedU32::strict_neg]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use]
-    fn unwrapped_neg(self) -> Self;
+    fn strict_neg(self) -> Self;
 
-    /// Unwrapped addition. Returns the sum, panicking on overflow.
+    /// Strict addition. Returns the sum, panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_add][FixedI32::unwrapped_add]</code> and
-    /// <code>FixedU32::[unwrapped\_add][FixedU32::unwrapped_add]</code>.
+    /// See also <code>FixedI32::[strict\_add][FixedI32::strict_add]</code> and
+    /// <code>FixedU32::[strict\_add][FixedU32::strict_add]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_add(self, rhs: Self) -> Self;
+    fn strict_add(self, rhs: Self) -> Self;
 
-    /// Unwrapped subtraction. Returns the difference, panicking on overflow.
+    /// Strict subtraction. Returns the difference, panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_sub][FixedI32::unwrapped_sub]</code> and
-    /// <code>FixedU32::[unwrapped\_sub][FixedU32::unwrapped_sub]</code>.
+    /// See also <code>FixedI32::[strict\_sub][FixedI32::strict_sub]</code> and
+    /// <code>FixedU32::[strict\_sub][FixedU32::strict_sub]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_sub(self, rhs: Self) -> Self;
+    fn strict_sub(self, rhs: Self) -> Self;
 
-    /// Unwrapped multiplication. Returns the product, panicking on overflow.
+    /// Strict multiplication. Returns the product, panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_mul][FixedI32::unwrapped_mul]</code> and
-    /// <code>FixedU32::[unwrapped\_mul][FixedU32::unwrapped_mul]</code>.
+    /// See also <code>FixedI32::[strict\_mul][FixedI32::strict_mul]</code> and
+    /// <code>FixedU32::[strict\_mul][FixedU32::strict_mul]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_mul(self, rhs: Self) -> Self;
+    fn strict_mul(self, rhs: Self) -> Self;
 
-    /// Unwrapped division. Returns the quotient, panicking on overflow.
+    /// Strict division. Returns the quotient, panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_div][FixedI32::unwrapped_div]</code> and
-    /// <code>FixedU32::[unwrapped\_div][FixedU32::unwrapped_div]</code>.
+    /// See also <code>FixedI32::[strict\_div][FixedI32::strict_div]</code> and
+    /// <code>FixedU32::[strict\_div][FixedU32::strict_div]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero or if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_div(self, rhs: Self) -> Self;
+    fn strict_div(self, rhs: Self) -> Self;
 
-    /// Unwrapped remainder. Returns the quotient, panicking if the divisor is zero.
+    /// Strict remainder. Returns the quotient, panicking if the divisor is zero.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_rem][FixedI32::unwrapped_rem]</code> and
-    /// <code>FixedU32::[unwrapped\_rem][FixedU32::unwrapped_rem]</code>.
+    /// See also <code>FixedI32::[strict\_rem][FixedI32::strict_rem]</code> and
+    /// <code>FixedU32::[strict\_rem][FixedU32::strict_rem]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_rem(self, rhs: Self) -> Self;
+    fn strict_rem(self, rhs: Self) -> Self;
 
-    /// Unwrapped reciprocal. Returns reciprocal, panicking on overflow.
+    /// Strict reciprocal. Returns reciprocal, panicking on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_recip][FixedI32::unwrapped_recip]</code> and
-    /// <code>FixedU32::[unwrapped\_recip][FixedU32::unwrapped_recip]</code>.
+    /// See also <code>FixedI32::[strict\_recip][FixedI32::strict_recip]</code>
+    /// and <code>FixedU32::[strict\_recip][FixedU32::strict_recip]</code>.
     ///
     /// # Panics
     ///
     /// Panics if `self` is zero or on overflow.
     #[track_caller]
     #[must_use]
-    fn unwrapped_recip(self) -> Self;
+    fn strict_recip(self) -> Self;
 
-    /// Unwrapped next multiple of `other`. Returns the next multiple, panicking
+    /// Strict next multiple of `other`. Returns the next multiple, panicking
     /// on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_next\_multiple\_of][FixedI32::unwrapped_next_multiple_of]</code>
+    /// <code>FixedI32::[strict\_next\_multiple\_of][FixedI32::strict_next_multiple_of]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_next\_multiple\_of][FixedU32::unwrapped_next_multiple_of]</code>.
+    /// <code>FixedU32::[strict\_next\_multiple\_of][FixedU32::strict_next_multiple_of]</code>.
     ///
     /// # Panics
     ///
     /// Panics if `other` is zero or on overflow.
     #[track_caller]
     #[must_use]
-    fn unwrapped_next_multiple_of(self, other: Self) -> Self;
+    fn strict_next_multiple_of(self, other: Self) -> Self;
 
-    /// Unwrapped multiply and add. Returns `self` × `mul` + `add`, panicking on overflow.
+    /// Strict multiply and add. Returns `self` × `mul` + `add`, panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_mul\_add][FixedI32::unwrapped_mul_add]</code>
-    /// and
-    /// <code>FixedU32::[unwrapped\_mul\_add][FixedU32::unwrapped_mul_add]</code>.
+    /// <code>FixedI32::[strict\_mul\_add][FixedI32::strict_mul_add]</code> and
+    /// <code>FixedU32::[strict\_mul\_add][FixedU32::strict_mul_add]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_mul_add(self, mul: Self, add: Self) -> Self;
+    fn strict_mul_add(self, mul: Self, add: Self) -> Self;
 
     /// Adds `self` to the product `a`&nbsp;×&nbsp;`b`, panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_add\_prod][FixedI32::unwrapped_add_prod]</code>
+    /// <code>FixedI32::[strict\_add\_prod][FixedI32::strict_add_prod]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_add\_prod][FixedU32::unwrapped_add_prod]</code>.
+    /// <code>FixedU32::[strict\_add\_prod][FixedU32::strict_add_prod]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use]
-    fn unwrapped_add_prod(self, a: Self, b: Self) -> Self;
+    fn strict_add_prod(self, a: Self, b: Self) -> Self;
 
-    /// Unwrapped multiply and accumulate. Adds (`a` × `b`) to `self`, panicking on overflow.
+    /// Strict multiply and accumulate. Adds (`a` × `b`) to `self`, panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_mul\_acc][FixedI32::unwrapped_mul_acc]</code>
-    /// and
-    /// <code>FixedU32::[unwrapped\_mul\_acc][FixedU32::unwrapped_mul_acc]</code>.
+    /// <code>FixedI32::[strict\_mul\_acc][FixedI32::strict_mul_acc]</code> and
+    /// <code>FixedU32::[strict\_mul\_acc][FixedU32::strict_mul_acc]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
-    fn unwrapped_mul_acc(&mut self, a: Self, b: Self);
+    fn strict_mul_acc(&mut self, a: Self, b: Self);
 
-    /// Unwrapped Euclidean division. Returns the quotient, panicking on overflow.
+    /// Strict Euclidean division. Returns the quotient, panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_div\_euclid][FixedI32::unwrapped_div_euclid]</code>
+    /// <code>FixedI32::[strict\_div\_euclid][FixedI32::strict_div_euclid]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_div\_euclid][FixedU32::unwrapped_div_euclid]</code>.
+    /// <code>FixedU32::[strict\_div\_euclid][FixedU32::strict_div_euclid]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero or if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_div_euclid(self, rhs: Self) -> Self;
+    fn strict_div_euclid(self, rhs: Self) -> Self;
 
-    /// Unwrapped remainder for Euclidean division. Returns the
+    /// Strict remainder for Euclidean division. Returns the
     /// remainder, panicking if the divisor is zero.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_rem\_euclid][FixedI32::unwrapped_rem_euclid]</code>
+    /// <code>FixedI32::[strict\_rem\_euclid][FixedI32::strict_rem_euclid]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_rem\_euclid][FixedU32::unwrapped_rem_euclid]</code>.
+    /// <code>FixedU32::[strict\_rem\_euclid][FixedU32::strict_rem_euclid]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_rem_euclid(self, rhs: Self) -> Self;
+    fn strict_rem_euclid(self, rhs: Self) -> Self;
 
-    /// Unwrapped multiplication by an integer. Returns the product, panicking on overflow.
+    /// Strict multiplication by an integer. Returns the product, panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_mul\_int][FixedI32::unwrapped_mul_int]</code>
-    /// and
-    /// <code>FixedU32::[unwrapped\_mul\_int][FixedU32::unwrapped_mul_int]</code>.
+    /// <code>FixedI32::[strict\_mul\_int][FixedI32::strict_mul_int]</code> and
+    /// <code>FixedU32::[strict\_mul\_int][FixedU32::strict_mul_int]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_mul_int(self, rhs: Self::Bits) -> Self;
+    fn strict_mul_int(self, rhs: Self::Bits) -> Self;
 
-    /// Unwrapped division by an integer. Returns the quotient, panicking on overflow.
+    /// Strict division by an integer. Returns the quotient, panicking on overflow.
     ///
     /// Overflow can only occur when dividing the minimum value by &minus;1.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_div\_int][FixedI32::unwrapped_div_int]</code>
-    /// and
-    /// <code>FixedU32::[unwrapped\_div\_int][FixedU32::unwrapped_div_int]</code>.
+    /// <code>FixedI32::[strict\_div\_int][FixedI32::strict_div_int]</code> and
+    /// <code>FixedU32::[strict\_div\_int][FixedU32::strict_div_int]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero or if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_div_int(self, rhs: Self::Bits) -> Self;
+    fn strict_div_int(self, rhs: Self::Bits) -> Self;
 
-    /// Unwrapped remainder for division by an integer. Returns the
+    /// Strict remainder for division by an integer. Returns the
     /// remainder, panicking if the divisor is zero.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_rem\_int][FixedI32::unwrapped_rem_int]</code>
-    /// and
-    /// <code>FixedU32::[unwrapped\_rem\_int][FixedU32::unwrapped_rem_int]</code>.
+    /// <code>FixedI32::[strict\_rem\_int][FixedI32::strict_rem_int]</code> and
+    /// <code>FixedU32::[strict\_rem\_int][FixedU32::strict_rem_int]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_rem_int(self, rhs: Self::Bits) -> Self;
+    fn strict_rem_int(self, rhs: Self::Bits) -> Self;
 
-    /// Unwrapped Euclidean division by an integer. Returns the
+    /// Strict Euclidean division by an integer. Returns the
     /// quotient, panicking on overflow.
     ///
     /// Overflow can only occur when dividing the minimum value by &minus;1.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_div\_euclid\_int][FixedI32::unwrapped_div_euclid_int]</code>
+    /// <code>FixedI32::[strict\_div\_euclid\_int][FixedI32::strict_div_euclid_int]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_div\_euclid\_int][FixedU32::unwrapped_div_euclid_int]</code>.
+    /// <code>FixedU32::[strict\_div\_euclid\_int][FixedU32::strict_div_euclid_int]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero or if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_div_euclid_int(self, rhs: Self::Bits) -> Self;
+    fn strict_div_euclid_int(self, rhs: Self::Bits) -> Self;
 
-    /// Unwrapped remainder for Euclidean division by an integer.
+    /// Strict remainder for Euclidean division by an integer.
     /// Returns the remainder, panicking on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_rem\_euclid\_int][FixedI32::unwrapped_rem_euclid_int]</code>
+    /// <code>FixedI32::[strict\_rem\_euclid\_int][FixedI32::strict_rem_euclid_int]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_rem\_euclid\_int][FixedU32::unwrapped_rem_euclid_int]</code>.
+    /// <code>FixedU32::[strict\_rem\_euclid\_int][FixedU32::strict_rem_euclid_int]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the divisor is zero or if the result does not fit.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_rem_euclid_int(self, rhs: Self::Bits) -> Self;
+    fn strict_rem_euclid_int(self, rhs: Self::Bits) -> Self;
 
-    /// Unwrapped shift left. Panics if `rhs`&nbsp;≥ the number of bits.
+    /// Strict shift left. Panics if `rhs`&nbsp;≥ the number of bits.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_shl][FixedI32::unwrapped_shl]</code> and
-    /// <code>FixedU32::[unwrapped\_shl][FixedU32::unwrapped_shl]</code>.
+    /// See also <code>FixedI32::[strict\_shl][FixedI32::strict_shl]</code> and
+    /// <code>FixedU32::[strict\_shl][FixedU32::strict_shl]</code>.
     ///
     /// # Panics
     ///
     /// Panics if `rhs`&nbsp;≥ the number of bits.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_shl(self, rhs: u32) -> Self;
+    fn strict_shl(self, rhs: u32) -> Self;
 
-    /// Unwrapped shift right. Panics if `rhs`&nbsp;≥ the number of bits.
+    /// Strict shift right. Panics if `rhs`&nbsp;≥ the number of bits.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_shr][FixedI32::unwrapped_shr]</code> and
-    /// <code>FixedU32::[unwrapped\_shr][FixedU32::unwrapped_shr]</code>.
+    /// See also <code>FixedI32::[strict\_shr][FixedI32::strict_shr]</code> and
+    /// <code>FixedU32::[strict\_shr][FixedU32::strict_shr]</code>.
     ///
     /// # Panics
     ///
     /// Panics if `rhs`&nbsp;≥ the number of bits.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_shr(self, rhs: u32) -> Self;
+    fn strict_shr(self, rhs: u32) -> Self;
 
-    /// Unwrapped distance. Returns the distance from `self` to `other`,
+    /// Strict distance. Returns the distance from `self` to `other`,
     /// panicking on overflow.
     ///
     /// # Panics
     ///
     /// Panics if the result does not fit.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_dist][FixedI32::unwrapped_dist]</code> and
-    /// <code>FixedU32::[unwrapped\_dist][FixedU32::unwrapped_dist]</code>.
+    /// See also <code>FixedI32::[strict\_dist][FixedI32::strict_dist]</code>
+    /// and <code>FixedU32::[strict\_dist][FixedU32::strict_dist]</code>.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_dist(self, other: Self) -> Self;
+    fn strict_dist(self, other: Self) -> Self;
 
     /// Compute the hypotenuse of a right triange, panicking on overflow.
     ///
@@ -2990,23 +2972,21 @@ where
     ///
     /// Panics if the result does not fit.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_hypot][FixedI32::unwrapped_hypot]</code> and
-    /// <code>FixedU32::[unwrapped\_hypot][FixedU32::unwrapped_hypot]</code>.
+    /// See also <code>FixedI32::[strict\_hypot][FixedI32::strict_hypot]</code>
+    /// and <code>FixedU32::[strict\_hypot][FixedU32::strict_hypot]</code>.
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    fn unwrapped_hypot(self, other: Self) -> Self;
+    fn strict_hypot(self, other: Self) -> Self;
 
     /// Returns the square root, panicking if the number is negative or on overflow.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_sqrt][FixedI32::unwrapped_sqrt]</code> and
-    /// <code>FixedU32::[unwrapped\_sqrt][FixedU32::unwrapped_sqrt]</code>.
+    /// See also <code>FixedI32::[strict\_sqrt][FixedI32::strict_sqrt]</code>
+    /// and <code>FixedU32::[strict\_sqrt][FixedU32::strict_sqrt]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the number is negative or on overflow.
-    fn unwrapped_sqrt(self) -> Self;
+    fn strict_sqrt(self) -> Self;
 
     /// Linear interpolation between `start` and `end`, panicking on overflow.
     ///
@@ -3014,12 +2994,11 @@ where
     ///
     /// Panics if the result does not fit.
     ///
-    /// See also
-    /// <code>FixedI32::[unwrapped\_lerp][FixedI32::unwrapped_lerp]</code> and
-    /// <code>FixedU32::[unwrapped\_lerp][FixedU32::unwrapped_lerp]</code>.
+    /// See also <code>FixedI32::[strict\_lerp][FixedI32::strict_lerp]</code>
+    /// and <code>FixedU32::[strict\_lerp][FixedU32::strict_lerp]</code>.
     #[track_caller]
     #[must_use]
-    fn unwrapped_lerp(self, start: Self, end: Self) -> Self;
+    fn strict_lerp(self, start: Self, end: Self) -> Self;
 
     /// Inverse linear interpolation between `start` and `end`, panicking on overflow.
     ///
@@ -3028,12 +3007,12 @@ where
     /// Panics when `start`&nbsp;=&nbsp;`end` or when the results overflows.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_inv\_lerp][FixedI32::unwrapped_inv_lerp]</code>
+    /// <code>FixedI32::[strict\_inv\_lerp][FixedI32::strict_inv_lerp]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_inv\_lerp][FixedU32::unwrapped_inv_lerp]</code>.
+    /// <code>FixedU32::[strict\_inv\_lerp][FixedU32::strict_inv_lerp]</code>.
     #[track_caller]
     #[must_use]
-    fn unwrapped_inv_lerp(self, start: Self, end: Self) -> Self;
+    fn strict_inv_lerp(self, start: Self, end: Self) -> Self;
 
     /// Overflowing negation.
     ///
@@ -3407,7 +3386,7 @@ where
         self.wrapping_round_ties_even()
     }
 
-    /// Unwrapped round. Rounds to the next integer to the nearest, with ties
+    /// Strict round. Rounds to the next integer to the nearest, with ties
     /// rounded to even, and panicking on overflow.
     ///
     /// # Panics
@@ -3417,7 +3396,7 @@ where
     #[must_use]
     #[deprecated(since = "1.28.0", note = "renamed to `unwrapped_round_ties_even`")]
     fn unwrapped_round_ties_to_even(self) -> Self {
-        self.unwrapped_round_ties_even()
+        self.strict_round_ties_even()
     }
 
     /// Overflowing round. Rounds to the next integer to the nearest, with ties
@@ -3498,7 +3477,6 @@ where
     #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_hex`")]
     #[track_caller]
     fn unwrapped_from_str_hex(src: &str) -> Self {
-
         Self::strict_from_str_hex(src)
     }
 
@@ -3548,6 +3526,365 @@ where
     #[track_caller]
     fn unwrapped_from_ascii_hex(src: &[u8]) -> Self {
         Self::strict_from_ascii_hex(src)
+    }
+
+    /// Strict ceil. Rounds to the next integer towards +∞,
+    /// panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_ceil`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_ceil(self) -> Self {
+        self.strict_ceil()
+    }
+
+    /// Strict floor. Rounds to the next integer towards &minus;∞,
+    /// panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_floor`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_floor(self) -> Self {
+        self.strict_floor()
+    }
+
+    /// Strict round. Rounds to the next integer to the nearest,
+    /// with ties rounded away from zero, and panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_round`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_round(self) -> Self {
+        self.strict_round()
+    }
+
+    /// Strict round. Rounds to the next integer to the nearest, with ties
+    /// rounded to even, and panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_round_ties_even`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_round_ties_even(self) -> Self {
+        self.strict_round_ties_even()
+    }
+
+    /// Strict negation. Returns the negated value, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_neg`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_neg(self) -> Self {
+        self.strict_neg()
+    }
+
+    /// Strict addition. Returns the sum, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_add`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_add(self, rhs: Self) -> Self {
+        self.strict_add(rhs)
+    }
+
+    /// Strict subtraction. Returns the difference, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_sub`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_sub(self, rhs: Self) -> Self {
+        self.strict_sub(rhs)
+    }
+
+    /// Strict multiplication. Returns the product, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_mul`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_mul(self, rhs: Self) -> Self {
+        self.strict_mul(rhs)
+    }
+
+    /// Strict division. Returns the quotient, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero or if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_div`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_div(self, rhs: Self) -> Self {
+        self.strict_div(rhs)
+    }
+
+    /// Strict remainder. Returns the quotient, panicking if the divisor is zero.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_rem`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_rem(self, rhs: Self) -> Self {
+        self.strict_rem(rhs)
+    }
+
+    /// Strict reciprocal. Returns reciprocal, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `self` is zero or on overflow.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_recip`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_recip(self) -> Self {
+        self.strict_recip()
+    }
+
+    /// Strict next multiple of `other`. Returns the next multiple, panicking
+    /// on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `other` is zero or on overflow.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_next_multiple_of`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_next_multiple_of(self, other: Self) -> Self {
+        self.strict_next_multiple_of(other)
+    }
+
+    /// Strict multiply and add. Returns `self` × `mul` + `add`, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_mul_add`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_mul_add(self, mul: Self, add: Self) -> Self {
+        self.strict_mul_add(mul, add)
+    }
+
+    /// Adds `self` to the product `a`&nbsp;×&nbsp;`b`, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_add_prod`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_add_prod(self, a: Self, b: Self) -> Self {
+        self.strict_add_prod(a, b)
+    }
+
+    /// Strict multiply and accumulate. Adds (`a` × `b`) to `self`, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_mul_acc`")]
+    #[track_caller]
+    fn unwrapped_mul_acc(&mut self, a: Self, b: Self) {
+        self.strict_mul_acc(a, b)
+    }
+
+    /// Strict Euclidean division. Returns the quotient, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero or if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_div_euclid`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_div_euclid(self, rhs: Self) -> Self {
+        self.strict_div_euclid(rhs)
+    }
+
+    /// Strict remainder for Euclidean division. Returns the
+    /// remainder, panicking if the divisor is zero.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_rem_euclid`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_rem_euclid(self, rhs: Self) -> Self {
+        self.strict_rem_euclid(rhs)
+    }
+
+    /// Strict multiplication by an integer. Returns the product, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_mul_int`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_mul_int(self, rhs: Self::Bits) -> Self {
+        self.strict_mul_int(rhs)
+    }
+
+    /// Strict division by an integer. Returns the quotient, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero or if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_div_int`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_div_int(self, rhs: Self::Bits) -> Self {
+        self.strict_div_int(rhs)
+    }
+
+    /// Strict remainder for division by an integer. Returns the
+    /// remainder, panicking if the divisor is zero.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_rem_int`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_rem_int(self, rhs: Self::Bits) -> Self {
+        self.strict_rem_int(rhs)
+    }
+
+    /// Strict Euclidean division by an integer. Returns the
+    /// quotient, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero or if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_div_euclid_int`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_div_euclid_int(self, rhs: Self::Bits) -> Self {
+        self.strict_div_euclid_int(rhs)
+    }
+
+    /// Strict remainder for Euclidean division by an integer.
+    /// Returns the remainder, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the divisor is zero or if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_rem_euclid_int`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_rem_euclid_int(self, rhs: Self::Bits) -> Self {
+        self.strict_rem_euclid_int(rhs)
+    }
+
+    /// Strict shift left. Panics if `rhs`&nbsp;≥ the number of bits.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `rhs`&nbsp;≥ the number of bits.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_shl`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_shl(self, rhs: u32) -> Self {
+        self.strict_shl(rhs)
+    }
+
+    /// Strict shift right. Panics if `rhs`&nbsp;≥ the number of bits.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `rhs`&nbsp;≥ the number of bits.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_shr`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_shr(self, rhs: u32) -> Self {
+        self.strict_shr(rhs)
+    }
+
+    /// Strict distance. Returns the distance from `self` to `other`,
+    /// panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    ///
+    /// See also
+    /// <code>FixedI32::[unwrapped\_dist][FixedI32::unwrapped_dist]</code> and
+    /// <code>FixedU32::[unwrapped\_dist][FixedU32::unwrapped_dist]</code>.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_dist`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_dist(self, other: Self) -> Self {
+        self.strict_dist(other)
+    }
+
+    /// Compute the hypotenuse of a right triange, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_hypot`")]
+    #[track_caller]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
+    fn unwrapped_hypot(self, other: Self) -> Self {
+        self.strict_hypot(other)
+    }
+
+    /// Returns the square root, panicking if the number is negative or on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the number is negative or on overflow.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_sqrt`")]
+    fn unwrapped_sqrt(self) -> Self {
+        self.strict_sqrt()
+    }
+
+    /// Linear interpolation between `start` and `end`, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the result does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_lerp`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_lerp(self, start: Self, end: Self) -> Self {
+        self.strict_lerp(start, end)
+    }
+
+    /// Inverse linear interpolation between `start` and `end`, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics when `start`&nbsp;=&nbsp;`end` or when the results overflows.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_inv_lerp`")]
+    #[track_caller]
+    #[must_use]
+    fn unwrapped_inv_lerp(self, start: Self, end: Self) -> Self {
+        self.strict_inv_lerp(start, end)
     }
 }
 
@@ -4643,10 +4980,10 @@ macro_rules! impl_fixed {
             trait_delegate! { fn wrapping_floor(self) -> Self }
             trait_delegate! { fn wrapping_round(self) -> Self }
             trait_delegate! { fn wrapping_round_ties_even(self) -> Self }
-            trait_delegate! { fn unwrapped_ceil(self) -> Self }
-            trait_delegate! { fn unwrapped_floor(self) -> Self }
-            trait_delegate! { fn unwrapped_round(self) -> Self }
-            trait_delegate! { fn unwrapped_round_ties_even(self) -> Self }
+            trait_delegate! { fn strict_ceil(self) -> Self }
+            trait_delegate! { fn strict_floor(self) -> Self }
+            trait_delegate! { fn strict_round(self) -> Self }
+            trait_delegate! { fn strict_round_ties_even(self) -> Self }
             trait_delegate! { fn overflowing_ceil(self) -> (Self, bool) }
             trait_delegate! { fn overflowing_floor(self) -> (Self, bool) }
             trait_delegate! { fn overflowing_round(self) -> (Self, bool) }
@@ -4752,31 +5089,31 @@ macro_rules! impl_fixed {
             trait_delegate! { fn wrapping_sqrt(self) -> Self }
             trait_delegate! { fn wrapping_lerp(self, start: Self, end: Self) -> Self }
             trait_delegate! { fn wrapping_inv_lerp(self, start: Self, end: Self) -> Self }
-            trait_delegate! { fn unwrapped_neg(self) -> Self }
-            trait_delegate! { fn unwrapped_add(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_sub(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_mul(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_div(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_rem(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_recip(self) -> Self }
-            trait_delegate! { fn unwrapped_next_multiple_of(self, other: Self) -> Self }
-            trait_delegate! { fn unwrapped_mul_add(self, mul: Self, add: Self) -> Self }
-            trait_delegate! { fn unwrapped_add_prod(self, a: Self, b: Self) -> Self }
-            trait_delegate! { fn unwrapped_mul_acc(&mut self, a: Self, b: Self) }
-            trait_delegate! { fn unwrapped_div_euclid(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_rem_euclid(self, rhs: Self) -> Self }
-            trait_delegate! { fn unwrapped_mul_int(self, rhs: Self::Bits) -> Self }
-            trait_delegate! { fn unwrapped_div_int(self, rhs: Self::Bits) -> Self }
-            trait_delegate! { fn unwrapped_rem_int(self, rhs: Self::Bits) -> Self }
-            trait_delegate! { fn unwrapped_div_euclid_int(self, rhs: Self::Bits) -> Self }
-            trait_delegate! { fn unwrapped_rem_euclid_int(self, rhs: Self::Bits) -> Self }
-            trait_delegate! { fn unwrapped_shl(self, rhs: u32) -> Self }
-            trait_delegate! { fn unwrapped_shr(self, rhs: u32) -> Self }
-            trait_delegate! { fn unwrapped_dist(self, other: Self) -> Self }
-            trait_delegate! { fn unwrapped_hypot(self, other: Self) -> Self }
-            trait_delegate! { fn unwrapped_sqrt(self) -> Self }
-            trait_delegate! { fn unwrapped_lerp(self, start: Self, end: Self) -> Self }
-            trait_delegate! { fn unwrapped_inv_lerp(self, start: Self, end: Self) -> Self }
+            trait_delegate! { fn strict_neg(self) -> Self }
+            trait_delegate! { fn strict_add(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_sub(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_mul(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_div(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_rem(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_recip(self) -> Self }
+            trait_delegate! { fn strict_next_multiple_of(self, other: Self) -> Self }
+            trait_delegate! { fn strict_mul_add(self, mul: Self, add: Self) -> Self }
+            trait_delegate! { fn strict_add_prod(self, a: Self, b: Self) -> Self }
+            trait_delegate! { fn strict_mul_acc(&mut self, a: Self, b: Self) }
+            trait_delegate! { fn strict_div_euclid(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_rem_euclid(self, rhs: Self) -> Self }
+            trait_delegate! { fn strict_mul_int(self, rhs: Self::Bits) -> Self }
+            trait_delegate! { fn strict_div_int(self, rhs: Self::Bits) -> Self }
+            trait_delegate! { fn strict_rem_int(self, rhs: Self::Bits) -> Self }
+            trait_delegate! { fn strict_div_euclid_int(self, rhs: Self::Bits) -> Self }
+            trait_delegate! { fn strict_rem_euclid_int(self, rhs: Self::Bits) -> Self }
+            trait_delegate! { fn strict_shl(self, rhs: u32) -> Self }
+            trait_delegate! { fn strict_shr(self, rhs: u32) -> Self }
+            trait_delegate! { fn strict_dist(self, other: Self) -> Self }
+            trait_delegate! { fn strict_hypot(self, other: Self) -> Self }
+            trait_delegate! { fn strict_sqrt(self) -> Self }
+            trait_delegate! { fn strict_lerp(self, start: Self, end: Self) -> Self }
+            trait_delegate! { fn strict_inv_lerp(self, start: Self, end: Self) -> Self }
             trait_delegate! { fn overflowing_neg(self) -> (Self, bool) }
             trait_delegate! { fn overflowing_add(self, rhs: Self) -> (Self, bool) }
             trait_delegate! { fn overflowing_sub(self, rhs: Self) -> (Self, bool) }
@@ -4910,22 +5247,6 @@ macro_rules! impl_fixed {
                 );
                 (Self::from_bits(bits), conv.overflow || new_overflow)
             }
-
-            /// Converts a fixed-point number, panicking if it does not fit.
-            ///
-            /// Any extra fractional bits are discarded, which rounds towards &minus;∞.
-            ///
-            /// # Panics
-            ///
-            /// Panics if the value does not fit, even when debug
-            /// assertions are not enabled.
-            #[inline]
-            fn unwrapped_from_fixed<F: Fixed>(src: F) -> Self {
-                match FromFixed::overflowing_from_fixed(src) {
-                    (val, false) => val,
-                    (_, true) => panic!("overflow"),
-                }
-            }
         }
 
         impl<Frac: $LeEqU> ToFixed for $Fixed<Frac> {
@@ -4983,6 +5304,7 @@ macro_rules! impl_fixed {
             fn overflowing_to_fixed<F: Fixed>(self) -> (F, bool) {
                 FromFixed::overflowing_from_fixed(self)
             }
+
             /// Converts a fixed-point number, panicking if it does not fit.
             ///
             /// Any extra fractional bits are discarded, which rounds towards &minus;∞.
@@ -4992,8 +5314,8 @@ macro_rules! impl_fixed {
             /// Panics if the value does not fit, even when debug
             /// assertions are not enabled.
             #[inline]
-            fn unwrapped_to_fixed<F: Fixed>(self) -> F {
-                FromFixed::unwrapped_from_fixed(self)
+            fn strict_to_fixed<F: Fixed>(self) -> F {
+                FromFixed::strict_from_fixed(self)
             }
         }
 

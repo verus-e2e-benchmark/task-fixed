@@ -963,7 +963,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn ceil(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_ceil())
+        Unwrapped(self.0.strict_ceil())
     }
 
     /// Unwrapped floor. Rounds to the next integer towards &minus;∞,
@@ -1000,7 +1000,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn floor(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_floor())
+        Unwrapped(self.0.strict_floor())
     }
 
     /// Unwrapped round. Rounds to the next integer to the nearest,
@@ -1035,7 +1035,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn round(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_round())
+        Unwrapped(self.0.strict_round())
     }
 
     /// Unwrapped round. Rounds to the next integer to the nearest, with ties
@@ -1073,7 +1073,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn round_ties_even(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_round_ties_even())
+        Unwrapped(self.0.strict_round_ties_even())
     }
 
     /// Returns the number of ones in the binary representation.
@@ -1226,7 +1226,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn sqrt(self) -> Self {
-        Unwrapped(self.0.unwrapped_sqrt())
+        Unwrapped(self.0.strict_sqrt())
     }
 
     /// Integer base-2 logarithm, rounded down.
@@ -1380,7 +1380,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn dist(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_dist(other.0))
+        Unwrapped(self.0.strict_dist(other.0))
     }
 
     /// Returns the mean of `self` and `other`.
@@ -1432,7 +1432,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn hypot(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_hypot(other.0))
+        Unwrapped(self.0.strict_hypot(other.0))
     }
 
     /// Returns the reciprocal (inverse), 1/`self`.
@@ -1466,7 +1466,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn recip(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_recip())
+        Unwrapped(self.0.strict_recip())
     }
 
     /// Returns the next multiple of `other`.
@@ -1504,7 +1504,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn next_multiple_of(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_next_multiple_of(other.0))
+        Unwrapped(self.0.strict_next_multiple_of(other.0))
     }
 
     /// Multiply and add. Returns `self` × `mul` + `add`.
@@ -1545,7 +1545,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn mul_add(self, mul: Unwrapped<F>, add: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_mul_add(mul.0, add.0))
+        Unwrapped(self.0.strict_mul_add(mul.0, add.0))
     }
 
     /// Adds `self` to the product `a`&nbsp;×&nbsp;`b`.
@@ -1582,7 +1582,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn add_prod(self, a: Unwrapped<F>, b: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_add_prod(a.0, b.0))
+        Unwrapped(self.0.strict_add_prod(a.0, b.0))
     }
 
     /// Multiply and accumulate. Adds (`a` × `b`) to `self`.
@@ -1617,7 +1617,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn mul_acc(&mut self, a: Unwrapped<F>, b: Unwrapped<F>) {
-        self.0.unwrapped_mul_acc(a.0, b.0);
+        self.0.strict_mul_acc(a.0, b.0);
     }
 
     /// Euclidean division.
@@ -1653,7 +1653,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn div_euclid(self, divisor: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_div_euclid(divisor.0))
+        Unwrapped(self.0.strict_div_euclid(divisor.0))
     }
 
     /// Remainder for Euclidean division.
@@ -1681,7 +1681,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn rem_euclid(self, divisor: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_rem_euclid(divisor.0))
+        Unwrapped(self.0.strict_rem_euclid(divisor.0))
     }
 
     /// Euclidean division by an integer.
@@ -1716,7 +1716,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn div_euclid_int(self, divisor: F::Bits) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_div_euclid_int(divisor))
+        Unwrapped(self.0.strict_div_euclid_int(divisor))
     }
 
     /// Remainder for Euclidean division.
@@ -1753,7 +1753,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn rem_euclid_int(self, divisor: F::Bits) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_rem_euclid_int(divisor))
+        Unwrapped(self.0.strict_rem_euclid_int(divisor))
     }
 
     /// Unbounded shift left. Computes `self << rhs`, without bounding the value
@@ -1835,7 +1835,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn lerp(self, start: Unwrapped<F>, end: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_lerp(start.0, end.0))
+        Unwrapped(self.0.strict_lerp(start.0, end.0))
     }
 
     /// Inverse linear interpolation between `start` and `end`.
@@ -1882,7 +1882,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn inv_lerp(self, start: Unwrapped<F>, end: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_inv_lerp(start.0, end.0))
+        Unwrapped(self.0.strict_inv_lerp(start.0, end.0))
     }
 
     /// Unwrapped round. Rounds to the next integer to the nearest, with ties
@@ -2641,7 +2641,7 @@ impl<F: Fixed> Neg for Unwrapped<F> {
     #[inline]
     #[track_caller]
     fn neg(self) -> Unwrapped<F> {
-        Unwrapped((self.0).unwrapped_neg())
+        Unwrapped((self.0).strict_neg())
     }
 }
 
@@ -2650,14 +2650,14 @@ impl<F: Fixed> Neg for &Unwrapped<F> {
     #[inline]
     #[track_caller]
     fn neg(self) -> Unwrapped<F> {
-        Unwrapped((self.0).unwrapped_neg())
+        Unwrapped((self.0).strict_neg())
     }
 }
-op! { unwrapped_add, Add add, AddAssign add_assign }
-op! { unwrapped_sub, Sub sub, SubAssign sub_assign }
-op! { unwrapped_mul, Mul mul, MulAssign mul_assign }
-op! { unwrapped_div, Div div, DivAssign div_assign }
-op! { unwrapped_rem, Rem rem, RemAssign rem_assign }
+op! { strict_add, Add add, AddAssign add_assign }
+op! { strict_sub, Sub sub, SubAssign sub_assign }
+op! { strict_mul, Mul mul, MulAssign mul_assign }
+op! { strict_div, Div div, DivAssign div_assign }
+op! { strict_rem, Rem rem, RemAssign rem_assign }
 
 impl<F> Not for Unwrapped<F>
 where
@@ -2816,9 +2816,9 @@ macro_rules! op_bits {
 
 macro_rules! ops {
     ($Fixed:ident($Bits:ident, $LeEqU:ident)) => {
-        op_bits! { $Fixed($Bits)::unwrapped_mul_int, Mul mul, MulAssign mul_assign }
-        op_bits! { $Fixed($Bits)::unwrapped_div_int, Div div, DivAssign div_assign }
-        op_bits! { $Fixed($Bits, $LeEqU)::unwrapped_rem_int, Rem rem, RemAssign rem_assign }
+        op_bits! { $Fixed($Bits)::strict_mul_int, Mul mul, MulAssign mul_assign }
+        op_bits! { $Fixed($Bits)::strict_div_int, Div div, DivAssign div_assign }
+        op_bits! { $Fixed($Bits, $LeEqU)::strict_rem_int, Rem rem, RemAssign rem_assign }
     };
 }
 ops! { FixedI8(i8, LeEqU8) }

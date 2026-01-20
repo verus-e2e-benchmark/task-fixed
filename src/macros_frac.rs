@@ -872,7 +872,7 @@ assert_eq!(Fix::MAX.checked_div_euclid(Fix::from_num(0.25)), None);
                     };
                     if_signed! {
                         $Signedness;
-                        if self.unwrapped_rem(rhs).is_negative() {
+                        if self.strict_rem(rhs).is_negative() {
                             let Some(neg_one) = Self::TRY_NEG_ONE else {
                                 return None;
                             };
@@ -1109,7 +1109,7 @@ assert_eq!(Fix::from_num(7.5).checked_div_euclid_int(0), None);
                     };
                     if_signed! {
                         $Signedness;
-                        if self.unwrapped_rem_int(rhs).is_negative() {
+                        if self.strict_rem_int(rhs).is_negative() {
                             let Some(neg_one) = Self::TRY_NEG_ONE else {
                                 return None;
                             };
@@ -2213,7 +2213,7 @@ assert_eq!(
             if_signed! {
                 $Signedness;
                 comment! {
-                    "Unwrapped signum. Returns a number representing
+                    "Strict signum. Returns a number representing
 the sign of `self`, panicking on overflow.
 
 Overflow can only occur
@@ -2232,9 +2232,9 @@ Panics if the result does not fit.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(5).unwrapped_signum(), 1);
-assert_eq!(Fix::ZERO.unwrapped_signum(), 0);
-assert_eq!(Fix::from_num(-5).unwrapped_signum(), -1);
+assert_eq!(Fix::from_num(5).strict_signum(), 1);
+assert_eq!(Fix::ZERO.strict_signum(), 0);
+assert_eq!(Fix::from_num(-5).strict_signum(), -1);
 ```
 
 The following panics because of overflow.
@@ -2243,7 +2243,7 @@ The following panics because of overflow.
 use fixed::types::extra::U", $nm1, ";
 use fixed::", stringify!($Self), ";
 type OneIntBit = ", stringify!($Self), "<U", $nm1, ">;
-let _overflow = OneIntBit::from_num(0.5).unwrapped_signum();
+let _overflow = OneIntBit::from_num(0.5).strict_signum();
 ```
 ";
                     #[inline]
@@ -2258,7 +2258,7 @@ let _overflow = OneIntBit::from_num(0.5).unwrapped_signum();
             }
 
             comment! {
-                "Unwrapped multiplication. Returns the product, panicking on overflow.
+                "Strict multiplication. Returns the product, panicking on overflow.
 
 # Panics
 
@@ -2270,7 +2270,7 @@ Panics if the result does not fit.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(3).unwrapped_mul(Fix::from_num(2)), Fix::from_num(6));
+assert_eq!(Fix::from_num(3).strict_mul(Fix::from_num(2)), Fix::from_num(6));
 ```
 
 The following panics because of overflow.
@@ -2279,13 +2279,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MAX.unwrapped_mul(Fix::from_num(4));
+let _overflow = Fix::MAX.strict_mul(Fix::from_num(4));
 ```
 ";
                 #[inline]
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
-                pub const fn unwrapped_mul(self, rhs: $Self<Frac>) -> $Self<Frac> {
+                pub const fn strict_mul(self, rhs: $Self<Frac>) -> $Self<Frac> {
                     match self.checked_mul(rhs) {
                         Some(s) => s,
                         None => panic!("overflow"),
@@ -2294,7 +2294,7 @@ let _overflow = Fix::MAX.unwrapped_mul(Fix::from_num(4));
             }
 
             comment! {
-                "Unwrapped division. Returns the quotient, panicking on overflow.
+                "Strict division. Returns the quotient, panicking on overflow.
 
 # Panics
 
@@ -2307,7 +2307,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 let one_point_5 = Fix::from_bits(0b11 << (4 - 1));
-assert_eq!(Fix::from_num(3).unwrapped_div(Fix::from_num(2)), one_point_5);
+assert_eq!(Fix::from_num(3).strict_div(Fix::from_num(2)), one_point_5);
 ```
 
 The following panics because of overflow.
@@ -2317,13 +2317,13 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 let quarter = Fix::ONE / 4;
-let _overflow = Fix::MAX.unwrapped_div(quarter);
+let _overflow = Fix::MAX.strict_div(quarter);
 ```
 ";
                 #[inline]
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
-                pub const fn unwrapped_div(self, rhs: $Self<Frac>) -> $Self<Frac> {
+                pub const fn strict_div(self, rhs: $Self<Frac>) -> $Self<Frac> {
                     match self.overflowing_div(rhs) {
                         (_, true) => panic!("overflow"),
                         (ans, false) => ans,
@@ -2332,7 +2332,7 @@ let _overflow = Fix::MAX.unwrapped_div(quarter);
             }
 
             comment! {
-                "Unwrapped reciprocal. Returns the reciprocal,
+                "Strict reciprocal. Returns the reciprocal,
 panicking on overflow.
 
 # Panics
@@ -2345,13 +2345,13 @@ Panics if the fixed-point number is zero or on overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(0.25).unwrapped_recip(), Fix::from_num(4));
+assert_eq!(Fix::from_num(0.25).strict_recip(), Fix::from_num(4));
 ```
 ";
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_recip(self) -> $Self<Frac> {
+                pub const fn strict_recip(self) -> $Self<Frac> {
                     match self.overflowing_recip() {
                         (_, true) => panic!("overflow"),
                         (ans, false) => ans,
@@ -2360,7 +2360,7 @@ assert_eq!(Fix::from_num(0.25).unwrapped_recip(), Fix::from_num(4));
             }
 
             comment! {
-                "Unwrapped Euclidean division. Returns the quotient, panicking on overflow.
+                "Strict Euclidean division. Returns the quotient, panicking on overflow.
 
 # Panics
 
@@ -2372,7 +2372,7 @@ Panics if the divisor is zero or if the division results in overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(7.5).unwrapped_div_euclid(Fix::from_num(2)), Fix::from_num(3));
+assert_eq!(Fix::from_num(7.5).strict_div_euclid(Fix::from_num(2)), Fix::from_num(3));
 ```
 
 The following panics because of overflow.
@@ -2381,13 +2381,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MAX.unwrapped_div_euclid(Fix::from_num(0.25));
+let _overflow = Fix::MAX.strict_div_euclid(Fix::from_num(0.25));
 ```
 ";
                 #[inline]
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
-                pub const fn unwrapped_div_euclid(self, rhs: $Self<Frac>) -> $Self<Frac> {
+                pub const fn strict_div_euclid(self, rhs: $Self<Frac>) -> $Self<Frac> {
                     match self.overflowing_div_euclid(rhs) {
                         (_, true) => panic!("overflow"),
                         (ans, false) => ans,
@@ -2422,7 +2422,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 assert_eq!(
-    Fix::from_num(3).unwrapped_add_prod(Fix::from_num(4), Fix::from_num(0.5)),
+    Fix::from_num(3).strict_add_prod(Fix::from_num(4), Fix::from_num(0.5)),
     5
 );
 ",
@@ -2430,7 +2430,7 @@ assert_eq!(
                     $Signedness;
                     "// -MAX + MAX × 1.5 = MAX / 2, which does not overflow
 assert_eq!(
-    (-Fix::MAX).unwrapped_add_prod(Fix::MAX, Fix::from_num(1.5)),
+    (-Fix::MAX).strict_add_prod(Fix::MAX, Fix::from_num(1.5)),
     Fix::MAX / 2
 );
 "
@@ -2443,13 +2443,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::DELTA.unwrapped_add_prod(Fix::MAX, Fix::ONE);
+let _overflow = Fix::DELTA.strict_add_prod(Fix::MAX, Fix::ONE);
 ```
 ";
                 #[inline]
                 #[must_use]
                 #[track_caller]
-                pub const fn unwrapped_add_prod<AFrac: $LeEqU, BFrac: $LeEqU>(
+                pub const fn strict_add_prod<AFrac: $LeEqU, BFrac: $LeEqU>(
                     self,
                     a: $Self<AFrac>,
                     b: $Self<BFrac>,
@@ -2466,7 +2466,7 @@ let _overflow = Fix::DELTA.unwrapped_add_prod(Fix::MAX, Fix::ONE);
             }
 
             comment! {
-                "Unwrapped multiply and accumulate. Adds (`a` × `b`) to `self`,
+                "Strict multiply and accumulate. Adds (`a` × `b`) to `self`,
 panicking on overflow.
 
 ",
@@ -2492,7 +2492,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 let mut acc = Fix::from_num(3);
-acc.unwrapped_mul_acc(Fix::from_num(4), Fix::from_num(0.5));
+acc.strict_mul_acc(Fix::from_num(4), Fix::from_num(0.5));
 assert_eq!(acc, 5);
 ",
                 if_signed_else_empty_str! {
@@ -2500,7 +2500,7 @@ assert_eq!(acc, 5);
                     "
 // MAX × 1.5 - MAX = MAX / 2, which does not overflow
 acc = -Fix::MAX;
-acc.unwrapped_mul_acc(Fix::MAX, Fix::from_num(1.5));
+acc.strict_mul_acc(Fix::MAX, Fix::from_num(1.5));
 assert_eq!(acc, Fix::MAX / 2);
 "
                 },
@@ -2513,22 +2513,22 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 let mut acc = Fix::DELTA;
-acc.unwrapped_mul_acc(Fix::MAX, Fix::ONE);
+acc.strict_mul_acc(Fix::MAX, Fix::ONE);
 ```
 ";
                 #[inline]
                 #[track_caller]
-                pub const fn unwrapped_mul_acc<AFrac: $LeEqU, BFrac: $LeEqU>(
+                pub const fn strict_mul_acc<AFrac: $LeEqU, BFrac: $LeEqU>(
                     &mut self,
                     a: $Self<AFrac>,
                     b: $Self<BFrac>,
                 ) {
-                    *self = self.unwrapped_add_prod(a, b);
+                    *self = self.strict_add_prod(a, b);
                 }
             }
 
             comment! {
-                "Unwrapped fixed-point remainder for division by an integer.
+                "Strict fixed-point remainder for division by an integer.
 Returns the remainder, panicking if the divisor is zero.
 
 # Panics
@@ -2541,7 +2541,7 @@ Panics if the divisor is zero.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(3.75).unwrapped_rem_int(2), Fix::from_num(1.75));
+assert_eq!(Fix::from_num(3.75).strict_rem_int(2), Fix::from_num(1.75));
 ```
 
 The following panics because the divisor is zero.
@@ -2550,13 +2550,13 @@ The following panics because the divisor is zero.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _divisor_is_zero = Fix::from_num(3.75).unwrapped_rem_int(0);
+let _divisor_is_zero = Fix::from_num(3.75).strict_rem_int(0);
 ```
 ";
                 #[inline]
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
-                pub const fn unwrapped_rem_int(self, rhs: $Inner) -> $Self<Frac> {
+                pub const fn strict_rem_int(self, rhs: $Inner) -> $Self<Frac> {
                     match self.checked_rem_int(rhs) {
                         Some(ans) => ans,
                         None => panic!("division by zero"),
@@ -2565,7 +2565,7 @@ let _divisor_is_zero = Fix::from_num(3.75).unwrapped_rem_int(0);
             }
 
             comment! {
-                "Unwrapped Euclidean division by an integer. Returns the quotient",
+                "Strict Euclidean division by an integer. Returns the quotient",
                 if_signed_unsigned!(
                     $Signedness,
                     ", panicking on overflow.
@@ -2592,11 +2592,11 @@ Panics if the divisor is zero",
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(7.5).unwrapped_div_euclid_int(2), Fix::from_num(3));
+assert_eq!(Fix::from_num(7.5).strict_div_euclid_int(2), Fix::from_num(3));
 ",
                 if_signed_else_empty_str! {
                     $Signedness;
-                    "assert_eq!(Fix::from_num(-7.5).unwrapped_div_euclid_int(2), Fix::from_num(-4));
+                    "assert_eq!(Fix::from_num(-7.5).strict_div_euclid_int(2), Fix::from_num(-4));
 ```
 
 The following panics because of overflow.
@@ -2605,7 +2605,7 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MIN.unwrapped_div_euclid_int(-1);
+let _overflow = Fix::MIN.strict_div_euclid_int(-1);
 ",
                 },
                 "```
@@ -2613,7 +2613,7 @@ let _overflow = Fix::MIN.unwrapped_div_euclid_int(-1);
                 #[inline]
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
-                pub const fn unwrapped_div_euclid_int(self, rhs: $Inner) -> $Self<Frac> {
+                pub const fn strict_div_euclid_int(self, rhs: $Inner) -> $Self<Frac> {
                     match self.overflowing_div_euclid_int(rhs) {
                         (_, true) => panic!("overflow"),
                         (ans, false) => ans,
@@ -2622,7 +2622,7 @@ let _overflow = Fix::MIN.unwrapped_div_euclid_int(-1);
             }
 
             comment! {
-                "Unwrapped remainder for Euclidean division by an integer. Returns the remainder",
+                "Strict remainder for Euclidean division by an integer. Returns the remainder",
                 if_signed_unsigned!(
                     $Signedness,
                     ", panicking on overflow.
@@ -2650,11 +2650,11 @@ Panics if the divisor is zero",
 use fixed::types::extra::U", $nm4, ";
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U", $nm4, ">;
-assert_eq!(Fix::from_num(7.5).unwrapped_rem_euclid_int(2), Fix::from_num(1.5));
+assert_eq!(Fix::from_num(7.5).strict_rem_euclid_int(2), Fix::from_num(1.5));
 ",
                 if_signed_else_empty_str! {
                     $Signedness;
-                    "assert_eq!(Fix::from_num(-7.5).unwrapped_rem_euclid_int(2), Fix::from_num(0.5));
+                    "assert_eq!(Fix::from_num(-7.5).strict_rem_euclid_int(2), Fix::from_num(0.5));
 ```
 
 The following panics because of overflow.
@@ -2664,7 +2664,7 @@ use fixed::types::extra::U", $nm4, ";
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U", $nm4, ">;
 // -8 ≤ Fix < 8, so the answer 12.5 overflows
-let _overflow = Fix::from_num(-7.5).unwrapped_rem_euclid_int(20);
+let _overflow = Fix::from_num(-7.5).strict_rem_euclid_int(20);
 ",
                 },
                 "```
@@ -2672,7 +2672,7 @@ let _overflow = Fix::from_num(-7.5).unwrapped_rem_euclid_int(20);
                 #[inline]
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
-                pub const fn unwrapped_rem_euclid_int(self, rhs: $Inner) -> $Self<Frac> {
+                pub const fn strict_rem_euclid_int(self, rhs: $Inner) -> $Self<Frac> {
                     match self.overflowing_rem_euclid_int(rhs) {
                         (_, true) => panic!("overflow"),
                         (ans, false) => ans,
@@ -2717,7 +2717,7 @@ Panics if the number is negative and on overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(2).unwrapped_sqrt(), Fix::SQRT_2);
+assert_eq!(Fix::from_num(2).strict_sqrt(), Fix::SQRT_2);
 ```
 ",
                 if_signed_else_empty_str! {
@@ -2729,7 +2729,7 @@ The following panics because the input value is negative.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _sqrt_neg = Fix::from_num(-1).unwrapped_sqrt();
+let _sqrt_neg = Fix::from_num(-1).strict_sqrt();
 ```
 
 The following panics because of overflow.
@@ -2738,14 +2738,14 @@ The following panics because of overflow.
 use fixed::types::extra::U", $n, ";
 use fixed::", stringify!($Self), ";
 type AllFrac = ", stringify!($Self), "<U", $n, ">;
-let _overflow = AllFrac::from_num(0.25).unwrapped_sqrt();
+let _overflow = AllFrac::from_num(0.25).strict_sqrt();
 ```
 ",
                 };
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_sqrt(self) -> Self {
+                pub const fn strict_sqrt(self) -> Self {
                     match self.overflowing_sqrt() {
                         (val, false) => val,
                         (_, true) => panic!("overflow"),
@@ -2773,7 +2773,7 @@ Panics if the result overflows.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(0.5).unwrapped_lerp(Fix::ZERO, Fix::MAX), Fix::MAX / 2);
+assert_eq!(Fix::from_num(0.5).strict_lerp(Fix::ZERO, Fix::MAX), Fix::MAX / 2);
 ```
 
 The following panics because of overflow.
@@ -2782,13 +2782,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::from_num(1.5).unwrapped_lerp(Fix::ZERO, Fix::MAX);
+let _overflow = Fix::from_num(1.5).strict_lerp(Fix::ZERO, Fix::MAX);
 ```
 ";
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_lerp<RangeFrac>(
+                pub const fn strict_lerp<RangeFrac>(
                     self,
                     start: $Self<RangeFrac>,
                     end: $Self<RangeFrac>,
@@ -2997,7 +2997,7 @@ assert_eq!(Fix::MAX.overflowing_div_euclid(Fix::from_num(0.25)), (wrapped, true)
                     q = q.round_to_zero();
                     if_signed! {
                         $Signedness;
-                        if self.unwrapped_rem(rhs).is_negative() {
+                        if self.strict_rem(rhs).is_negative() {
                             let Some(neg_one) = Self::TRY_NEG_ONE else {
                                 return (q, true);
                             };
@@ -3055,7 +3055,7 @@ assert_eq!(Fix::MIN.overflowing_div_euclid_int(-1), (wrapped, true));
                     q = q.round_to_zero();
                     if_signed! {
                         $Signedness;
-                        if self.unwrapped_rem_int(rhs).is_negative() {
+                        if self.strict_rem_int(rhs).is_negative() {
                             let Some(neg_one) = Self::TRY_NEG_ONE else {
                                 return (q, true);
                             };
@@ -3229,7 +3229,7 @@ assert_eq!(Fix::from_num(-7.5).overflowing_rem_euclid_int(20), (Fix::from_num(-3
                 pub const fn overflowing_rem_euclid_int(self, rhs: $Inner) -> ($Self<Frac>, bool) {
                     if_signed! {
                         $Signedness;
-                        let rem = self.unwrapped_rem_int(rhs);
+                        let rem = self.strict_rem_int(rhs);
                         if !rem.is_negative() {
                             return (rem, false);
                         }
@@ -3262,7 +3262,7 @@ assert_eq!(Fix::from_num(-7.5).overflowing_rem_euclid_int(20), (Fix::from_num(-3
                     }
                     if_unsigned! {
                         $Signedness;
-                        (self.unwrapped_rem_int(rhs), false)
+                        (self.strict_rem_int(rhs), false)
                     }
                 }
             }
@@ -3393,7 +3393,7 @@ assert_eq!(
 
             pub(crate) const TRY_ONE: Option<Self> =
                 if Self::FRAC_NBITS < $Inner::BITS - if_signed_unsigned!($Signedness, 1, 0) {
-                    Some(Self::DELTA.unwrapped_shl(Self::FRAC_NBITS))
+                    Some(Self::DELTA.strict_shl(Self::FRAC_NBITS))
                 } else {
                     None
                 };
@@ -3401,10 +3401,169 @@ assert_eq!(
             if_signed! {
                 $Signedness;
                 pub(crate) const TRY_NEG_ONE: Option<Self> = if Self::FRAC_NBITS < $Inner::BITS {
-                    Some(Self::DELTA.unwrapped_neg().unwrapped_shl(Self::FRAC_NBITS))
+                    Some(Self::DELTA.strict_neg().strict_shl(Self::FRAC_NBITS))
                 } else {
                     None
                 };
+            }
+
+            /// Strict multiplication. Returns the product, panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the result does not fit.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_mul`")]
+            #[inline]
+            #[track_caller]
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub const fn unwrapped_mul(self, rhs: $Self<Frac>) -> $Self<Frac> {
+                self.strict_mul(rhs)
+            }
+
+            /// Strict division. Returns the quotient, panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the divisor is zero or if the division results in overflow.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_div`")]
+            #[inline]
+            #[track_caller]
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub const fn unwrapped_div(self, rhs: $Self<Frac>) -> $Self<Frac> {
+                self.strict_div(rhs)
+            }
+
+            /// Strict reciprocal. Returns the reciprocal, panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the fixed-point number is zero or on overflow.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_recip`")]
+            #[inline]
+            #[track_caller]
+            #[must_use]
+            pub const fn unwrapped_recip(self) -> $Self<Frac> {
+                self.strict_recip()
+            }
+
+            /// Strict Euclidean division. Returns the quotient, panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the divisor is zero or if the division results in overflow.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_div_euclid`")]
+            #[inline]
+            #[track_caller]
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub const fn unwrapped_div_euclid(self, rhs: $Self<Frac>) -> $Self<Frac> {
+                self.strict_div_euclid(rhs)
+            }
+
+            /// Adds `self` to the product `a`&nbsp;×&nbsp;`b`, panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the result does not fit.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_add_prod`")]
+            #[inline]
+            #[must_use]
+            #[track_caller]
+            pub const fn unwrapped_add_prod<AFrac: $LeEqU, BFrac: $LeEqU>(
+                self,
+                a: $Self<AFrac>,
+                b: $Self<BFrac>,
+            ) -> $Self<Frac> {
+                self.strict_add_prod(a, b)
+            }
+
+            /// Strict multiply and accumulate. Adds (`a` × `b`) to `self`,
+            /// panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the result does not fit.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_mul_acc`")]
+            #[inline]
+            #[track_caller]
+            pub const fn unwrapped_mul_acc<AFrac: $LeEqU, BFrac: $LeEqU>(
+                &mut self,
+                a: $Self<AFrac>,
+                b: $Self<BFrac>,
+            ) {
+                self.strict_mul_acc(a, b)
+            }
+
+            /// Strict fixed-point remainder for division by an integer. Returns
+            /// the remainder, panicking if the divisor is zero.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the divisor is zero.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_rem_int`")]
+            #[inline]
+            #[track_caller]
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub const fn unwrapped_rem_int(self, rhs: $Inner) -> $Self<Frac> {
+                self.strict_rem_int(rhs)
+            }
+
+            /// Strict Euclidean division by an integer. Returns the quotient,
+            /// panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the divisor is zero or if the division results in overflow.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_div_euclid_int`")]
+            #[inline]
+            #[track_caller]
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub const fn unwrapped_div_euclid_int(self, rhs: $Inner) -> $Self<Frac> {
+                self.strict_div_euclid_int(rhs)
+            }
+
+            /// Strict remainder for Euclidean division by an integer. Returns
+            /// the remainder, panicking on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the divisor is zero or if the division results in overflow.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_rem_euclid_int`")]
+            #[inline]
+            #[track_caller]
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            pub const fn unwrapped_rem_euclid_int(self, rhs: $Inner) -> $Self<Frac> {
+                self.strict_rem_euclid_int(rhs)
+            }
+
+            /// Returns the square root, panicking for negative numbers and on overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the number is negative and on overflow.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_sqrt`")]
+            #[inline]
+            #[track_caller]
+            #[must_use]
+            pub const fn unwrapped_sqrt(self) -> Self {
+                self.strict_sqrt()
+            }
+
+            /// Linear interpolation between `start` and `end`, panicking on
+            /// overflow.
+            ///
+            /// # Panics
+            ///
+            /// Panics if the result overflows.
+            #[deprecated(since = "1.30.0", note = "renamed to `strict_lerp`")]
+            #[inline]
+            #[track_caller]
+            #[must_use]
+            pub const fn unwrapped_lerp<RangeFrac>(
+                self,
+                start: $Self<RangeFrac>,
+                end: $Self<RangeFrac>,
+            ) -> $Self<RangeFrac> {
+                self.strict_lerp(start, end)
             }
         }
     };
