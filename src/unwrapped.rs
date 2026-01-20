@@ -494,7 +494,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_num<Src: ToFixed>(src: Src) -> Unwrapped<F> {
-        Unwrapped(src.unwrapped_to_fixed())
+        Unwrapped(src.strict_to_fixed())
     }
 
     /// Converts a fixed-point number to another number, panicking on
@@ -544,7 +544,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn to_num<Dst: FromFixed>(self) -> Dst {
-        Dst::unwrapped_from_fixed(self.0)
+        Dst::strict_from_fixed(self.0)
     }
 
     /// Parses a string slice containing decimal digits to return a fixed-point number.
@@ -581,7 +581,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn from_str_dec(src: &str) -> Unwrapped<F> {
-        Unwrapped(F::unwrapped_from_str(src))
+        Unwrapped(F::strict_from_str(src))
     }
 
     /// Parses a string slice containing binary digits to return a fixed-point number.
@@ -624,7 +624,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_str_binary(src: &str) -> Result<Unwrapped<F>, ParseFixedError> {
-        Ok(Unwrapped(F::unwrapped_from_str_binary(src)))
+        Ok(Unwrapped(F::strict_from_str_binary(src)))
     }
 
     /// Parses a string slice containing octal digits to return a fixed-point number.
@@ -667,7 +667,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_str_octal(src: &str) -> Result<Unwrapped<F>, ParseFixedError> {
-        Ok(Unwrapped(F::unwrapped_from_str_octal(src)))
+        Ok(Unwrapped(F::strict_from_str_octal(src)))
     }
 
     /// Parses a string slice containing hexadecimal digits to return a fixed-point number.
@@ -710,7 +710,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_str_hex(src: &str) -> Result<Unwrapped<F>, ParseFixedError> {
-        Ok(Unwrapped(F::unwrapped_from_str_hex(src)))
+        Ok(Unwrapped(F::strict_from_str_hex(src)))
     }
 
     /// Parses an ASCII-byte slice containing decimal digits to return a fixed-point number.
@@ -747,7 +747,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn from_ascii(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::unwrapped_from_ascii(src))
+        Unwrapped(F::strict_from_ascii(src))
     }
 
     /// Parses an ASCII-byte slice containing binary digits to return a fixed-point number.
@@ -782,7 +782,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_ascii_binary(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::unwrapped_from_ascii_binary(src))
+        Unwrapped(F::strict_from_ascii_binary(src))
     }
 
     /// Parses an ASCII-byte slice containing octal digits to return a fixed-point number.
@@ -817,7 +817,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_ascii_octal(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::unwrapped_from_ascii_octal(src))
+        Unwrapped(F::strict_from_ascii_octal(src))
     }
 
     /// Parses an ASCII-byte slice containing hexadecimal digits to return a fixed-point number.
@@ -852,7 +852,7 @@ impl<F: Fixed> Unwrapped<F> {
     #[inline]
     #[track_caller]
     pub fn from_ascii_hex(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::unwrapped_from_ascii_hex(src))
+        Unwrapped(F::strict_from_ascii_hex(src))
     }
 
     /// Returns the integer part.
@@ -2396,7 +2396,7 @@ impl<F: Fixed> FromStr for Unwrapped<F> {
     #[inline]
     #[track_caller]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Unwrapped(F::unwrapped_from_str(s)))
+        Ok(Unwrapped(F::strict_from_str(s)))
     }
 }
 

@@ -567,7 +567,7 @@ The other number can be:
     even.
   * Any other number `src` for which [`ToFixed`] is implemented, in
     which case this method returns
-    <code>src.[unwrapped\_to\_fixed][ToFixed::unwrapped_to_fixed]\()</code>.
+    <code>src.[strict\_to\_fixed][ToFixed::strict_to_fixed]\()</code>.
 
 # Panics
 
@@ -585,7 +585,7 @@ type Fix = ", stringify!($Self), "<U4>;
 
 // 1.75 is 1.11 in binary
 let src = I16F16::from_bits(0b111 << (16 - 2));
-assert_eq!(Fix::unwrapped_from_num(src), Fix::from_bits(0b111 << (4 - 2)));
+assert_eq!(Fix::strict_from_num(src), Fix::from_bits(0b111 << (4 - 2)));
 ```
 
 The following panics because of overflow.
@@ -595,14 +595,14 @@ use fixed::types::extra::{U0, U4};
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 let too_large = ", stringify!($Self), "::<U0>::from_bits(0b1101 << (", $n, " - 7));
-let _overflow = Fix::unwrapped_from_num(too_large);
+let _overflow = Fix::strict_from_num(too_large);
 ```
 
 [finite]: f64::is_finite
 ";
             #[inline]
             #[track_caller]
-            pub fn unwrapped_from_num<Src: ToFixed>(src: Src) -> $Self<Frac> {
+            pub fn strict_from_num<Src: ToFixed>(src: Src) -> $Self<Frac> {
                 match src.overflowing_to_fixed() {
                     (_, true) => panic!("overflow"),
                     (ans, false) => ans,
@@ -628,7 +628,7 @@ The other number can be:
     even.
   * Any other type `Dst` for which [`FromFixed`] is implemented, in
     which case this method returns
-    <code>Dst::[unwrapped\_from\_fixed][FromFixed::unwrapped_from_fixed]\(self)</code>.
+    <code>Dst::[strict\_from\_fixed][FromFixed::strict_from_fixed]\(self)</code>.
 
 # Panics
 
@@ -645,7 +645,7 @@ type Fix = ", stringify!($Self), "<U4>;
 // 1.75 is 1.11 in binary
 let src = Fix::from_bits(0b111 << (4 - 2));
 let expected = I16F16::from_bits(0b111 << (16 - 2));
-assert_eq!(src.unwrapped_to_num::<I16F16>(), expected);
+assert_eq!(src.strict_to_num::<I16F16>(), expected);
 ```
 
 The following panics because of overflow.
@@ -655,13 +655,13 @@ use fixed::types::extra::{U4, U6};
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
 type TooFewIntBits = ", stringify!($Self), "<U6>;
-let _overflow = Fix::MAX.unwrapped_to_num::<TooFewIntBits>();
+let _overflow = Fix::MAX.strict_to_num::<TooFewIntBits>();
 ```
 ";
             #[inline]
             #[track_caller]
             #[must_use]
-            pub fn unwrapped_to_num<Dst: FromFixed>(self) -> Dst {
+            pub fn strict_to_num<Dst: FromFixed>(self) -> Dst {
                 match Dst::overflowing_from_fixed(self) {
                     (_, true) => panic!("overflow"),
                     (ans, false) => ans,
@@ -806,15 +806,15 @@ assert_eq!(one_point_625.overflowing_to_num::<f32>(), (1.625f32, false));
         /// Creates a fixed-point number from a fixed-point number with the same
         /// underlying integer type. Usable in constant context.
         ///
-        /// This is equivalent to the [`unwrapped_from_num`] method with
+        /// This is equivalent to the [`strict_from_num`] method with
         #[doc = concat!("<code>[", stringify!($Self), "]&lt;SrcFrac></code>")]
         /// as its generic parameter, but can also be used in constant context.
-        /// Unless required in constant context, use [`unwrapped_from_num`] or
+        /// Unless required in constant context, use [`strict_from_num`] or
         /// [`from_num`] instead.
         ///
         /// # Planned deprecation
         ///
-        /// This method will be deprecated when the [`unwrapped_from_num`]
+        /// This method will be deprecated when the [`strict_from_num`]
         /// method is usable in constant context.
         ///
         /// # Panics
@@ -828,7 +828,7 @@ assert_eq!(one_point_625.overflowing_to_num::<f32>(), (1.625f32, false));
         #[doc = concat!("use fixed::", stringify!($Self), ";")]
         #[doc = concat!("type FixA = ", stringify!($Self), "<U2>;")]
         #[doc = concat!("type FixB = ", stringify!($Self), "<U4>;")]
-        /// const A: FixA = FixA::unwrapped_from_str("3.5");
+        /// const A: FixA = FixA::strict_from_str("3.5");
         /// const B: FixB = FixB::const_from_fixed(A);
         /// assert_eq!(B, 3.5);
         /// ```
@@ -844,7 +844,7 @@ assert_eq!(one_point_625.overflowing_to_num::<f32>(), (1.625f32, false));
         /// ```
         ///
         /// [`from_num`]: Self::from_num
-        /// [`unwrapped_from_num`]: Self::unwrapped_from_num
+        /// [`strict_from_num`]: Self::strict_from_num
         #[inline]
         #[track_caller]
         #[must_use]
@@ -875,15 +875,15 @@ assert_eq!(one_point_625.overflowing_to_num::<f32>(), (1.625f32, false));
         #[doc = concat!("[`", stringify!($Inner), "`].")]
         /// Usable in constant context.
         ///
-        /// This is equivalent to the [`unwrapped_from_num`] method with
+        /// This is equivalent to the [`strict_from_num`] method with
         #[doc = concat!("[`", stringify!($Inner), "`]")]
         /// as its generic parameter, but can also be used in constant context.
-        /// Unless required in constant context, use [`unwrapped_from_num`] or
+        /// Unless required in constant context, use [`strict_from_num`] or
         /// [`from_num`] instead.
         ///
         /// # Planned deprecation
         ///
-        /// This method will be deprecated when the [`unwrapped_from_num`]
+        /// This method will be deprecated when the [`strict_from_num`]
         /// method is usable in constant context.
         ///
         /// # Panics
@@ -913,7 +913,7 @@ assert_eq!(one_point_625.overflowing_to_num::<f32>(), (1.625f32, false));
         /// ```
         ///
         /// [`from_num`]: Self::from_num
-        /// [`unwrapped_from_num`]: Self::unwrapped_from_num
+        /// [`strict_from_num`]: Self::strict_from_num
         #[inline]
         #[track_caller]
         #[must_use]
@@ -1918,7 +1918,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary
-let f = Fix::unwrapped_from_str("1.75");
+let f = Fix::strict_from_str("1.75");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -1928,14 +1928,14 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_str("1.75.");
+let _error = Fix::strict_from_str("1.75.");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_str(src: &str) -> $Self<Frac> {
-                Self::unwrapped_from_ascii(src.as_bytes())
+            pub const fn strict_from_str(src: &str) -> $Self<Frac> {
+                Self::strict_from_ascii(src.as_bytes())
             }
         }
 
@@ -1956,7 +1956,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary
-let f = Fix::unwrapped_from_str_binary("1.11");
+let f = Fix::strict_from_str_binary("1.11");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -1966,14 +1966,14 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_str_binary("1.2");
+let _error = Fix::strict_from_str_binary("1.2");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_str_binary(src: &str) -> $Self<Frac> {
-                Self::unwrapped_from_ascii_binary(src.as_bytes())
+            pub const fn strict_from_str_binary(src: &str) -> $Self<Frac> {
+                Self::strict_from_ascii_binary(src.as_bytes())
             }
         }
 
@@ -1994,7 +1994,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary, 1.6 in octal
-let f = Fix::unwrapped_from_str_octal("1.6");
+let f = Fix::strict_from_str_octal("1.6");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -2004,14 +2004,14 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_str_octal("1.8");
+let _error = Fix::strict_from_str_octal("1.8");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_str_octal(src: &str) -> $Self<Frac> {
-                Self::unwrapped_from_ascii_octal(src.as_bytes())
+            pub const fn strict_from_str_octal(src: &str) -> $Self<Frac> {
+                Self::strict_from_ascii_octal(src.as_bytes())
             }
         }
 
@@ -2032,7 +2032,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary, 1.C in hexadecimal
-let f = Fix::unwrapped_from_str_hex("1.C");
+let f = Fix::strict_from_str_hex("1.C");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -2042,14 +2042,14 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_str_hex("1.G");
+let _error = Fix::strict_from_str_hex("1.G");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_str_hex(src: &str) -> $Self<Frac> {
-                Self::unwrapped_from_ascii_hex(src.as_bytes())
+            pub const fn strict_from_str_hex(src: &str) -> $Self<Frac> {
+                Self::strict_from_ascii_hex(src.as_bytes())
             }
         }
 
@@ -2070,7 +2070,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary
-let f = Fix::unwrapped_from_ascii(b"1.75");
+let f = Fix::strict_from_ascii(b"1.75");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -2080,13 +2080,13 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_ascii(b"1.75.");
+let _error = Fix::strict_from_ascii(b"1.75.");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_ascii(src: &[u8]) -> $Self<Frac> {
+            pub const fn strict_from_ascii(src: &[u8]) -> $Self<Frac> {
                 match $Self::from_ascii(src) {
                     Ok(o) => o,
                     Err(e) => panic!("{}", e.message()),
@@ -2111,7 +2111,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary
-let f = Fix::unwrapped_from_ascii_binary(b"1.11");
+let f = Fix::strict_from_ascii_binary(b"1.11");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -2121,13 +2121,13 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_ascii_binary(b"1.2");
+let _error = Fix::strict_from_ascii_binary(b"1.2");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_ascii_binary(src: &[u8]) -> $Self<Frac> {
+            pub const fn strict_from_ascii_binary(src: &[u8]) -> $Self<Frac> {
                 match $Self::from_ascii_binary(src) {
                     Ok(o) => o,
                     Err(e) => panic!("{}", e.message()),
@@ -2152,7 +2152,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary, 1.6 in octal
-let f = Fix::unwrapped_from_ascii_octal(b"1.6");
+let f = Fix::strict_from_ascii_octal(b"1.6");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -2162,13 +2162,13 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_ascii_octal(b"1.8");
+let _error = Fix::strict_from_ascii_octal(b"1.8");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_ascii_octal(src: &[u8]) -> $Self<Frac> {
+            pub const fn strict_from_ascii_octal(src: &[u8]) -> $Self<Frac> {
                 match $Self::from_ascii_octal(src) {
                     Ok(o) => o,
                     Err(e) => panic!("{}", e.message()),
@@ -2193,7 +2193,7 @@ use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
 // 1.75 is 1.11 in binary, 1.C in hexadecimal
-let f = Fix::unwrapped_from_ascii_hex(b"1.C");
+let f = Fix::strict_from_ascii_hex(b"1.C");
 assert_eq!(f, Fix::from_bits(0b111 << (4 - 2)));
 ```
 
@@ -2203,13 +2203,13 @@ The following panics because of a parsing error.
 use fixed::types::extra::U4;
 use fixed::"#, stringify!($Self), ";
 type Fix = ", stringify!($Self), r#"<U4>;
-let _error = Fix::unwrapped_from_ascii_hex(b"1.G");
+let _error = Fix::strict_from_ascii_hex(b"1.G");
 ```
 "#;
             #[inline]
             #[track_caller]
             #[must_use]
-            pub const fn unwrapped_from_ascii_hex(src: &[u8]) -> $Self<Frac> {
+            pub const fn strict_from_ascii_hex(src: &[u8]) -> $Self<Frac> {
                 match $Self::from_ascii_hex(src) {
                     Ok(o) => o,
                     Err(e) => panic!("{}", e.message()),
@@ -2518,6 +2518,145 @@ assert_eq!(U8F8::overflowing_from_ascii_hex(b"C0F.FE"), Ok((check, true)));
                     Err(e) => Err(e),
                 }
             }
+        }
+
+        /// Creates a fixed-point number from another number, panicking on
+        /// overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_num`")]
+        #[inline]
+        #[track_caller]
+        pub fn unwrapped_from_num<Src: ToFixed>(src: Src) -> $Self<Frac> {
+            Self::strict_from_num(src)
+        }
+
+        /// Converts a fixed-point number to another number, panicking on
+        /// overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_to_num`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub fn unwrapped_to_num<Dst: FromFixed>(self) -> Dst {
+            self.strict_to_num()
+        }
+
+        /// Parses a string slice containing decimal digits to return a
+        /// fixed-point number, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_str(src: &str) -> $Self<Frac> {
+            Self::strict_from_str(src)
+        }
+
+        /// Parses a string slice containing binary digits to return a
+        /// fixed-point number, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_binary`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_str_binary(src: &str) -> $Self<Frac> {
+            Self::strict_from_str_binary(src)
+        }
+
+        /// Parses a string slice containing octal digits to return a
+        /// fixed-point number, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_octal`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_str_octal(src: &str) -> $Self<Frac> {
+            Self::strict_from_str_octal(src)
+        }
+
+        /// Parses a string slice containing hexadecimal digits to return a
+        /// fixed-point number, wrapping on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_hex`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_str_hex(src: &str) -> $Self<Frac> {
+            Self::strict_from_str_hex(src)
+        }
+
+        /// Parses an ASCII-byte slice containing decimal digits to return a
+        /// fixed-point number, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_ascii(src: &[u8]) -> $Self<Frac> {
+            Self::strict_from_ascii(src)
+        }
+
+        /// Parses an ASCII-byte slice containing binary digits to return a
+        /// fixed-point number, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii_binary`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_ascii_binary(src: &[u8]) -> $Self<Frac> {
+            Self::strict_from_ascii_binary(src)
+        }
+
+        /// Parses an ASCII-byte slice containing octal digits to return a
+        /// fixed-point number, panicking on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii_octal`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_ascii_octal(src: &[u8]) -> $Self<Frac> {
+            Self::strict_from_ascii_octal(src)
+        }
+
+        /// Parses an ASCII-byte slice containing hexadecimal digits to return a
+        /// fixed-point number, wrapping on overflow.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the value does not fit or if there is a parsing error.
+        #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii_hex`")]
+        #[inline]
+        #[track_caller]
+        #[must_use]
+        pub const fn unwrapped_from_ascii_hex(src: &[u8]) -> $Self<Frac> {
+            Self::strict_from_ascii_hex(src)
         }
     };
 }

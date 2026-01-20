@@ -930,34 +930,33 @@ where
     /// Creates a fixed-point number from another number, panicking on overflow.
     ///
     /// Returns the same value as
-    /// <code>src.[unwrapped\_to\_fixed][ToFixed::unwrapped_to_fixed]\()</code>.
+    /// <code>src.[strict\_to\_fixed][ToFixed::strict_to_fixed]\()</code>.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_num][FixedI32::unwrapped_from_num]</code>
+    /// <code>FixedI32::[strict\_from\_num][FixedI32::strict_from_num]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_num][FixedU32::unwrapped_from_num]</code>.
+    /// <code>FixedU32::[strict\_from\_num][FixedU32::strict_from_num]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit.
     #[track_caller]
-    fn unwrapped_from_num<Src: ToFixed>(src: Src) -> Self;
+    fn strict_from_num<Src: ToFixed>(src: Src) -> Self;
 
     /// Converts a fixed-point number to another number, panicking on overflow.
     ///
     /// Returns the same value as
-    /// <code>Dst::[unwrapped\_from\_fixed][FromFixed::unwrapped_from_fixed]\(self)</code>.
+    /// <code>Dst::[strict\_from\_fixed][FromFixed::strict_from_fixed]\(self)</code>.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_to\_num][FixedI32::unwrapped_to_num]</code>
-    /// and
-    /// <code>FixedU32::[unwrapped\_to\_num][FixedU32::unwrapped_to_num]</code>.
+    /// <code>FixedI32::[strict\_to\_num][FixedI32::strict_to_num]</code> and
+    /// <code>FixedU32::[strict\_to\_num][FixedU32::strict_to_num]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit.
     #[track_caller]
-    fn unwrapped_to_num<Dst: FromFixed>(self) -> Dst;
+    fn strict_to_num<Dst: FromFixed>(self) -> Dst;
 
     /// Creates a fixed-point number from another number.
     ///
@@ -1227,15 +1226,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str][FixedI32::unwrapped_from_str]</code>
+    /// <code>FixedI32::[strict\_from\_str][FixedI32::strict_from_str]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str][FixedU32::unwrapped_from_str]</code>.
+    /// <code>FixedU32::[strict\_from\_str][FixedU32::strict_from_str]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_str(src: &str) -> Self;
+    fn strict_from_str(src: &str) -> Self;
 
     /// Parses a string slice containing binary digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1243,15 +1242,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str\_binary][FixedI32::unwrapped_from_str_binary]</code>
+    /// <code>FixedI32::[strict\_from\_str\_binary][FixedI32::strict_from_str_binary]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str\_binary][FixedU32::unwrapped_from_str_binary]</code>.
+    /// <code>FixedU32::[strict\_from\_str\_binary][FixedU32::strict_from_str_binary]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_str_binary(src: &str) -> Self;
+    fn strict_from_str_binary(src: &str) -> Self;
 
     /// Parses a string slice containing octal digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1259,15 +1258,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str\_octal][FixedI32::unwrapped_from_str_octal]</code>
+    /// <code>FixedI32::[strict\_from\_str\_octal][FixedI32::strict_from_str_octal]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str\_octal][FixedU32::unwrapped_from_str_octal]</code>.
+    /// <code>FixedU32::[strict\_from\_str\_octal][FixedU32::strict_from_str_octal]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_str_octal(src: &str) -> Self;
+    fn strict_from_str_octal(src: &str) -> Self;
 
     /// Parses a string slice containing hexadecimal digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1275,15 +1274,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str\_hex][FixedI32::unwrapped_from_str_hex]</code>
+    /// <code>FixedI32::[strict\_from\_str\_hex][FixedI32::strict_from_str_hex]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str\_hex][FixedU32::unwrapped_from_str_hex]</code>.
+    /// <code>FixedU32::[strict\_from\_str\_hex][FixedU32::strict_from_str_hex]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_str_hex(src: &str) -> Self;
+    fn strict_from_str_hex(src: &str) -> Self;
 
     /// Parses an ASCII-byte slice containing decimal digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1291,15 +1290,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii][FixedI32::unwrapped_from_ascii]</code>
+    /// <code>FixedI32::[strict\_from\_ascii][FixedI32::strict_from_ascii]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii][FixedU32::unwrapped_from_ascii]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii][FixedU32::strict_from_ascii]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_ascii(src: &[u8]) -> Self;
+    fn strict_from_ascii(src: &[u8]) -> Self;
 
     /// Parses an ASCII-byte slice containing binary digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1307,15 +1306,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii\_binary][FixedI32::unwrapped_from_ascii_binary]</code>
+    /// <code>FixedI32::[strict\_from\_ascii\_binary][FixedI32::strict_from_ascii_binary]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii\_binary][FixedU32::unwrapped_from_ascii_binary]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii\_binary][FixedU32::strict_from_ascii_binary]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_ascii_binary(src: &[u8]) -> Self;
+    fn strict_from_ascii_binary(src: &[u8]) -> Self;
 
     /// Parses an ASCII-byte slice containing octal digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1323,15 +1322,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii\_octal][FixedI32::unwrapped_from_ascii_octal]</code>
+    /// <code>FixedI32::[strict\_from\_ascii\_octal][FixedI32::strict_from_ascii_octal]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii\_octal][FixedU32::unwrapped_from_ascii_octal]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii\_octal][FixedU32::strict_from_ascii_octal]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_ascii_octal(src: &[u8]) -> Self;
+    fn strict_from_ascii_octal(src: &[u8]) -> Self;
 
     /// Parses an ASCII-byte slice containing hexadecimal digits to return a
     /// fixed-point number, panicking on overflow.
@@ -1339,15 +1338,15 @@ where
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii\_hex][FixedI32::unwrapped_from_ascii_hex]</code>
+    /// <code>FixedI32::[strict\_from\_ascii\_hex][FixedI32::strict_from_ascii_hex]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii\_hex][FixedU32::unwrapped_from_ascii_hex]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii\_hex][FixedU32::strict_from_ascii_hex]</code>.
     ///
     /// # Panics
     ///
     /// Panics if the value does not fit or if there is a parsing error.
     #[track_caller]
-    fn unwrapped_from_ascii_hex(src: &[u8]) -> Self;
+    fn strict_from_ascii_hex(src: &[u8]) -> Self;
 
     /// Parses a string slice containing decimal digits to return a
     /// fixed-point number.
@@ -3431,6 +3430,125 @@ where
     fn overflowing_round_ties_to_even(self) -> (Self, bool) {
         self.overflowing_round_ties_even()
     }
+
+    /// Creates a fixed-point number from another number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_num`")]
+    #[track_caller]
+    fn unwrapped_from_num<Src: ToFixed>(src: Src) -> Self {
+        Self::strict_from_num(src)
+    }
+
+    /// Converts a fixed-point number to another number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_to_num`")]
+    #[track_caller]
+    fn unwrapped_to_num<Dst: FromFixed>(self) -> Dst {
+        self.strict_to_num()
+    }
+
+    /// Parses a string slice containing decimal digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str`")]
+    #[track_caller]
+    fn unwrapped_from_str(src: &str) -> Self {
+        Self::strict_from_str(src)
+    }
+
+    /// Parses a string slice containing binary digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_binary`")]
+    #[track_caller]
+    fn unwrapped_from_str_binary(src: &str) -> Self {
+        Self::strict_from_str_binary(src)
+    }
+
+    /// Parses a string slice containing octal digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_octal`")]
+    #[track_caller]
+    fn unwrapped_from_str_octal(src: &str) -> Self {
+        Self::strict_from_str_octal(src)
+    }
+
+    /// Parses a string slice containing hexadecimal digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_str_hex`")]
+    #[track_caller]
+    fn unwrapped_from_str_hex(src: &str) -> Self {
+
+        Self::strict_from_str_hex(src)
+    }
+
+    /// Parses an ASCII-byte slice containing decimal digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii`")]
+    #[track_caller]
+    fn unwrapped_from_ascii(src: &[u8]) -> Self {
+        Self::strict_from_ascii(src)
+    }
+
+    /// Parses an ASCII-byte slice containing binary digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii_binary`")]
+    #[track_caller]
+    fn unwrapped_from_ascii_binary(src: &[u8]) -> Self {
+        Self::strict_from_ascii_binary(src)
+    }
+
+    /// Parses an ASCII-byte slice containing octal digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii_octal`")]
+    #[track_caller]
+    fn unwrapped_from_ascii_octal(src: &[u8]) -> Self {
+        Self::strict_from_ascii_octal(src)
+    }
+
+    /// Parses an ASCII-byte slice containing hexadecimal digits to return a
+    /// fixed-point number, panicking on overflow.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit or if there is a parsing error.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_ascii_hex`")]
+    #[track_caller]
+    fn unwrapped_from_ascii_hex(src: &[u8]) -> Self {
+        Self::strict_from_ascii_hex(src)
+    }
 }
 
 /// This trait provides methods common to all signed fixed-point numbers.
@@ -4094,7 +4212,7 @@ pub trait FromFixed {
     /// are not enabled.
     #[inline]
     #[track_caller]
-    fn unwrapped_from_fixed<F: Fixed>(src: F) -> Self
+    fn strict_from_fixed<F: Fixed>(src: F) -> Self
     where
         Self: Sized,
     {
@@ -4102,6 +4220,25 @@ pub trait FromFixed {
             (val, false) => val,
             (_, true) => panic!("overflow"),
         }
+    }
+
+    /// Converts from a fixed-point number, panicking if the value
+    /// does not fit.
+    ///
+    /// Any extra fractional bits are discarded, which rounds towards &minus;∞.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the value does not fit, even when debug assertions
+    /// are not enabled.
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_from_fixed`")]
+    #[inline]
+    #[track_caller]
+    fn unwrapped_from_fixed<F: Fixed>(src: F) -> Self
+    where
+        Self: Sized,
+    {
+        Self::strict_from_fixed(src)
     }
 }
 
@@ -4202,7 +4339,7 @@ pub trait ToFixed {
     /// [finite]: f64::is_finite
     #[inline]
     #[track_caller]
-    fn unwrapped_to_fixed<F: Fixed>(self) -> F
+    fn strict_to_fixed<F: Fixed>(self) -> F
     where
         Self: Sized,
     {
@@ -4210,6 +4347,27 @@ pub trait ToFixed {
             (val, false) => val,
             (_, true) => panic!("overflow"),
         }
+    }
+
+    /// Converts to a fixed-point number, panicking if it does not fit.
+    ///
+    /// Any extra fractional bits are discarded, which rounds towards &minus;∞.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `self` is a floating-point number that is not
+    /// [finite] or if the value does not fit, even if debug
+    /// assertions are not enabled.
+    ///
+    /// [finite]: f64::is_finite
+    #[deprecated(since = "1.30.0", note = "renamed to `strict_to_fixed`")]
+    #[inline]
+    #[track_caller]
+    fn unwrapped_to_fixed<F: Fixed>(self) -> F
+    where
+        Self: Sized,
+    {
+        self.strict_to_fixed()
     }
 }
 
@@ -4373,8 +4531,8 @@ macro_rules! impl_fixed {
             trait_delegate! { fn saturating_to_num<Dst: FromFixed>(self) -> Dst }
             trait_delegate! { fn wrapping_from_num<Src: ToFixed>(val: Src) -> Self }
             trait_delegate! { fn wrapping_to_num<Dst: FromFixed>(self) -> Dst }
-            trait_delegate! { fn unwrapped_from_num<Src: ToFixed>(val: Src) -> Self }
-            trait_delegate! { fn unwrapped_to_num<Dst: FromFixed>(self) -> Dst }
+            trait_delegate! { fn strict_from_num<Src: ToFixed>(val: Src) -> Self }
+            trait_delegate! { fn strict_to_num<Dst: FromFixed>(self) -> Dst }
             trait_delegate! { fn overflowing_from_num<Src: ToFixed>(val: Src) -> (Self, bool) }
             trait_delegate! { fn overflowing_to_num<Dst: FromFixed>(self) -> (Dst, bool) }
             trait_delegate! { fn from_str_binary(src: &str) -> Result<Self, ParseFixedError> }
@@ -4432,14 +4590,14 @@ macro_rules! impl_fixed {
             trait_delegate! {
                 fn wrapping_from_ascii_hex(src: &[u8]) -> Result<Self, ParseFixedError>
             }
-            trait_delegate! { fn unwrapped_from_str(src: &str) -> Self }
-            trait_delegate! { fn unwrapped_from_str_binary(src: &str) -> Self }
-            trait_delegate! { fn unwrapped_from_str_octal(src: &str) -> Self }
-            trait_delegate! { fn unwrapped_from_str_hex(src: &str) -> Self }
-            trait_delegate! { fn unwrapped_from_ascii(src: &[u8]) -> Self }
-            trait_delegate! { fn unwrapped_from_ascii_binary(src: &[u8]) -> Self }
-            trait_delegate! { fn unwrapped_from_ascii_octal(src: &[u8]) -> Self }
-            trait_delegate! { fn unwrapped_from_ascii_hex(src: &[u8]) -> Self }
+            trait_delegate! { fn strict_from_str(src: &str) -> Self }
+            trait_delegate! { fn strict_from_str_binary(src: &str) -> Self }
+            trait_delegate! { fn strict_from_str_octal(src: &str) -> Self }
+            trait_delegate! { fn strict_from_str_hex(src: &str) -> Self }
+            trait_delegate! { fn strict_from_ascii(src: &[u8]) -> Self }
+            trait_delegate! { fn strict_from_ascii_binary(src: &[u8]) -> Self }
+            trait_delegate! { fn strict_from_ascii_octal(src: &[u8]) -> Self }
+            trait_delegate! { fn strict_from_ascii_hex(src: &[u8]) -> Self }
             trait_delegate! {
                 fn overflowing_from_str(src: &str) -> Result<(Self, bool), ParseFixedError>
             }
