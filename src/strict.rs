@@ -42,16 +42,21 @@ use core::str::FromStr;
 ///
 /// ```rust,should_panic
 /// use fixed::types::I16F16;
-/// use fixed::Unwrapped;
-/// let max = Unwrapped(I16F16::MAX);
-/// let delta = Unwrapped(I16F16::DELTA);
+/// use fixed::Strict;
+/// let max = Strict(I16F16::MAX);
+/// let delta = Strict(I16F16::DELTA);
 /// let _overflow = max + delta;
 /// ```
 #[repr(transparent)]
 #[derive(Clone, Copy, Default, Hash, Eq, PartialEq, Ord, PartialOrd)]
-pub struct Unwrapped<F>(pub F);
+pub struct Strict<F>(pub F);
 
-impl<F: Fixed> Unwrapped<F> {
+#[deprecated(since = "1.30.0", note = "renamed to `Strict`")]
+/// Provides arithmetic operations that panic on overflow even when
+/// debug assertions are disabled.
+pub type Unwrapped<F> = Strict<F>;
+
+impl<F: Fixed> Strict<F> {
     /// Zero.
     ///
     /// See also <code>FixedI32::[ZERO][FixedI32::ZERO]</code> and
@@ -61,10 +66,10 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::ZERO, Unwrapped(I16F16::ZERO));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::ZERO, Strict(I16F16::ZERO));
     /// ```
-    pub const ZERO: Unwrapped<F> = Unwrapped(F::ZERO);
+    pub const ZERO: Strict<F> = Strict(F::ZERO);
 
     /// The difference between any two successive representable numbers, <i>Δ</i>.
     ///
@@ -75,10 +80,10 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::DELTA, Unwrapped(I16F16::DELTA));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::DELTA, Strict(I16F16::DELTA));
     /// ```
-    pub const DELTA: Unwrapped<F> = Unwrapped(F::DELTA);
+    pub const DELTA: Strict<F> = Strict(F::DELTA);
 
     /// The smallest value that can be represented.
     ///
@@ -89,10 +94,10 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::MIN, Unwrapped(I16F16::MIN));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::MIN, Strict(I16F16::MIN));
     /// ```
-    pub const MIN: Unwrapped<F> = Unwrapped(F::MIN);
+    pub const MIN: Strict<F> = Strict(F::MIN);
 
     /// The largest value that can be represented.
     ///
@@ -103,10 +108,10 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::MAX, Unwrapped(I16F16::MAX));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::MAX, Strict(I16F16::MAX));
     /// ```
-    pub const MAX: Unwrapped<F> = Unwrapped(F::MAX);
+    pub const MAX: Strict<F> = Strict(F::MAX);
 
     /// [`true`] if the type is signed.
     ///
@@ -117,9 +122,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
-    /// assert!(Unwrapped::<I16F16>::IS_SIGNED);
-    /// assert!(!Unwrapped::<U16F16>::IS_SIGNED);
+    /// use fixed::Strict;
+    /// assert!(Strict::<I16F16>::IS_SIGNED);
+    /// assert!(!Strict::<U16F16>::IS_SIGNED);
     /// ```
     pub const IS_SIGNED: bool = F::IS_SIGNED;
 
@@ -132,8 +137,8 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::INT_NBITS, I16F16::INT_NBITS);
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::INT_NBITS, I16F16::INT_NBITS);
     /// ```
     pub const INT_NBITS: u32 = F::INT_NBITS;
 
@@ -146,8 +151,8 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::FRAC_NBITS, I16F16::FRAC_NBITS);
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::FRAC_NBITS, I16F16::FRAC_NBITS);
     /// ```
     pub const FRAC_NBITS: u32 = F::FRAC_NBITS;
 
@@ -161,12 +166,12 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped::<I16F16>::from_bits(0x1C), Unwrapped(I16F16::from_bits(0x1C)));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict::<I16F16>::from_bits(0x1C), Strict(I16F16::from_bits(0x1C)));
     /// ```
     #[inline]
-    pub fn from_bits(bits: F::Bits) -> Unwrapped<F> {
-        Unwrapped(F::from_bits(bits))
+    pub fn from_bits(bits: F::Bits) -> Strict<F> {
+        Strict(F::from_bits(bits))
     }
 
     /// Creates an integer that has a bitwise representation identical
@@ -179,9 +184,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x1C));
-    /// assert_eq!(w.to_bits(), 0x1C);
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x1C));
+    /// assert_eq!(s.to_bits(), 0x1C);
     /// ```
     #[inline]
     pub fn to_bits(self) -> F::Bits {
@@ -198,17 +203,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x1234_5678));
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x1234_5678));
     /// if cfg!(target_endian = "big") {
-    ///     assert_eq!(Unwrapped::from_be(w), w);
+    ///     assert_eq!(Strict::from_be(s), s);
     /// } else {
-    ///     assert_eq!(Unwrapped::from_be(w), w.swap_bytes());
+    ///     assert_eq!(Strict::from_be(s), s.swap_bytes());
     /// }
     /// ```
     #[inline]
-    pub fn from_be(w: Self) -> Self {
-        Unwrapped(F::from_be(w.0))
+    pub fn from_be(s: Self) -> Self {
+        Strict(F::from_be(s.0))
     }
 
     /// Converts a fixed-point number from little endian to the
@@ -221,17 +226,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x1234_5678));
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x1234_5678));
     /// if cfg!(target_endian = "little") {
-    ///     assert_eq!(Unwrapped::from_le(w), w);
+    ///     assert_eq!(Strict::from_le(s), s);
     /// } else {
-    ///     assert_eq!(Unwrapped::from_le(w), w.swap_bytes());
+    ///     assert_eq!(Strict::from_le(s), s.swap_bytes());
     /// }
     /// ```
     #[inline]
-    pub fn from_le(w: Self) -> Self {
-        Unwrapped(F::from_le(w.0))
+    pub fn from_le(s: Self) -> Self {
+        Strict(F::from_le(s.0))
     }
 
     /// Converts `self` to big endian from the target’s endianness.
@@ -243,18 +248,18 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x1234_5678));
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x1234_5678));
     /// if cfg!(target_endian = "big") {
-    ///     assert_eq!(w.to_be(), w);
+    ///     assert_eq!(s.to_be(), s);
     /// } else {
-    ///     assert_eq!(w.to_be(), w.swap_bytes());
+    ///     assert_eq!(s.to_be(), s.swap_bytes());
     /// }
     /// ```
     #[inline]
     #[must_use]
     pub fn to_be(self) -> Self {
-        Unwrapped(self.0.to_be())
+        Strict(self.0.to_be())
     }
 
     /// Converts `self` to little endian from the target’s endianness.
@@ -266,18 +271,18 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x1234_5678));
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x1234_5678));
     /// if cfg!(target_endian = "little") {
-    ///     assert_eq!(w.to_le(), w);
+    ///     assert_eq!(s.to_le(), s);
     /// } else {
-    ///     assert_eq!(w.to_le(), w.swap_bytes());
+    ///     assert_eq!(s.to_le(), s.swap_bytes());
     /// }
     /// ```
     #[inline]
     #[must_use]
     pub fn to_le(self) -> Self {
-        Unwrapped(self.0.to_le())
+        Strict(self.0.to_le())
     }
 
     /// Reverses the byte order of the fixed-point number.
@@ -289,15 +294,15 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x1234_5678));
-    /// let swapped = Unwrapped(I16F16::from_bits(0x7856_3412));
-    /// assert_eq!(w.swap_bytes(), swapped);
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x1234_5678));
+    /// let swapped = Strict(I16F16::from_bits(0x7856_3412));
+    /// assert_eq!(s.swap_bytes(), swapped);
     /// ```
     #[inline]
     #[must_use]
     pub fn swap_bytes(self) -> Self {
-        Unwrapped(self.0.swap_bytes())
+        Strict(self.0.swap_bytes())
     }
 
     /// Creates a fixed-point number from its representation
@@ -311,16 +316,16 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let bytes = [0x12, 0x34, 0x56, 0x78];
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_be_bytes(bytes),
-    ///     Unwrapped::<I16F16>::from_bits(0x1234_5678)
+    ///     Strict::<I16F16>::from_be_bytes(bytes),
+    ///     Strict::<I16F16>::from_bits(0x1234_5678)
     /// );
     /// ```
     #[inline]
     pub fn from_be_bytes(bytes: F::Bytes) -> Self {
-        Unwrapped(F::from_be_bytes(bytes))
+        Strict(F::from_be_bytes(bytes))
     }
 
     /// Creates a fixed-point number from its representation
@@ -334,16 +339,16 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let bytes = [0x78, 0x56, 0x34, 0x12];
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_le_bytes(bytes),
-    ///     Unwrapped::<I16F16>::from_bits(0x1234_5678)
+    ///     Strict::<I16F16>::from_le_bytes(bytes),
+    ///     Strict::<I16F16>::from_bits(0x1234_5678)
     /// );
     /// ```
     #[inline]
     pub fn from_le_bytes(bytes: F::Bytes) -> Self {
-        Unwrapped(F::from_le_bytes(bytes))
+        Strict(F::from_le_bytes(bytes))
     }
 
     /// Creates a fixed-point number from its representation
@@ -357,20 +362,20 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let bytes = if cfg!(target_endian = "big") {
     ///     [0x12, 0x34, 0x56, 0x78]
     /// } else {
     ///     [0x78, 0x56, 0x34, 0x12]
     /// };
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_ne_bytes(bytes),
-    ///     Unwrapped::<I16F16>::from_bits(0x1234_5678)
+    ///     Strict::<I16F16>::from_ne_bytes(bytes),
+    ///     Strict::<I16F16>::from_bits(0x1234_5678)
     /// );
     /// ```
     #[inline]
     pub fn from_ne_bytes(bytes: F::Bytes) -> Self {
-        Unwrapped(F::from_ne_bytes(bytes))
+        Strict(F::from_ne_bytes(bytes))
     }
 
     /// Returns the memory representation of this fixed-point
@@ -383,9 +388,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_bits(0x1234_5678).to_be_bytes(),
+    ///     Strict::<I16F16>::from_bits(0x1234_5678).to_be_bytes(),
     ///     [0x12, 0x34, 0x56, 0x78]
     /// );
     /// ```
@@ -404,9 +409,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_bits(0x1234_5678).to_le_bytes(),
+    ///     Strict::<I16F16>::from_bits(0x1234_5678).to_le_bytes(),
     ///     [0x78, 0x56, 0x34, 0x12]
     /// );
     /// ```
@@ -425,14 +430,14 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let bytes = if cfg!(target_endian = "big") {
     ///     [0x12, 0x34, 0x56, 0x78]
     /// } else {
     ///     [0x78, 0x56, 0x34, 0x12]
     /// };
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_bits(0x1234_5678).to_ne_bytes(),
+    ///     Strict::<I16F16>::from_bits(0x1234_5678).to_ne_bytes(),
     ///     bytes
     /// );
     /// ```
@@ -441,7 +446,7 @@ impl<F: Fixed> Unwrapped<F> {
         self.0.to_ne_bytes()
     }
 
-    /// Unwrapped conversion from another number.
+    /// Strict conversion from another number.
     ///
     /// The other number can be:
     ///
@@ -457,12 +462,12 @@ impl<F: Fixed> Unwrapped<F> {
     ///     with ties rounding to even.
     ///   * Any other number `src` for which [`ToFixed`] is
     ///     implemented, in which case this method returns
-    ///     <code>[Unwrapped]\(src.[unwrapped\_to\_fixed][ToFixed::unwrapped_to_fixed]\())</code>.
+    ///     <code>[Strict]\(src.[strict\_to\_fixed][ToFixed::strict_to_fixed]\())</code>.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_num][FixedI32::unwrapped_from_num]</code>
+    /// <code>FixedI32::[strict\_from\_num][FixedI32::strict_from_num]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_num][FixedU32::unwrapped_from_num]</code>.
+    /// <code>FixedU32::[strict\_from\_num][FixedU32::strict_from_num]</code>.
     ///
     /// # Panics
     ///
@@ -474,27 +479,27 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I4F4, I16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let src = I16F16::from_num(1.75);
-    /// let dst = Unwrapped::<I4F4>::from_num(src);
-    /// assert_eq!(dst, Unwrapped(I4F4::from_num(1.75)));
+    /// let dst = Strict::<I4F4>::from_num(src);
+    /// assert_eq!(dst, Strict(I4F4::from_num(1.75)));
     /// ```
     ///
     /// The following panics even when debug assertions are disabled.
     ///
     /// ```should_panic
     /// use fixed::types::{I4F4, I16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let src = I16F16::from_bits(0x1234_5678);
-    /// let _overflow = Unwrapped::<I4F4>::from_num(src);
+    /// let _overflow = Strict::<I4F4>::from_num(src);
     /// ```
     ///
     /// [`F128`]: crate::F128
     /// [finite]: f64::is_finite
     #[inline]
     #[track_caller]
-    pub fn from_num<Src: ToFixed>(src: Src) -> Unwrapped<F> {
-        Unwrapped(src.strict_to_fixed())
+    pub fn from_num<Src: ToFixed>(src: Src) -> Strict<F> {
+        Strict(src.strict_to_fixed())
     }
 
     /// Converts a fixed-point number to another number, panicking on
@@ -515,19 +520,19 @@ impl<F: Fixed> Unwrapped<F> {
     ///     with ties rounding to even.
     ///   * Any other type `Dst` for which [`FromFixed`] is
     ///     implemented, in which case this method returns
-    ///     <code>Dst::[unwrapped\_from\_fixed][FromFixed::unwrapped_from_fixed]\(self.0)</code>.
+    ///     <code>Dst::[strict\_from\_fixed][FromFixed::strict_from_fixed]\(self.0)</code>.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_to\_num][FixedI32::unwrapped_to_num]</code>
+    /// <code>FixedI32::[strict\_to\_num][FixedI32::strict_to_num]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_to\_num][FixedU32::unwrapped_to_num]</code>.
+    /// <code>FixedU32::[strict\_to\_num][FixedU32::strict_to_num]</code>.
     ///
     /// # Examples
     ///
     /// ```rust
     /// use fixed::types::{I16F16, I4F4};
-    /// use fixed::Unwrapped;
-    /// let src = Unwrapped(I4F4::from_num(1.75));
+    /// use fixed::Strict;
+    /// let src = Strict(I4F4::from_num(1.75));
     /// assert_eq!(src.to_num::<I16F16>(), I16F16::from_num(1.75));
     /// ```
     ///
@@ -535,8 +540,8 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```should_panic
     /// use fixed::types::{I2F6, I4F4};
-    /// use fixed::Unwrapped;
-    /// let src = Unwrapped(I4F4::MAX);
+    /// use fixed::Strict;
+    /// let src = Strict(I4F4::MAX);
     /// let _overflow = src.to_num::<I2F6>();
     /// ```
     ///
@@ -552,9 +557,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str][FixedI32::unwrapped_from_str]</code>
+    /// <code>FixedI32::[strict\_from\_str][FixedI32::strict_from_str]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str][FixedU32::unwrapped_from_str]</code>.
+    /// <code>FixedU32::[strict\_from\_str][FixedU32::strict_from_str]</code>.
     ///
     /// # Panics
     ///
@@ -564,24 +569,24 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// // 16 + 3/4 = 16.75
-    /// let check = Unwrapped(I8F8::from_bits((16 << 8) + (3 << 8) / 4));
-    /// assert_eq!(Unwrapped::<I8F8>::from_str_dec("16.75"), check);
+    /// let check = Strict(I8F8::from_bits((16 << 8) + (3 << 8) / 4));
+    /// assert_eq!(Strict::<I8F8>::from_str_dec("16.75"), check);
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_str_dec("1.2.");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_str_dec("1.2.");
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn from_str_dec(src: &str) -> Unwrapped<F> {
-        Unwrapped(F::strict_from_str(src))
+    pub fn from_str_dec(src: &str) -> Strict<F> {
+        Strict(F::strict_from_str(src))
     }
 
     /// Parses a string slice containing binary digits to return a fixed-point number.
@@ -589,9 +594,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str\_binary][FixedI32::unwrapped_from_str_binary]</code>
+    /// <code>FixedI32::[strict\_from\_str\_binary][FixedI32::strict_from_str_binary]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str\_binary][FixedU32::unwrapped_from_str_binary]</code>.
+    /// <code>FixedU32::[strict\_from\_str\_binary][FixedU32::strict_from_str_binary]</code>.
     ///
     /// # Panics
     ///
@@ -601,17 +606,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let check = Unwrapped(I8F8::from_bits(0b1110001 << (8 - 1)));
-    /// assert_eq!(Unwrapped::<I8F8>::from_str_binary("111000.1"), Ok(check));
+    /// use fixed::Strict;
+    /// let check = Strict(I8F8::from_bits(0b1110001 << (8 - 1)));
+    /// assert_eq!(Strict::<I8F8>::from_str_binary("111000.1"), Ok(check));
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_str_binary("1.2");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_str_binary("1.2");
     /// ```
     ///
     /// # Compatibility note
@@ -623,8 +628,8 @@ impl<F: Fixed> Unwrapped<F> {
     /// [`from_str_dec`]: Self::from_str_dec
     #[inline]
     #[track_caller]
-    pub fn from_str_binary(src: &str) -> Result<Unwrapped<F>, ParseFixedError> {
-        Ok(Unwrapped(F::strict_from_str_binary(src)))
+    pub fn from_str_binary(src: &str) -> Result<Strict<F>, ParseFixedError> {
+        Ok(Strict(F::strict_from_str_binary(src)))
     }
 
     /// Parses a string slice containing octal digits to return a fixed-point number.
@@ -632,9 +637,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str\_octal][FixedI32::unwrapped_from_str_octal]</code>
+    /// <code>FixedI32::[strict\_from\_str\_octal][FixedI32::strict_from_str_octal]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str\_octal][FixedU32::unwrapped_from_str_octal]</code>.
+    /// <code>FixedU32::[strict\_from\_str\_octal][FixedU32::strict_from_str_octal]</code>.
     ///
     /// # Panics
     ///
@@ -644,17 +649,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let check = Unwrapped(I8F8::from_bits(0o1654 << (8 - 3)));
-    /// assert_eq!(Unwrapped::<I8F8>::from_str_octal("165.4"), Ok(check));
+    /// use fixed::Strict;
+    /// let check = Strict(I8F8::from_bits(0o1654 << (8 - 3)));
+    /// assert_eq!(Strict::<I8F8>::from_str_octal("165.4"), Ok(check));
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_str_octal("1.8");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_str_octal("1.8");
     /// ```
     ///
     /// # Compatibility note
@@ -666,8 +671,8 @@ impl<F: Fixed> Unwrapped<F> {
     /// [`from_str_dec`]: Self::from_str_dec
     #[inline]
     #[track_caller]
-    pub fn from_str_octal(src: &str) -> Result<Unwrapped<F>, ParseFixedError> {
-        Ok(Unwrapped(F::strict_from_str_octal(src)))
+    pub fn from_str_octal(src: &str) -> Result<Strict<F>, ParseFixedError> {
+        Ok(Strict(F::strict_from_str_octal(src)))
     }
 
     /// Parses a string slice containing hexadecimal digits to return a fixed-point number.
@@ -675,9 +680,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_str\_hex][FixedI32::unwrapped_from_str_hex]</code>
+    /// <code>FixedI32::[strict\_from\_str\_hex][FixedI32::strict_from_str_hex]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_str\_hex][FixedU32::unwrapped_from_str_hex]</code>.
+    /// <code>FixedU32::[strict\_from\_str\_hex][FixedU32::strict_from_str_hex]</code>.
     ///
     /// # Panics
     ///
@@ -687,17 +692,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let check = Unwrapped(I8F8::from_bits(0xFFE));
-    /// assert_eq!(Unwrapped::<I8F8>::from_str_hex("F.FE"), Ok(check));
+    /// use fixed::Strict;
+    /// let check = Strict(I8F8::from_bits(0xFFE));
+    /// assert_eq!(Strict::<I8F8>::from_str_hex("F.FE"), Ok(check));
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_str_hex("1.G");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_str_hex("1.G");
     /// ```
     ///
     /// # Compatibility note
@@ -709,8 +714,8 @@ impl<F: Fixed> Unwrapped<F> {
     /// [`from_str_dec`]: Self::from_str_dec
     #[inline]
     #[track_caller]
-    pub fn from_str_hex(src: &str) -> Result<Unwrapped<F>, ParseFixedError> {
-        Ok(Unwrapped(F::strict_from_str_hex(src)))
+    pub fn from_str_hex(src: &str) -> Result<Strict<F>, ParseFixedError> {
+        Ok(Strict(F::strict_from_str_hex(src)))
     }
 
     /// Parses an ASCII-byte slice containing decimal digits to return a fixed-point number.
@@ -718,9 +723,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii][FixedI32::unwrapped_from_ascii]</code>
+    /// <code>FixedI32::[strict\_from\_ascii][FixedI32::strict_from_ascii]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii][FixedU32::unwrapped_from_ascii]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii][FixedU32::strict_from_ascii]</code>.
     ///
     /// # Panics
     ///
@@ -730,24 +735,24 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// // 16 + 3/4 = 16.75
-    /// let check = Unwrapped(I8F8::from_bits((16 << 8) + (3 << 8) / 4));
-    /// assert_eq!(Unwrapped::<I8F8>::from_ascii(b"16.75"), check);
+    /// let check = Strict(I8F8::from_bits((16 << 8) + (3 << 8) / 4));
+    /// assert_eq!(Strict::<I8F8>::from_ascii(b"16.75"), check);
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_ascii(b"1.2.");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_ascii(b"1.2.");
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn from_ascii(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::strict_from_ascii(src))
+    pub fn from_ascii(src: &[u8]) -> Strict<F> {
+        Strict(F::strict_from_ascii(src))
     }
 
     /// Parses an ASCII-byte slice containing binary digits to return a fixed-point number.
@@ -755,9 +760,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii\_binary][FixedI32::unwrapped_from_ascii_binary]</code>
+    /// <code>FixedI32::[strict\_from\_ascii\_binary][FixedI32::strict_from_ascii_binary]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii\_binary][FixedU32::unwrapped_from_ascii_binary]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii\_binary][FixedU32::strict_from_ascii_binary]</code>.
     ///
     /// # Panics
     ///
@@ -767,22 +772,22 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let check = Unwrapped(I8F8::from_bits(0b1110001 << (8 - 1)));
-    /// assert_eq!(Unwrapped::<I8F8>::from_ascii_binary(b"111000.1"), check);
+    /// use fixed::Strict;
+    /// let check = Strict(I8F8::from_bits(0b1110001 << (8 - 1)));
+    /// assert_eq!(Strict::<I8F8>::from_ascii_binary(b"111000.1"), check);
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_ascii_binary(b"1.2");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_ascii_binary(b"1.2");
     /// ```
     #[inline]
     #[track_caller]
-    pub fn from_ascii_binary(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::strict_from_ascii_binary(src))
+    pub fn from_ascii_binary(src: &[u8]) -> Strict<F> {
+        Strict(F::strict_from_ascii_binary(src))
     }
 
     /// Parses an ASCII-byte slice containing octal digits to return a fixed-point number.
@@ -790,9 +795,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii\_octal][FixedI32::unwrapped_from_ascii_octal]</code>
+    /// <code>FixedI32::[strict\_from\_ascii\_octal][FixedI32::strict_from_ascii_octal]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii\_octal][FixedU32::unwrapped_from_ascii_octal]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii\_octal][FixedU32::strict_from_ascii_octal]</code>.
     ///
     /// # Panics
     ///
@@ -802,22 +807,22 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let check = Unwrapped(I8F8::from_bits(0o1654 << (8 - 3)));
-    /// assert_eq!(Unwrapped::<I8F8>::from_ascii_octal(b"165.4"), check);
+    /// use fixed::Strict;
+    /// let check = Strict(I8F8::from_bits(0o1654 << (8 - 3)));
+    /// assert_eq!(Strict::<I8F8>::from_ascii_octal(b"165.4"), check);
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_ascii_octal(b"1.8");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_ascii_octal(b"1.8");
     /// ```
     #[inline]
     #[track_caller]
-    pub fn from_ascii_octal(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::strict_from_ascii_octal(src))
+    pub fn from_ascii_octal(src: &[u8]) -> Strict<F> {
+        Strict(F::strict_from_ascii_octal(src))
     }
 
     /// Parses an ASCII-byte slice containing hexadecimal digits to return a fixed-point number.
@@ -825,9 +830,9 @@ impl<F: Fixed> Unwrapped<F> {
     /// Rounding is to the nearest, with ties rounded to even.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_from\_ascii\_hex][FixedI32::unwrapped_from_ascii_hex]</code>
+    /// <code>FixedI32::[strict\_from\_ascii\_hex][FixedI32::strict_from_ascii_hex]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_from\_ascii\_hex][FixedU32::unwrapped_from_ascii_hex]</code>.
+    /// <code>FixedU32::[strict\_from\_ascii\_hex][FixedU32::strict_from_ascii_hex]</code>.
     ///
     /// # Panics
     ///
@@ -837,22 +842,22 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let check = Unwrapped(I8F8::from_bits(0xFFE));
-    /// assert_eq!(Unwrapped::<I8F8>::from_ascii_hex(b"F.FE"), check);
+    /// use fixed::Strict;
+    /// let check = Strict(I8F8::from_bits(0xFFE));
+    /// assert_eq!(Strict::<I8F8>::from_ascii_hex(b"F.FE"), check);
     /// ```
     ///
     /// The following panics because of a parsing error.
     ///
     /// ```rust,should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let _error = Unwrapped::<I8F8>::from_ascii_hex(b"1.G");
+    /// use fixed::Strict;
+    /// let _error = Strict::<I8F8>::from_ascii_hex(b"1.G");
     /// ```
     #[inline]
     #[track_caller]
-    pub fn from_ascii_hex(src: &[u8]) -> Unwrapped<F> {
-        Unwrapped(F::strict_from_ascii_hex(src))
+    pub fn from_ascii_hex(src: &[u8]) -> Strict<F> {
+        Strict(F::strict_from_ascii_hex(src))
     }
 
     /// Returns the integer part.
@@ -861,7 +866,7 @@ impl<F: Fixed> Unwrapped<F> {
     /// negative numbers with non-zero fractional parts will be
     /// rounded towards &minus;∞, except in the case where there are no
     /// integer bits, for example for the type
-    /// <code>[Unwrapped]&lt;[I0F16]&gt;</code>, where the return
+    /// <code>[Strict]&lt;[I0F16]&gt;</code>, where the return
     /// value is always zero.
     ///
     /// See also <code>FixedI32::[int][FixedI32::int]</code> and
@@ -871,16 +876,16 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(I16F16::from_num(12.25)).int(), Unwrapped(I16F16::from_num(12)));
-    /// assert_eq!(Unwrapped(I16F16::from_num(-12.25)).int(), Unwrapped(I16F16::from_num(-13)));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(I16F16::from_num(12.25)).int(), Strict(I16F16::from_num(12)));
+    /// assert_eq!(Strict(I16F16::from_num(-12.25)).int(), Strict(I16F16::from_num(-13)));
     /// ```
     ///
     /// [I0F16]: crate::types::I0F16
     #[inline]
     #[must_use]
-    pub fn int(self) -> Unwrapped<F> {
-        Unwrapped(self.0.int())
+    pub fn int(self) -> Strict<F> {
+        Strict(self.0.int())
     }
 
     /// Returns the fractional part.
@@ -889,7 +894,7 @@ impl<F: Fixed> Unwrapped<F> {
     /// the returned fraction will be non-negative for negative
     /// numbers, except in the case where there are no integer bits,
     /// for example for the type
-    /// <code>[Unwrapped]&lt;[I0F16]&gt;</code>, where the return
+    /// <code>[Strict]&lt;[I0F16]&gt;</code>, where the return
     /// value is always equal to `self`.
     ///
     /// See also <code>FixedI32::[frac][FixedI32::frac]</code> and
@@ -899,16 +904,16 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(I16F16::from_num(12.25)).frac(), Unwrapped(I16F16::from_num(0.25)));
-    /// assert_eq!(Unwrapped(I16F16::from_num(-12.25)).frac(), Unwrapped(I16F16::from_num(0.75)));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(I16F16::from_num(12.25)).frac(), Strict(I16F16::from_num(0.25)));
+    /// assert_eq!(Strict(I16F16::from_num(-12.25)).frac(), Strict(I16F16::from_num(0.75)));
     /// ```
     ///
     /// [I0F16]: crate::types::I0F16
     #[inline]
     #[must_use]
-    pub fn frac(self) -> Unwrapped<F> {
-        Unwrapped(self.0.frac())
+    pub fn frac(self) -> Strict<F> {
+        Strict(self.0.frac())
     }
 
     /// Rounds to the next integer towards 0.
@@ -921,23 +926,23 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let three = Unwrapped(I16F16::from_num(3));
-    /// assert_eq!(Unwrapped(I16F16::from_num(3.9)).round_to_zero(), three);
-    /// assert_eq!(Unwrapped(I16F16::from_num(-3.9)).round_to_zero(), -three);
+    /// use fixed::Strict;
+    /// let three = Strict(I16F16::from_num(3));
+    /// assert_eq!(Strict(I16F16::from_num(3.9)).round_to_zero(), three);
+    /// assert_eq!(Strict(I16F16::from_num(-3.9)).round_to_zero(), -three);
     /// ```
     #[inline]
     #[must_use]
-    pub fn round_to_zero(self) -> Unwrapped<F> {
-        Unwrapped(self.0.round_to_zero())
+    pub fn round_to_zero(self) -> Strict<F> {
+        Strict(self.0.round_to_zero())
     }
 
-    /// Unwrapped ceil. Rounds to the next integer towards +∞, panicking
+    /// Strict ceil. Rounds to the next integer towards +∞, panicking
     /// on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_ceil][FixedI32::unwrapped_ceil]</code> and
-    /// <code>FixedU32::[unwrapped\_ceil][FixedU32::unwrapped_ceil]</code>.
+    /// <code>FixedI32::[strict\_ceil][FixedI32::strict_ceil]</code> and
+    /// <code>FixedU32::[strict\_ceil][FixedU32::strict_ceil]</code>.
     ///
     /// # Panics
     ///
@@ -947,34 +952,34 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let two_half = Unwrapped(I16F16::from_num(5) / 2);
-    /// assert_eq!(two_half.ceil(), Unwrapped(I16F16::from_num(3)));
+    /// use fixed::Strict;
+    /// let two_half = Strict(I16F16::from_num(5) / 2);
+    /// assert_eq!(two_half.ceil(), Strict(I16F16::from_num(3)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped(I16F16::MAX).ceil();
+    /// use fixed::Strict;
+    /// let _overflow = Strict(I16F16::MAX).ceil();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn ceil(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_ceil())
+    pub fn ceil(self) -> Strict<F> {
+        Strict(self.0.strict_ceil())
     }
 
-    /// Unwrapped floor. Rounds to the next integer towards &minus;∞,
+    /// Strict floor. Rounds to the next integer towards &minus;∞,
     /// panicking on overflow.
     ///
     /// Overflow can only occur for signed numbers with zero integer
     /// bits.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_floor][FixedI32::unwrapped_floor]</code> and
-    /// <code>FixedU32::[unwrapped\_floor][FixedU32::unwrapped_floor]</code>.
+    /// <code>FixedI32::[strict\_floor][FixedI32::strict_floor]</code> and
+    /// <code>FixedU32::[strict\_floor][FixedU32::strict_floor]</code>.
     ///
     /// # Panics
     ///
@@ -984,31 +989,31 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let two_half = Unwrapped(I16F16::from_num(5) / 2);
-    /// assert_eq!(two_half.floor(), Unwrapped(I16F16::from_num(2)));
+    /// use fixed::Strict;
+    /// let two_half = Strict(I16F16::from_num(5) / 2);
+    /// assert_eq!(two_half.floor(), Strict(I16F16::from_num(2)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I0F32;
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped(I0F32::MIN).floor();
+    /// use fixed::Strict;
+    /// let _overflow = Strict(I0F32::MIN).floor();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn floor(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_floor())
+    pub fn floor(self) -> Strict<F> {
+        Strict(self.0.strict_floor())
     }
 
-    /// Unwrapped round. Rounds to the next integer to the nearest,
+    /// Strict round. Rounds to the next integer to the nearest,
     /// with ties rounded away from zero, and panics on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_round][FixedI32::unwrapped_round]</code> and
-    /// <code>FixedU32::[unwrapped\_round][FixedU32::unwrapped_round]</code>.
+    /// <code>FixedI32::[strict\_round][FixedI32::strict_round]</code> and
+    /// <code>FixedU32::[strict\_round][FixedU32::strict_round]</code>.
     ///
     /// # Panics
     ///
@@ -1018,33 +1023,33 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let two_half = Unwrapped(I16F16::from_num(5) / 2);
-    /// assert_eq!(two_half.round(), Unwrapped(I16F16::from_num(3)));
-    /// assert_eq!((-two_half).round(), Unwrapped(I16F16::from_num(-3)));
+    /// use fixed::Strict;
+    /// let two_half = Strict(I16F16::from_num(5) / 2);
+    /// assert_eq!(two_half.round(), Strict(I16F16::from_num(3)));
+    /// assert_eq!((-two_half).round(), Strict(I16F16::from_num(-3)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped(I16F16::MAX).round();
+    /// use fixed::Strict;
+    /// let _overflow = Strict(I16F16::MAX).round();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn round(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_round())
+    pub fn round(self) -> Strict<F> {
+        Strict(self.0.strict_round())
     }
 
-    /// Unwrapped round. Rounds to the next integer to the nearest, with ties
+    /// Strict round. Rounds to the next integer to the nearest, with ties
     /// rounded to even, and panics on overflow.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_round\_ties\_even][FixedI32::unwrapped_round_ties_even]</code>
+    /// <code>FixedI32::[strict\_round\_ties\_even][FixedI32::strict_round_ties_even]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_round\_ties\_even][FixedU32::unwrapped_round_ties_even]</code>.
+    /// <code>FixedU32::[strict\_round\_ties\_even][FixedU32::strict_round_ties_even]</code>.
     ///
     /// # Panics
     ///
@@ -1054,26 +1059,26 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let two_half = Unwrapped(I16F16::from_num(2.5));
-    /// assert_eq!(two_half.round_ties_even(), Unwrapped(I16F16::from_num(2)));
-    /// let three_half = Unwrapped(I16F16::from_num(3.5));
-    /// assert_eq!(three_half.round_ties_even(), Unwrapped(I16F16::from_num(4)));
+    /// use fixed::Strict;
+    /// let two_half = Strict(I16F16::from_num(2.5));
+    /// assert_eq!(two_half.round_ties_even(), Strict(I16F16::from_num(2)));
+    /// let three_half = Strict(I16F16::from_num(3.5));
+    /// assert_eq!(three_half.round_ties_even(), Strict(I16F16::from_num(4)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let max = Unwrapped(I16F16::MAX);
+    /// use fixed::Strict;
+    /// let max = Strict(I16F16::MAX);
     /// let _overflow = max.round_ties_even();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn round_ties_even(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_round_ties_even())
+    pub fn round_ties_even(self) -> Strict<F> {
+        Strict(self.0.strict_round_ties_even())
     }
 
     /// Returns the number of ones in the binary representation.
@@ -1085,9 +1090,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x00FF_FF00));
-    /// assert_eq!(w.count_ones(), w.0.count_ones());
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x00FF_FF00));
+    /// assert_eq!(s.count_ones(), s.0.count_ones());
     /// ```
     #[inline]
     #[doc(alias("popcount", "popcnt"))]
@@ -1104,9 +1109,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x00FF_FF00));
-    /// assert_eq!(w.count_zeros(), w.0.count_zeros());
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x00FF_FF00));
+    /// assert_eq!(s.count_zeros(), s.0.count_zeros());
     /// ```
     #[inline]
     pub fn count_zeros(self) -> u32 {
@@ -1122,9 +1127,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::U16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(U16F16::from_bits(0xFF00_00FF));
-    /// assert_eq!(w.leading_ones(), w.0.leading_ones());
+    /// use fixed::Strict;
+    /// let s = Strict(U16F16::from_bits(0xFF00_00FF));
+    /// assert_eq!(s.leading_ones(), s.0.leading_ones());
     /// ```
     #[inline]
     pub fn leading_ones(self) -> u32 {
@@ -1141,9 +1146,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x00FF_FF00));
-    /// assert_eq!(w.leading_zeros(), w.0.leading_zeros());
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x00FF_FF00));
+    /// assert_eq!(s.leading_zeros(), s.0.leading_zeros());
     /// ```
     #[inline]
     pub fn leading_zeros(self) -> u32 {
@@ -1160,9 +1165,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::U16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(U16F16::from_bits(0xFF00_00FF));
-    /// assert_eq!(w.trailing_ones(), w.0.trailing_ones());
+    /// use fixed::Strict;
+    /// let s = Strict(U16F16::from_bits(0xFF00_00FF));
+    /// assert_eq!(s.trailing_ones(), s.0.trailing_ones());
     /// ```
     #[inline]
     pub fn trailing_ones(self) -> u32 {
@@ -1179,9 +1184,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let w = Unwrapped(I16F16::from_bits(0x00FF_FF00));
-    /// assert_eq!(w.trailing_zeros(), w.0.trailing_zeros());
+    /// use fixed::Strict;
+    /// let s = Strict(I16F16::from_bits(0x00FF_FF00));
+    /// assert_eq!(s.trailing_zeros(), s.0.trailing_zeros());
     /// ```
     #[inline]
     pub fn trailing_zeros(self) -> u32 {
@@ -1191,8 +1196,8 @@ impl<F: Fixed> Unwrapped<F> {
     /// Returns the square root.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_sqrt][FixedI32::unwrapped_sqrt]</code> and
-    /// <code>FixedU32::[unwrapped\_sqrt][FixedU32::unwrapped_sqrt]</code>.
+    /// <code>FixedI32::[strict\_sqrt][FixedI32::strict_sqrt]</code> and
+    /// <code>FixedU32::[strict\_sqrt][FixedU32::strict_sqrt]</code>.
     ///
     /// # Panics
     ///
@@ -1202,16 +1207,16 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I0F32;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(I0F32::lit("0b0.0001")).sqrt().0, I0F32::lit("0b0.01"));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(I0F32::lit("0b0.0001")).sqrt().0, I0F32::lit("0b0.01"));
     /// ```
     ///
     /// The following panics because the input value is negative.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let neg = Unwrapped(I16F16::from_num(-1));
+    /// use fixed::Strict;
+    /// let neg = Strict(I16F16::from_num(-1));
     /// let _sqrt_neg = neg.sqrt();
     /// ```
     ///
@@ -1219,14 +1224,14 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```should_panic
     /// use fixed::types::I0F32;
-    /// use fixed::Unwrapped;
-    /// let u = Unwrapped(I0F32::from_num(0.25));
+    /// use fixed::Strict;
+    /// let u = Strict(I0F32::from_num(0.25));
     /// let _overflow = u.sqrt();
     /// ```
     #[inline]
     #[track_caller]
     pub fn sqrt(self) -> Self {
-        Unwrapped(self.0.strict_sqrt())
+        Strict(self.0.strict_sqrt())
     }
 
     /// Integer base-2 logarithm, rounded down.
@@ -1283,17 +1288,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let i = I16F16::from_bits(0x1234_5678);
-    /// assert_eq!(Unwrapped(i).reverse_bits(), Unwrapped(i.reverse_bits()));
+    /// assert_eq!(Strict(i).reverse_bits(), Strict(i.reverse_bits()));
     /// ```
     #[inline]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn reverse_bits(self) -> Unwrapped<F> {
-        Unwrapped(self.0.reverse_bits())
+    pub fn reverse_bits(self) -> Strict<F> {
+        Strict(self.0.reverse_bits())
     }
 
-    /// Shifts to the left by `n` bits, unwrapped the truncated bits to the right end.
+    /// Shifts to the left by `n` bits, strict the truncated bits to the right end.
     ///
     /// See also <code>FixedI32::[rotate\_left][FixedI32::rotate_left]</code>
     /// and <code>FixedU32::[rotate\_left][FixedU32::rotate_left]</code>.
@@ -1302,17 +1307,17 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let i = I16F16::from_bits(0x00FF_FF00);
-    /// assert_eq!(Unwrapped(i).rotate_left(12), Unwrapped(i.rotate_left(12)));
+    /// assert_eq!(Strict(i).rotate_left(12), Strict(i.rotate_left(12)));
     /// ```
     #[inline]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn rotate_left(self, n: u32) -> Unwrapped<F> {
-        Unwrapped(self.0.rotate_left(n))
+    pub fn rotate_left(self, n: u32) -> Strict<F> {
+        Strict(self.0.rotate_left(n))
     }
 
-    /// Shifts to the right by `n` bits, unwrapped the truncated bits to the left end.
+    /// Shifts to the right by `n` bits, strict the truncated bits to the left end.
     ///
     /// See also <code>FixedI32::[rotate\_right][FixedI32::rotate_right]</code>
     /// and <code>FixedU32::[rotate\_right][FixedU32::rotate_right]</code>.
@@ -1321,14 +1326,14 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// let i = I16F16::from_bits(0x00FF_FF00);
-    /// assert_eq!(Unwrapped(i).rotate_right(12), Unwrapped(i.rotate_right(12)));
+    /// assert_eq!(Strict(i).rotate_right(12), Strict(i.rotate_right(12)));
     /// ```
     #[inline]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn rotate_right(self, n: u32) -> Unwrapped<F> {
-        Unwrapped(self.0.rotate_right(n))
+    pub fn rotate_right(self, n: u32) -> Strict<F> {
+        Strict(self.0.rotate_right(n))
     }
 
     /// Returns [`true`] if the number is zero.
@@ -1340,9 +1345,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert!(Unwrapped(I16F16::ZERO).is_zero());
-    /// assert!(!Unwrapped(I16F16::from_num(4.3)).is_zero());
+    /// use fixed::Strict;
+    /// assert!(Strict(I16F16::ZERO).is_zero());
+    /// assert!(!Strict(I16F16::from_num(4.3)).is_zero());
     /// ```
     #[inline]
     pub fn is_zero(self) -> bool {
@@ -1352,8 +1357,8 @@ impl<F: Fixed> Unwrapped<F> {
     /// Returns the distance from `self` to `other`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_dist][FixedI32::unwrapped_dist]</code> and
-    /// <code>FixedU32::[unwrapped\_dist][FixedU32::unwrapped_dist]</code>.
+    /// <code>FixedI32::[strict\_dist][FixedI32::strict_dist]</code> and
+    /// <code>FixedU32::[strict\_dist][FixedU32::strict_dist]</code>.
     ///
     /// # Panics
     ///
@@ -1363,24 +1368,24 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// assert_eq!(Unwr::from_num(-1).dist(Unwr::from_num(4)), Unwr::from_num(5));
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// assert_eq!(St::from_num(-1).dist(St::from_num(4)), St::from_num(5));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// let _overflow = Unwr::MIN.dist(Unwr::ZERO);
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// let _overflow = St::MIN.dist(St::ZERO);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn dist(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_dist(other.0))
+    pub fn dist(self, other: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_dist(other.0))
     }
 
     /// Returns the mean of `self` and `other`.
@@ -1392,54 +1397,54 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let three = Unwrapped(I16F16::from_num(3));
-    /// let four = Unwrapped(I16F16::from_num(4));
-    /// assert_eq!(three.mean(four), Unwrapped(I16F16::from_num(3.5)));
-    /// assert_eq!(three.mean(-four), Unwrapped(I16F16::from_num(-0.5)));
+    /// use fixed::Strict;
+    /// let three = Strict(I16F16::from_num(3));
+    /// let four = Strict(I16F16::from_num(4));
+    /// assert_eq!(three.mean(four), Strict(I16F16::from_num(3.5)));
+    /// assert_eq!(three.mean(-four), Strict(I16F16::from_num(-0.5)));
     /// ```
     #[inline]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn mean(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.mean(other.0))
+    pub fn mean(self, other: Strict<F>) -> Strict<F> {
+        Strict(self.0.mean(other.0))
     }
 
     /// Compute the hypotenuse of a right triange.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_hypot][FixedI32::unwrapped_hypot]</code> and
-    /// <code>FixedU32::[unwrapped\_hypot][FixedU32::unwrapped_hypot]</code>.
+    /// <code>FixedI32::[strict\_hypot][FixedI32::strict_hypot]</code> and
+    /// <code>FixedU32::[strict\_hypot][FixedU32::strict_hypot]</code>.
     ///
     /// # Examples
     ///
     /// ```rust
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I8F8>;
+    /// use fixed::Strict;
+    /// type St = Strict<I8F8>;
     /// // hypot(3, 4) == 5
-    /// assert_eq!(Unwr::from_num(3).hypot(Unwr::from_num(4)), Unwr::from_num(5));
+    /// assert_eq!(St::from_num(3).hypot(St::from_num(4)), St::from_num(5));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I8F8>;
+    /// use fixed::Strict;
+    /// type St = Strict<I8F8>;
     /// // hypot(88, 105) == 137, which does not fit
-    /// let _overflow = Unwr::from_num(88).hypot(Unwr::from_num(105));
+    /// let _overflow = St::from_num(88).hypot(St::from_num(105));
     /// ```
     #[inline]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn hypot(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_hypot(other.0))
+    pub fn hypot(self, other: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_hypot(other.0))
     }
 
     /// Returns the reciprocal (inverse), 1/`self`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_recip][FixedI32::unwrapped_recip]</code> and
-    /// <code>FixedU32::[unwrapped\_recip][FixedU32::unwrapped_recip]</code>.
+    /// <code>FixedI32::[strict\_recip][FixedI32::strict_recip]</code> and
+    /// <code>FixedU32::[strict\_recip][FixedU32::strict_recip]</code>.
     ///
     /// # Panics
     ///
@@ -1449,32 +1454,32 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I8F24;
-    /// use fixed::Unwrapped;
-    /// let quarter = Unwrapped(I8F24::from_num(0.25));
-    /// assert_eq!(quarter.recip(), Unwrapped(I8F24::from_num(4)));
+    /// use fixed::Strict;
+    /// let quarter = Strict(I8F24::from_num(0.25));
+    /// assert_eq!(quarter.recip(), Strict(I8F24::from_num(4)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I8F24;
-    /// use fixed::Unwrapped;
-    /// let frac_1_512 = Unwrapped(I8F24::ONE / 512);
+    /// use fixed::Strict;
+    /// let frac_1_512 = Strict(I8F24::ONE / 512);
     /// let _overflow = frac_1_512.recip();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn recip(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_recip())
+    pub fn recip(self) -> Strict<F> {
+        Strict(self.0.strict_recip())
     }
 
     /// Returns the next multiple of `other`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_next\_multiple\_of][FixedI32::unwrapped_next_multiple_of]</code>
+    /// <code>FixedI32::[strict\_next\_multiple\_of][FixedI32::strict_next_multiple_of]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_next\_multiple\_of][FixedU32::unwrapped_next_multiple_of]</code>.
+    /// <code>FixedU32::[strict\_next\_multiple\_of][FixedU32::strict_next_multiple_of]</code>.
     ///
     /// # Panics
     ///
@@ -1484,10 +1489,10 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let one_point_5 = Unwrapped::<I16F16>::from_num(1.5);
-    /// let four = Unwrapped::<I16F16>::from_num(4);
-    /// let four_point_5 = Unwrapped::<I16F16>::from_num(4.5);
+    /// use fixed::Strict;
+    /// let one_point_5 = Strict::<I16F16>::from_num(1.5);
+    /// let four = Strict::<I16F16>::from_num(4);
+    /// let four_point_5 = Strict::<I16F16>::from_num(4.5);
     /// assert_eq!(four.next_multiple_of(one_point_5), four_point_5);
     /// ```
     ///
@@ -1495,24 +1500,24 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust,should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let two = Unwrapped::<I16F16>::from_num(2);
-    /// let max = Unwrapped::<I16F16>::MAX;
+    /// use fixed::Strict;
+    /// let two = Strict::<I16F16>::from_num(2);
+    /// let max = Strict::<I16F16>::MAX;
     /// let _overflow = max.next_multiple_of(two);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn next_multiple_of(self, other: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_next_multiple_of(other.0))
+    pub fn next_multiple_of(self, other: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_next_multiple_of(other.0))
     }
 
     /// Multiply and add. Returns `self` × `mul` + `add`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_mul\_add][FixedI32::unwrapped_mul_add]</code>
+    /// <code>FixedI32::[strict\_mul\_add][FixedI32::strict_mul_add]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_mul\_add][FixedU32::unwrapped_mul_add]</code>.
+    /// <code>FixedU32::[strict\_mul\_add][FixedU32::strict_mul_add]</code>.
     ///
     /// # Panics
     ///
@@ -1522,38 +1527,38 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let half = Unwrapped(I16F16::from_num(0.5));
-    /// let three = Unwrapped(I16F16::from_num(3));
-    /// let four = Unwrapped(I16F16::from_num(4));
-    /// assert_eq!(three.mul_add(half, four), Unwrapped(I16F16::from_num(5.5)));
+    /// use fixed::Strict;
+    /// let half = Strict(I16F16::from_num(0.5));
+    /// let three = Strict(I16F16::from_num(3));
+    /// let four = Strict(I16F16::from_num(4));
+    /// assert_eq!(three.mul_add(half, four), Strict(I16F16::from_num(5.5)));
     /// // max × 1.5 - max = max / 2, which does not overflow
-    /// let max = Unwrapped(I16F16::MAX);
-    /// assert_eq!(max.mul_add(Unwrapped(I16F16::from_num(1.5)), -max), max / 2);
+    /// let max = Strict(I16F16::MAX);
+    /// assert_eq!(max.mul_add(Strict(I16F16::from_num(1.5)), -max), max / 2);
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let one = Unwrapped(I16F16::ONE);
-    /// let max = Unwrapped(I16F16::MAX);
+    /// use fixed::Strict;
+    /// let one = Strict(I16F16::ONE);
+    /// let max = Strict(I16F16::MAX);
     /// let _overflow = max.mul_add(one, one);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn mul_add(self, mul: Unwrapped<F>, add: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_mul_add(mul.0, add.0))
+    pub fn mul_add(self, mul: Strict<F>, add: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_mul_add(mul.0, add.0))
     }
 
     /// Adds `self` to the product `a`&nbsp;×&nbsp;`b`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_add\_prod][FixedI32::unwrapped_add_prod]</code>
+    /// <code>FixedI32::[strict\_add\_prod][FixedI32::strict_add_prod]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_add\_prod][FixedU32::unwrapped_add_prod]</code>.
+    /// <code>FixedU32::[strict\_add\_prod][FixedU32::strict_add_prod]</code>.
     ///
     /// # Panics
     ///
@@ -1563,34 +1568,34 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let half = Unwrapped(I16F16::from_num(0.5));
-    /// let three = Unwrapped(I16F16::from_num(3));
-    /// let four = Unwrapped(I16F16::from_num(4));
-    /// assert_eq!(three.add_prod(four, half), Unwrapped(I16F16::from_num(5)));
+    /// use fixed::Strict;
+    /// let half = Strict(I16F16::from_num(0.5));
+    /// let three = Strict(I16F16::from_num(3));
+    /// let four = Strict(I16F16::from_num(4));
+    /// assert_eq!(three.add_prod(four, half), Strict(I16F16::from_num(5)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let max = Unwrapped(I16F16::MAX);
-    /// let _overflow = max.add_prod(max, Unwrapped(I16F16::from_num(3)));
+    /// use fixed::Strict;
+    /// let max = Strict(I16F16::MAX);
+    /// let _overflow = max.add_prod(max, Strict(I16F16::from_num(3)));
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn add_prod(self, a: Unwrapped<F>, b: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_add_prod(a.0, b.0))
+    pub fn add_prod(self, a: Strict<F>, b: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_add_prod(a.0, b.0))
     }
 
     /// Multiply and accumulate. Adds (`a` × `b`) to `self`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_mul\_acc][FixedI32::unwrapped_mul_acc]</code>
+    /// <code>FixedI32::[strict\_mul\_acc][FixedI32::strict_mul_acc]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_mul\_acc][FixedU32::unwrapped_mul_acc]</code>.
+    /// <code>FixedU32::[strict\_mul\_acc][FixedU32::strict_mul_acc]</code>.
     ///
     /// # Panics
     ///
@@ -1600,32 +1605,32 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let mut acc = Unwrapped(I16F16::from_num(3));
-    /// acc.mul_acc(Unwrapped(I16F16::from_num(4)), Unwrapped(I16F16::from_num(0.5)));
-    /// assert_eq!(acc, Unwrapped(I16F16::from_num(5)));
+    /// use fixed::Strict;
+    /// let mut acc = Strict(I16F16::from_num(3));
+    /// acc.mul_acc(Strict(I16F16::from_num(4)), Strict(I16F16::from_num(0.5)));
+    /// assert_eq!(acc, Strict(I16F16::from_num(5)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let mut acc = Unwrapped(I16F16::MAX);
-    /// acc.mul_acc(Unwrapped(I16F16::MAX), Unwrapped(I16F16::from_num(3)));
+    /// use fixed::Strict;
+    /// let mut acc = Strict(I16F16::MAX);
+    /// acc.mul_acc(Strict(I16F16::MAX), Strict(I16F16::from_num(3)));
     /// ```
     #[inline]
     #[track_caller]
-    pub fn mul_acc(&mut self, a: Unwrapped<F>, b: Unwrapped<F>) {
+    pub fn mul_acc(&mut self, a: Strict<F>, b: Strict<F>) {
         self.0.strict_mul_acc(a.0, b.0);
     }
 
     /// Euclidean division.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_div\_euclid][FixedI32::unwrapped_div_euclid]</code>
+    /// <code>FixedI32::[strict\_div\_euclid][FixedI32::strict_div_euclid]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_div\_euclid][FixedU32::unwrapped_div_euclid]</code>.
+    /// <code>FixedU32::[strict\_div\_euclid][FixedU32::strict_div_euclid]</code>.
     ///
     /// # Panics
     ///
@@ -1635,33 +1640,33 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let num = Unwrapped(I16F16::from_num(7.5));
-    /// let den = Unwrapped(I16F16::from_num(2));
-    /// assert_eq!(num.div_euclid(den), Unwrapped(I16F16::from_num(3)));
+    /// use fixed::Strict;
+    /// let num = Strict(I16F16::from_num(7.5));
+    /// let den = Strict(I16F16::from_num(2));
+    /// assert_eq!(num.div_euclid(den), Strict(I16F16::from_num(3)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let quarter = Unwrapped(I16F16::from_num(0.25));
-    /// let _overflow = Unwrapped(I16F16::MAX).div_euclid(quarter);
+    /// use fixed::Strict;
+    /// let quarter = Strict(I16F16::from_num(0.25));
+    /// let _overflow = Strict(I16F16::MAX).div_euclid(quarter);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn div_euclid(self, divisor: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_div_euclid(divisor.0))
+    pub fn div_euclid(self, divisor: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_div_euclid(divisor.0))
     }
 
     /// Remainder for Euclidean division.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_rem\_euclid][FixedI32::unwrapped_rem_euclid]</code>
+    /// <code>FixedI32::[strict\_rem\_euclid][FixedI32::strict_rem_euclid]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_rem\_euclid][FixedU32::unwrapped_rem_euclid]</code>.
+    /// <code>FixedU32::[strict\_rem\_euclid][FixedU32::strict_rem_euclid]</code>.
     ///
     /// # Panics
     ///
@@ -1671,25 +1676,25 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let num = Unwrapped(I16F16::from_num(7.5));
-    /// let den = Unwrapped(I16F16::from_num(2));
-    /// assert_eq!(num.rem_euclid(den), Unwrapped(I16F16::from_num(1.5)));
-    /// assert_eq!((-num).rem_euclid(den), Unwrapped(I16F16::from_num(0.5)));
+    /// use fixed::Strict;
+    /// let num = Strict(I16F16::from_num(7.5));
+    /// let den = Strict(I16F16::from_num(2));
+    /// assert_eq!(num.rem_euclid(den), Strict(I16F16::from_num(1.5)));
+    /// assert_eq!((-num).rem_euclid(den), Strict(I16F16::from_num(0.5)));
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn rem_euclid(self, divisor: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_rem_euclid(divisor.0))
+    pub fn rem_euclid(self, divisor: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_rem_euclid(divisor.0))
     }
 
     /// Euclidean division by an integer.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_div\_euclid\_int][FixedI32::unwrapped_div_euclid_int]</code>
+    /// <code>FixedI32::[strict\_div\_euclid\_int][FixedI32::strict_div_euclid_int]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_div\_euclid\_int][FixedU32::unwrapped_div_euclid_int]</code>.
+    /// <code>FixedU32::[strict\_div\_euclid\_int][FixedU32::strict_div_euclid_int]</code>.
     ///
     /// # Panics
     ///
@@ -1699,32 +1704,32 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let num = Unwrapped(I16F16::from_num(7.5));
-    /// assert_eq!(num.div_euclid_int(2), Unwrapped(I16F16::from_num(3)));
+    /// use fixed::Strict;
+    /// let num = Strict(I16F16::from_num(7.5));
+    /// assert_eq!(num.div_euclid_int(2), Strict(I16F16::from_num(3)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let min = Unwrapped(I16F16::MIN);
+    /// use fixed::Strict;
+    /// let min = Strict(I16F16::MIN);
     /// let _overflow = min.div_euclid_int(-1);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn div_euclid_int(self, divisor: F::Bits) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_div_euclid_int(divisor))
+    pub fn div_euclid_int(self, divisor: F::Bits) -> Strict<F> {
+        Strict(self.0.strict_div_euclid_int(divisor))
     }
 
     /// Remainder for Euclidean division.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_rem\_euclid\_int][FixedI32::unwrapped_rem_euclid_int]</code>
+    /// <code>FixedI32::[strict\_rem\_euclid\_int][FixedI32::strict_rem_euclid_int]</code>
     /// and
-    /// <code>FixedU32::[unwrapped\_rem\_euclid\_int][FixedU32::unwrapped_rem_euclid_int]</code>.
+    /// <code>FixedU32::[strict\_rem\_euclid\_int][FixedU32::strict_rem_euclid_int]</code>.
     ///
     /// # Panics
     ///
@@ -1734,26 +1739,26 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let num = Unwrapped(I16F16::from_num(7.5));
-    /// assert_eq!(num.rem_euclid_int(2), Unwrapped(I16F16::from_num(1.5)));
-    /// assert_eq!((-num).rem_euclid_int(2), Unwrapped(I16F16::from_num(0.5)));
+    /// use fixed::Strict;
+    /// let num = Strict(I16F16::from_num(7.5));
+    /// assert_eq!(num.rem_euclid_int(2), Strict(I16F16::from_num(1.5)));
+    /// assert_eq!((-num).rem_euclid_int(2), Strict(I16F16::from_num(0.5)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I8F8;
-    /// use fixed::Unwrapped;
-    /// let num = Unwrapped(I8F8::from_num(-7.5));
+    /// use fixed::Strict;
+    /// let num = Strict(I8F8::from_num(-7.5));
     /// // -128 ≤ Fix < 128, so the answer 192.5 overflows
     /// let _overflow = num.rem_euclid_int(200);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn rem_euclid_int(self, divisor: F::Bits) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_rem_euclid_int(divisor))
+    pub fn rem_euclid_int(self, divisor: F::Bits) -> Strict<F> {
+        Strict(self.0.strict_rem_euclid_int(divisor))
     }
 
     /// Unbounded shift left. Computes `self << rhs`, without bounding the value
@@ -1767,16 +1772,16 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// let num = Unwrapped(I16F16::from_num(1.5));
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// let num = Strict(I16F16::from_num(1.5));
     /// assert_eq!(num.unbounded_shl(5), num << 5);
-    /// assert_eq!(num.unbounded_shl(32), Unwr::ZERO);
+    /// assert_eq!(num.unbounded_shl(32), St::ZERO);
     /// ```
     #[must_use = "this returns the result of the operation, without modifying the original"]
     #[inline]
-    pub fn unbounded_shl(self, rhs: u32) -> Unwrapped<F> {
-        Unwrapped(self.0.unbounded_shl(rhs))
+    pub fn unbounded_shl(self, rhs: u32) -> Strict<F> {
+        Strict(self.0.unbounded_shl(rhs))
     }
 
     /// Unbounded shift right. Computes `self >> rhs`, without bounding the
@@ -1790,25 +1795,25 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// let num = Unwrapped(I16F16::from_num(1.5));
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// let num = Strict(I16F16::from_num(1.5));
     /// assert_eq!(num.unbounded_shr(5), num >> 5);
-    /// assert_eq!(num.unbounded_shr(32), Unwr::ZERO);
+    /// assert_eq!(num.unbounded_shr(32), St::ZERO);
     /// assert_eq!((-num).unbounded_shr(5), (-num) >> 5);
-    /// assert_eq!((-num).unbounded_shr(32), -Unwr::DELTA);
+    /// assert_eq!((-num).unbounded_shr(32), -St::DELTA);
     /// ```
     #[must_use = "this returns the result of the operation, without modifying the original"]
     #[inline]
-    pub fn unbounded_shr(self, rhs: u32) -> Unwrapped<F> {
-        Unwrapped(self.0.unbounded_shr(rhs))
+    pub fn unbounded_shr(self, rhs: u32) -> Strict<F> {
+        Strict(self.0.unbounded_shr(rhs))
     }
 
     /// Linear interpolation between `start` and `end`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_lerp][FixedI32::unwrapped_lerp]</code> and
-    /// <code>FixedU32::[unwrapped\_lerp][FixedU32::unwrapped_lerp]</code>.
+    /// <code>FixedI32::[strict\_lerp][FixedI32::strict_lerp]</code> and
+    /// <code>FixedU32::[strict\_lerp][FixedU32::strict_lerp]</code>.
     ///
     /// # Panics
     ///
@@ -1818,31 +1823,31 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// assert_eq!(Unwr::from_num(0.5).lerp(Unwr::ZERO, Unwr::MAX), Unwr::MAX / 2);
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// assert_eq!(St::from_num(0.5).lerp(St::ZERO, St::MAX), St::MAX / 2);
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// let _overflow = Unwr::from_num(1.5).lerp(Unwr::ZERO, Unwr::MAX);
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// let _overflow = St::from_num(1.5).lerp(St::ZERO, St::MAX);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use = "this returns the result of the operation, without modifying the original"]
-    pub fn lerp(self, start: Unwrapped<F>, end: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_lerp(start.0, end.0))
+    pub fn lerp(self, start: Strict<F>, end: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_lerp(start.0, end.0))
     }
 
     /// Inverse linear interpolation between `start` and `end`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_inv\_lerp][FixedI32::unwrapped_inv_lerp]</code> and
-    /// <code>FixedU32::[unwrapped\_inv\_lerp][FixedU32::unwrapped_inv_lerp]</code>.
+    /// <code>FixedI32::[strict\_inv\_lerp][FixedI32::strict_inv_lerp]</code> and
+    /// <code>FixedU32::[strict\_inv\_lerp][FixedU32::strict_inv_lerp]</code>.
     ///
     /// # Panics
     ///
@@ -1852,11 +1857,11 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
     /// assert_eq!(
-    ///     Unwr::from_num(25).inv_lerp(Unwr::from_num(20), Unwr::from_num(40)),
-    ///     Unwr::from_num(0.25)
+    ///     St::from_num(25).inv_lerp(St::from_num(20), St::from_num(40)),
+    ///     St::from_num(0.25)
     /// );
     /// ```
     ///
@@ -1864,9 +1869,9 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// let two = Unwr::from_num(2);
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// let two = St::from_num(2);
     /// let _zero_range = two.inv_lerp(two, two);
     /// ```
     ///
@@ -1874,18 +1879,18 @@ impl<F: Fixed> Unwrapped<F> {
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// type Unwr = Unwrapped<I16F16>;
-    /// let _overflow = Unwr::MAX.inv_lerp(Unwr::ZERO, Unwr::from_num(0.5));
+    /// use fixed::Strict;
+    /// type St = Strict<I16F16>;
+    /// let _overflow = St::MAX.inv_lerp(St::ZERO, St::from_num(0.5));
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn inv_lerp(self, start: Unwrapped<F>, end: Unwrapped<F>) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_inv_lerp(start.0, end.0))
+    pub fn inv_lerp(self, start: Strict<F>, end: Strict<F>) -> Strict<F> {
+        Strict(self.0.strict_inv_lerp(start.0, end.0))
     }
 
-    /// Unwrapped round. Rounds to the next integer to the nearest, with ties
+    /// Strict round. Rounds to the next integer to the nearest, with ties
     /// rounded to even, and panics on overflow.
     ///
     /// # Panics
@@ -1895,12 +1900,12 @@ impl<F: Fixed> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     #[deprecated(since = "1.28.0", note = "renamed to `round_ties_even`")]
-    pub fn round_ties_to_even(self) -> Unwrapped<F> {
+    pub fn round_ties_to_even(self) -> Strict<F> {
         self.round_ties_even()
     }
 }
 
-impl<F: FixedSigned> Unwrapped<F> {
+impl<F: FixedSigned> Strict<F> {
     /// Returns the bit pattern of `self` reinterpreted as an unsigned
     /// fixed-point number of the same size.
     ///
@@ -1910,15 +1915,15 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     ///
-    /// let n = Unwrapped(-I16F16::DELTA);
-    /// assert_eq!(n.cast_unsigned(), Unwrapped(U16F16::MAX));
+    /// let n = Strict(-I16F16::DELTA);
+    /// assert_eq!(n.cast_unsigned(), Strict(U16F16::MAX));
     /// ```
     #[must_use]
     #[inline]
-    pub fn cast_unsigned(self) -> Unwrapped<F::Unsigned> {
-        Unwrapped(self.0.cast_unsigned())
+    pub fn cast_unsigned(self) -> Strict<F::Unsigned> {
+        Strict(self.0.cast_unsigned())
     }
 
     /// Returns the number of bits required to represent the value.
@@ -1933,14 +1938,14 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I4F4;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(I4F4::from_num(-3)).signed_bits(), 7);      // “_101.0000”
-    /// assert_eq!(Unwrapped(I4F4::from_num(-1)).signed_bits(), 5);      // “___1.0000”
-    /// assert_eq!(Unwrapped(I4F4::from_num(-0.0625)).signed_bits(), 1); // “____.___1”
-    /// assert_eq!(Unwrapped(I4F4::from_num(0)).signed_bits(), 1);       // “____.___0”
-    /// assert_eq!(Unwrapped(I4F4::from_num(0.0625)).signed_bits(), 2);  // “____.__01”
-    /// assert_eq!(Unwrapped(I4F4::from_num(1)).signed_bits(), 6);       // “__01.0000”
-    /// assert_eq!(Unwrapped(I4F4::from_num(3)).signed_bits(), 7);       // “_011.0000”
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(I4F4::from_num(-3)).signed_bits(), 7);      // “_101.0000”
+    /// assert_eq!(Strict(I4F4::from_num(-1)).signed_bits(), 5);      // “___1.0000”
+    /// assert_eq!(Strict(I4F4::from_num(-0.0625)).signed_bits(), 1); // “____.___1”
+    /// assert_eq!(Strict(I4F4::from_num(0)).signed_bits(), 1);       // “____.___0”
+    /// assert_eq!(Strict(I4F4::from_num(0.0625)).signed_bits(), 2);  // “____.__01”
+    /// assert_eq!(Strict(I4F4::from_num(1)).signed_bits(), 6);       // “__01.0000”
+    /// assert_eq!(Strict(I4F4::from_num(3)).signed_bits(), 7);       // “_011.0000”
     /// ```
     #[inline]
     pub fn signed_bits(self) -> u32 {
@@ -1955,10 +1960,10 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert!(Unwrapped(I16F16::from_num(4.3)).is_positive());
-    /// assert!(!Unwrapped(I16F16::ZERO).is_positive());
-    /// assert!(!Unwrapped(I16F16::from_num(-4.3)).is_positive());
+    /// use fixed::Strict;
+    /// assert!(Strict(I16F16::from_num(4.3)).is_positive());
+    /// assert!(!Strict(I16F16::ZERO).is_positive());
+    /// assert!(!Strict(I16F16::from_num(-4.3)).is_positive());
     /// ```
     #[inline]
     pub fn is_positive(self) -> bool {
@@ -1973,24 +1978,24 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert!(!Unwrapped(I16F16::from_num(4.3)).is_negative());
-    /// assert!(!Unwrapped(I16F16::ZERO).is_negative());
-    /// assert!(Unwrapped(I16F16::from_num(-4.3)).is_negative());
+    /// use fixed::Strict;
+    /// assert!(!Strict(I16F16::from_num(4.3)).is_negative());
+    /// assert!(!Strict(I16F16::ZERO).is_negative());
+    /// assert!(Strict(I16F16::from_num(-4.3)).is_negative());
     /// ```
     #[inline]
     pub fn is_negative(self) -> bool {
         self.0.is_negative()
     }
 
-    /// Unwrapped absolute value. Returns the absolute value, panicking
+    /// Strict absolute value. Returns the absolute value, panicking
     /// on overflow.
     ///
     /// Overflow can only occur when trying to find the absolute value
     /// of the minimum value.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_abs][FixedI32::unwrapped_abs]</code>.
+    /// <code>FixedI32::[strict\_abs][FixedI32::strict_abs]</code>.
     ///
     /// # Panics
     ///
@@ -2000,28 +2005,28 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(I16F16::from_num(-5)).abs(), Unwrapped(I16F16::from_num(5)));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(I16F16::from_num(-5)).abs(), Strict(I16F16::from_num(5)));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped(I16F16::MIN).abs();
+    /// use fixed::Strict;
+    /// let _overflow = Strict(I16F16::MIN).abs();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn abs(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_abs())
+    pub fn abs(self) -> Strict<F> {
+        Strict(self.0.strict_abs())
     }
 
     /// Returns a number representing the sign of `self`.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_signum][FixedI32::unwrapped_signum]</code>.
+    /// <code>FixedI32::[strict\_signum][FixedI32::strict_signum]</code>.
     ///
     /// # Panics
     ///
@@ -2035,30 +2040,30 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::I16F16;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(<I16F16>::from_num(-3.9)).signum(), Unwrapped(I16F16::NEG_ONE));
-    /// assert_eq!(Unwrapped(<I16F16>::ZERO).signum(), Unwrapped(I16F16::ZERO));
-    /// assert_eq!(Unwrapped(<I16F16>::from_num(3.9)).signum(), Unwrapped(I16F16::ONE));
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(<I16F16>::from_num(-3.9)).signum(), Strict(I16F16::NEG_ONE));
+    /// assert_eq!(Strict(<I16F16>::ZERO).signum(), Strict(I16F16::ZERO));
+    /// assert_eq!(Strict(<I16F16>::from_num(3.9)).signum(), Strict(I16F16::ONE));
     /// ```
     ///
     /// The following panics because of overflow.
     ///
     /// ```should_panic
     /// use fixed::types::I1F31;
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped(<I1F31>::from_num(0.5)).signum();
+    /// use fixed::Strict;
+    /// let _overflow = Strict(<I1F31>::from_num(0.5)).signum();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn signum(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_signum())
+    pub fn signum(self) -> Strict<F> {
+        Strict(self.0.strict_signum())
     }
 
     /// Addition with an unsigned fixed-point number.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_add\_unsigned][FixedI32::unwrapped_add_unsigned]</code>.
+    /// <code>FixedI32::[strict\_add\_unsigned][FixedI32::strict_add_unsigned]</code>.
     ///
     /// # Panics
     ///
@@ -2068,10 +2073,10 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_num(-5).add_unsigned(U16F16::from_num(3)),
-    ///     Unwrapped::<I16F16>::from_num(-2)
+    ///     Strict::<I16F16>::from_num(-5).add_unsigned(U16F16::from_num(3)),
+    ///     Strict::<I16F16>::from_num(-2)
     /// );
     /// ```
     ///
@@ -2079,20 +2084,20 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust,should_panic
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped::<I16F16>::ZERO.add_unsigned(U16F16::MAX);
+    /// use fixed::Strict;
+    /// let _overflow = Strict::<I16F16>::ZERO.add_unsigned(U16F16::MAX);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn add_unsigned(self, rhs: F::Unsigned) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_add_unsigned(rhs))
+    pub fn add_unsigned(self, rhs: F::Unsigned) -> Strict<F> {
+        Strict(self.0.strict_add_unsigned(rhs))
     }
 
     /// Subtraction with an unsigned fixed-point number.
     ///
     /// See also
-    /// <code>FixedI32::[unwrapped\_sub\_unsigned][FixedI32::unwrapped_sub_unsigned]</code>.
+    /// <code>FixedI32::[strict\_sub\_unsigned][FixedI32::strict_sub_unsigned]</code>.
     ///
     /// # Panics
     ///
@@ -2102,10 +2107,10 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// assert_eq!(
-    ///     Unwrapped::<I16F16>::from_num(3).sub_unsigned(U16F16::from_num(5)),
-    ///     Unwrapped::<I16F16>::from_num(-2)
+    ///     Strict::<I16F16>::from_num(3).sub_unsigned(U16F16::from_num(5)),
+    ///     Strict::<I16F16>::from_num(-2)
     /// );
     /// ```
     ///
@@ -2113,18 +2118,18 @@ impl<F: FixedSigned> Unwrapped<F> {
     ///
     /// ```rust,should_panic
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped::<I16F16>::ZERO.sub_unsigned(U16F16::MAX);
+    /// use fixed::Strict;
+    /// let _overflow = Strict::<I16F16>::ZERO.sub_unsigned(U16F16::MAX);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn sub_unsigned(self, rhs: F::Unsigned) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_sub_unsigned(rhs))
+    pub fn sub_unsigned(self, rhs: F::Unsigned) -> Strict<F> {
+        Strict(self.0.strict_sub_unsigned(rhs))
     }
 }
 
-impl<F: FixedUnsigned> Unwrapped<F> {
+impl<F: FixedUnsigned> Strict<F> {
     /// Returns the bit pattern of `self` reinterpreted as a signed fixed-point
     /// number of the same size.
     ///
@@ -2134,15 +2139,15 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     ///
-    /// let n = Unwrapped(U16F16::MAX);
-    /// assert_eq!(n.cast_signed(), Unwrapped(-I16F16::DELTA));
+    /// let n = Strict(U16F16::MAX);
+    /// assert_eq!(n.cast_signed(), Strict(-I16F16::DELTA));
     /// ```
     #[must_use]
     #[inline]
-    pub fn cast_signed(self) -> Unwrapped<F::Signed> {
-        Unwrapped(self.0.cast_signed())
+    pub fn cast_signed(self) -> Strict<F::Signed> {
+        Strict(self.0.cast_signed())
     }
 
     /// Returns the number of bits required to represent the value.
@@ -2154,11 +2159,11 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::U4F4;
-    /// use fixed::Unwrapped;
-    /// assert_eq!(Unwrapped(U4F4::from_num(0)).significant_bits(), 0);      // “____.____”
-    /// assert_eq!(Unwrapped(U4F4::from_num(0.0625)).significant_bits(), 1); // “____.___1”
-    /// assert_eq!(Unwrapped(U4F4::from_num(1)).significant_bits(), 5);      // “___1.0000”
-    /// assert_eq!(Unwrapped(U4F4::from_num(3)).significant_bits(), 6);      // “__11.0000”
+    /// use fixed::Strict;
+    /// assert_eq!(Strict(U4F4::from_num(0)).significant_bits(), 0);      // “____.____”
+    /// assert_eq!(Strict(U4F4::from_num(0.0625)).significant_bits(), 1); // “____.___1”
+    /// assert_eq!(Strict(U4F4::from_num(1)).significant_bits(), 5);      // “___1.0000”
+    /// assert_eq!(Strict(U4F4::from_num(3)).significant_bits(), 6);      // “__11.0000”
     /// ```
     #[inline]
     pub fn significant_bits(self) -> u32 {
@@ -2175,10 +2180,10 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::U16F16;
-    /// use fixed::Unwrapped;
-    /// assert!(Unwrapped(U16F16::from_num(0.5)).is_power_of_two());
-    /// assert!(Unwrapped(U16F16::from_num(4)).is_power_of_two());
-    /// assert!(!Unwrapped(U16F16::from_num(5)).is_power_of_two());
+    /// use fixed::Strict;
+    /// assert!(Strict(U16F16::from_num(0.5)).is_power_of_two());
+    /// assert!(Strict(U16F16::from_num(4)).is_power_of_two());
+    /// assert!(!Strict(U16F16::from_num(5)).is_power_of_two());
     /// ```
     #[inline]
     pub fn is_power_of_two(self) -> bool {
@@ -2197,8 +2202,8 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::U16F16;
-    /// use fixed::Unwrapped;
-    /// type T = Unwrapped<U16F16>;
+    /// use fixed::Strict;
+    /// type T = Strict<U16F16>;
     /// assert_eq!(T::from_bits(0b11_0010).highest_one(), T::from_bits(0b10_0000));
     /// assert_eq!(T::from_num(0.3).highest_one(), T::from_num(0.25));
     /// assert_eq!(T::from_num(4).highest_one(), T::from_num(4));
@@ -2207,14 +2212,14 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     /// ```
     #[inline]
     #[must_use]
-    pub fn highest_one(self) -> Unwrapped<F> {
-        Unwrapped(self.0.highest_one())
+    pub fn highest_one(self) -> Strict<F> {
+        Strict(self.0.highest_one())
     }
 
     /// Returns the smallest power of two that is ≥&nbsp;`self`.
     ///
     /// See also
-    /// <code>FixedU32::[unwrapped\_next\_power\_of\_two][FixedU32::unwrapped_next_power_of_two]</code>.
+    /// <code>FixedU32::[strict\_next\_power\_of\_two][FixedU32::strict_next_power_of_two]</code>.
     ///
     /// # Panics
     ///
@@ -2224,8 +2229,8 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::U16F16;
-    /// use fixed::Unwrapped;
-    /// type T = Unwrapped<U16F16>;
+    /// use fixed::Strict;
+    /// type T = Strict<U16F16>;
     /// assert_eq!(T::from_bits(0b11_0010).next_power_of_two(), T::from_bits(0b100_0000));
     /// assert_eq!(T::from_num(0.3).next_power_of_two(), T::from_num(0.5));
     /// assert_eq!(T::from_num(4).next_power_of_two(), T::from_num(4));
@@ -2236,20 +2241,20 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```should_panic
     /// use fixed::types::U16F16;
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped(U16F16::MAX).next_power_of_two();
+    /// use fixed::Strict;
+    /// let _overflow = Strict(U16F16::MAX).next_power_of_two();
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn next_power_of_two(self) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_next_power_of_two())
+    pub fn next_power_of_two(self) -> Strict<F> {
+        Strict(self.0.strict_next_power_of_two())
     }
 
     /// Addition with an signed fixed-point number.
     ///
     /// See also
-    /// <code>FixedU32::[unwrapped\_add\_signed][FixedU32::unwrapped_add_signed]</code>.
+    /// <code>FixedU32::[strict\_add\_signed][FixedU32::strict_add_signed]</code>.
     ///
     /// # Panics
     ///
@@ -2259,10 +2264,10 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// assert_eq!(
-    ///     Unwrapped::<U16F16>::from_num(5).add_signed(I16F16::from_num(-3)),
-    ///     Unwrapped::<U16F16>::from_num(2)
+    ///     Strict::<U16F16>::from_num(5).add_signed(I16F16::from_num(-3)),
+    ///     Strict::<U16F16>::from_num(2)
     /// );
     /// ```
     ///
@@ -2270,20 +2275,20 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust,should_panic
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped::<U16F16>::ZERO.add_signed(-I16F16::DELTA);
+    /// use fixed::Strict;
+    /// let _overflow = Strict::<U16F16>::ZERO.add_signed(-I16F16::DELTA);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn add_signed(self, rhs: F::Signed) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_add_signed(rhs))
+    pub fn add_signed(self, rhs: F::Signed) -> Strict<F> {
+        Strict(self.0.strict_add_signed(rhs))
     }
 
     /// Subtraction with an signed fixed-point number.
     ///
     /// See also
-    /// <code>FixedU32::[unwrapped\_sub\_signed][FixedU32::unwrapped_sub_signed]</code>.
+    /// <code>FixedU32::[strict\_sub\_signed][FixedU32::strict_sub_signed]</code>.
     ///
     /// # Panics
     ///
@@ -2293,10 +2298,10 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
+    /// use fixed::Strict;
     /// assert_eq!(
-    ///     Unwrapped::<U16F16>::from_num(5).sub_signed(I16F16::from_num(-3)),
-    ///     Unwrapped::<U16F16>::from_num(8)
+    ///     Strict::<U16F16>::from_num(5).sub_signed(I16F16::from_num(-3)),
+    ///     Strict::<U16F16>::from_num(8)
     /// );
     /// ```
     ///
@@ -2304,82 +2309,82 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     ///
     /// ```rust,should_panic
     /// use fixed::types::{I16F16, U16F16};
-    /// use fixed::Unwrapped;
-    /// let _overflow = Unwrapped::<U16F16>::ZERO.sub_signed(I16F16::DELTA);
+    /// use fixed::Strict;
+    /// let _overflow = Strict::<U16F16>::ZERO.sub_signed(I16F16::DELTA);
     /// ```
     #[inline]
     #[track_caller]
     #[must_use]
-    pub fn sub_signed(self, rhs: F::Signed) -> Unwrapped<F> {
-        Unwrapped(self.0.strict_sub_signed(rhs))
+    pub fn sub_signed(self, rhs: F::Signed) -> Strict<F> {
+        Strict(self.0.strict_sub_signed(rhs))
     }
 }
 
-impl<F: Fixed> Display for Unwrapped<F> {
+impl<F: Fixed> Display for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         Display::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> Debug for Unwrapped<F> {
+impl<F: Fixed> Debug for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         Debug::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> Binary for Unwrapped<F> {
+impl<F: Fixed> Binary for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         Binary::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> Octal for Unwrapped<F> {
+impl<F: Fixed> Octal for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         Octal::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> LowerHex for Unwrapped<F> {
+impl<F: Fixed> LowerHex for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         LowerHex::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> UpperHex for Unwrapped<F> {
+impl<F: Fixed> UpperHex for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         UpperHex::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> LowerExp for Unwrapped<F> {
+impl<F: Fixed> LowerExp for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         LowerExp::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> UpperExp for Unwrapped<F> {
+impl<F: Fixed> UpperExp for Strict<F> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         UpperExp::fmt(&self.0, f)
     }
 }
 
-impl<F: Fixed> From<F> for Unwrapped<F> {
+impl<F: Fixed> From<F> for Strict<F> {
     /// Wraps a fixed-point number.
     #[inline]
-    fn from(src: F) -> Unwrapped<F> {
-        Unwrapped(src)
+    fn from(src: F) -> Strict<F> {
+        Strict(src)
     }
 }
 
-impl<F: Fixed> FromStr for Unwrapped<F> {
+impl<F: Fixed> FromStr for Strict<F> {
     type Err = ParseFixedError;
     /// Parses a string slice containing decimal digits to return a fixed-point number.
     ///
@@ -2387,7 +2392,7 @@ impl<F: Fixed> FromStr for Unwrapped<F> {
     ///
     /// This method either returns [`Ok`] or panics, and never returns [`Err`].
     /// The inherent method
-    /// <code>[Unwrapped]&lt;F>::[from\_str\_dec][Unwrapped::from_str_dec]</code>
+    /// <code>[Strict]&lt;F>::[from\_str\_dec][Strict::from_str_dec]</code>
     /// returns the value directly instead of a [`Result`].
     ///
     /// # Panics
@@ -2396,70 +2401,70 @@ impl<F: Fixed> FromStr for Unwrapped<F> {
     #[inline]
     #[track_caller]
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Unwrapped(F::strict_from_str(s)))
+        Ok(Strict(F::strict_from_str(s)))
     }
 }
 
 macro_rules! op {
-    ($unwrapped:ident, $Op:ident $op:ident, $OpAssign:ident $op_assign:ident) => {
-        impl<F: Fixed> $Op<Unwrapped<F>> for Unwrapped<F> {
-            type Output = Unwrapped<F>;
+    ($strict:ident, $Op:ident $op:ident, $OpAssign:ident $op_assign:ident) => {
+        impl<F: Fixed> $Op<Strict<F>> for Strict<F> {
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$unwrapped(other.0))
+            fn $op(self, other: Strict<F>) -> Strict<F> {
+                Strict((self.0).$strict(other.0))
             }
         }
-        impl<F: Fixed> $Op<Unwrapped<F>> for &Unwrapped<F> {
-            type Output = Unwrapped<F>;
+        impl<F: Fixed> $Op<Strict<F>> for &Strict<F> {
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$unwrapped(other.0))
+            fn $op(self, other: Strict<F>) -> Strict<F> {
+                Strict((self.0).$strict(other.0))
             }
         }
-        impl<F: Fixed> $Op<&Unwrapped<F>> for Unwrapped<F> {
-            type Output = Unwrapped<F>;
+        impl<F: Fixed> $Op<&Strict<F>> for Strict<F> {
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: &Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$unwrapped(other.0))
+            fn $op(self, other: &Strict<F>) -> Strict<F> {
+                Strict((self.0).$strict(other.0))
             }
         }
-        impl<F: Fixed> $Op<&Unwrapped<F>> for &Unwrapped<F> {
-            type Output = Unwrapped<F>;
+        impl<F: Fixed> $Op<&Strict<F>> for &Strict<F> {
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: &Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$unwrapped(other.0))
+            fn $op(self, other: &Strict<F>) -> Strict<F> {
+                Strict((self.0).$strict(other.0))
             }
         }
-        impl<F: Fixed> $OpAssign<Unwrapped<F>> for Unwrapped<F> {
+        impl<F: Fixed> $OpAssign<Strict<F>> for Strict<F> {
             #[inline]
             #[track_caller]
-            fn $op_assign(&mut self, other: Unwrapped<F>) {
-                self.0 = (self.0).$unwrapped(other.0);
+            fn $op_assign(&mut self, other: Strict<F>) {
+                self.0 = (self.0).$strict(other.0);
             }
         }
-        impl<F: Fixed> $OpAssign<&Unwrapped<F>> for Unwrapped<F> {
+        impl<F: Fixed> $OpAssign<&Strict<F>> for Strict<F> {
             #[inline]
             #[track_caller]
-            fn $op_assign(&mut self, other: &Unwrapped<F>) {
-                self.0 = (self.0).$unwrapped(other.0);
+            fn $op_assign(&mut self, other: &Strict<F>) {
+                self.0 = (self.0).$strict(other.0);
             }
         }
-        impl<F: Fixed> $OpAssign<F> for Unwrapped<F> {
+        impl<F: Fixed> $OpAssign<F> for Strict<F> {
             #[inline]
             #[track_caller]
             fn $op_assign(&mut self, other: F) {
-                self.0 = (self.0).$unwrapped(other);
+                self.0 = (self.0).$strict(other);
             }
         }
-        impl<F: Fixed> $OpAssign<&F> for Unwrapped<F> {
+        impl<F: Fixed> $OpAssign<&F> for Strict<F> {
             #[inline]
             #[track_caller]
             fn $op_assign(&mut self, other: &F) {
-                self.0 = (self.0).$unwrapped(*other);
+                self.0 = (self.0).$strict(*other);
             }
         }
     };
@@ -2467,65 +2472,65 @@ macro_rules! op {
 
 macro_rules! op_bitwise {
     ($Op:ident $op:ident, $OpAssign:ident $op_assign:ident) => {
-        impl<F> $Op<Unwrapped<F>> for Unwrapped<F>
+        impl<F> $Op<Strict<F>> for Strict<F>
         where
             F: $Op<F, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
-            fn $op(self, other: Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$op(other.0))
+            fn $op(self, other: Strict<F>) -> Strict<F> {
+                Strict((self.0).$op(other.0))
             }
         }
-        impl<F> $Op<Unwrapped<F>> for &Unwrapped<F>
+        impl<F> $Op<Strict<F>> for &Strict<F>
         where
             for<'a> &'a F: $Op<F, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
-            fn $op(self, other: Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$op(other.0))
+            fn $op(self, other: Strict<F>) -> Strict<F> {
+                Strict((self.0).$op(other.0))
             }
         }
-        impl<F> $Op<&Unwrapped<F>> for Unwrapped<F>
+        impl<F> $Op<&Strict<F>> for Strict<F>
         where
             for<'a> F: $Op<&'a F, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
-            fn $op(self, other: &Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$op(&other.0))
+            fn $op(self, other: &Strict<F>) -> Strict<F> {
+                Strict((self.0).$op(&other.0))
             }
         }
-        impl<F> $Op<&Unwrapped<F>> for &Unwrapped<F>
+        impl<F> $Op<&Strict<F>> for &Strict<F>
         where
             for<'a, 'b> &'a F: $Op<&'b F, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
-            fn $op(self, other: &Unwrapped<F>) -> Unwrapped<F> {
-                Unwrapped((self.0).$op(&other.0))
+            fn $op(self, other: &Strict<F>) -> Strict<F> {
+                Strict((self.0).$op(&other.0))
             }
         }
-        impl<F> $OpAssign<Unwrapped<F>> for Unwrapped<F>
+        impl<F> $OpAssign<Strict<F>> for Strict<F>
         where
             F: $OpAssign<F>,
         {
             #[inline]
-            fn $op_assign(&mut self, other: Unwrapped<F>) {
+            fn $op_assign(&mut self, other: Strict<F>) {
                 (self.0).$op_assign(other.0);
             }
         }
-        impl<F> $OpAssign<&Unwrapped<F>> for Unwrapped<F>
+        impl<F> $OpAssign<&Strict<F>> for Strict<F>
         where
             for<'a> F: $OpAssign<&'a F>,
         {
             #[inline]
-            fn $op_assign(&mut self, other: &Unwrapped<F>) {
+            fn $op_assign(&mut self, other: &Strict<F>) {
                 (self.0).$op_assign(&other.0);
             }
         }
-        impl<F> $OpAssign<F> for Unwrapped<F>
+        impl<F> $OpAssign<F> for Strict<F>
         where
             F: $OpAssign<F>,
         {
@@ -2534,7 +2539,7 @@ macro_rules! op_bitwise {
                 (self.0).$op_assign(other);
             }
         }
-        impl<F> $OpAssign<&F> for Unwrapped<F>
+        impl<F> $OpAssign<&F> for Strict<F>
         where
             for<'a> F: $OpAssign<&'a F>,
         {
@@ -2551,63 +2556,63 @@ macro_rules! op_shift {
         $Op:ident $op:ident, $OpAssign:ident $op_assign:ident;
         $($Rhs:ident),*
     ) => { $(
-        impl<F> $Op<$Rhs> for Unwrapped<F>
+        impl<F> $Op<$Rhs> for Strict<F>
         where
             F: $Op<u32, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: $Rhs) -> Unwrapped<F> {
+            fn $op(self, other: $Rhs) -> Strict<F> {
                 let nbits = size_of::<F>() as u32 * 8;
                 let checked = other as u32 % nbits;
                 assert!(checked as $Rhs == other, "overflow");
-                Unwrapped((self.0).$op(checked))
+                Strict((self.0).$op(checked))
             }
         }
-        impl<F> $Op<$Rhs> for &Unwrapped<F>
+        impl<F> $Op<$Rhs> for &Strict<F>
         where
             for<'a> &'a F: $Op<u32, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: $Rhs) -> Unwrapped<F> {
+            fn $op(self, other: $Rhs) -> Strict<F> {
                 let nbits = size_of::<F>() as u32 * 8;
                 let checked = other as u32 % nbits;
                 assert!(checked as $Rhs == other, "overflow");
-                Unwrapped((self.0).$op(checked))
+                Strict((self.0).$op(checked))
             }
         }
-        impl<F> $Op<&$Rhs> for Unwrapped<F>
+        impl<F> $Op<&$Rhs> for Strict<F>
         where
             F: $Op<u32, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: &$Rhs) -> Unwrapped<F> {
+            fn $op(self, other: &$Rhs) -> Strict<F> {
                 let nbits = size_of::<F>() as u32 * 8;
                 let checked = *other as u32 % nbits;
                 assert!(checked as $Rhs == *other, "overflow");
-                Unwrapped((self.0).$op(checked))
+                Strict((self.0).$op(checked))
             }
         }
-        impl<F> $Op<&$Rhs> for &Unwrapped<F>
+        impl<F> $Op<&$Rhs> for &Strict<F>
         where
             for<'a> &'a F: $Op<u32, Output = F>,
         {
-            type Output = Unwrapped<F>;
+            type Output = Strict<F>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: &$Rhs) -> Unwrapped<F> {
+            fn $op(self, other: &$Rhs) -> Strict<F> {
                 let nbits = size_of::<F>() as u32 * 8;
                 let checked = *other as u32 % nbits;
                 assert!(checked as $Rhs == *other, "overflow");
-                Unwrapped((self.0).$op(checked))
+                Strict((self.0).$op(checked))
             }
         }
-        impl<F> $OpAssign<$Rhs> for Unwrapped<F>
+        impl<F> $OpAssign<$Rhs> for Strict<F>
         where
             F: $OpAssign<u32>,
         {
@@ -2620,7 +2625,7 @@ macro_rules! op_shift {
                 (self.0).$op_assign(checked);
             }
         }
-        impl<F> $OpAssign<&$Rhs> for Unwrapped<F>
+        impl<F> $OpAssign<&$Rhs> for Strict<F>
         where
             F: $OpAssign<u32>,
         {
@@ -2636,21 +2641,21 @@ macro_rules! op_shift {
     )* };
 }
 
-impl<F: Fixed> Neg for Unwrapped<F> {
-    type Output = Unwrapped<F>;
+impl<F: Fixed> Neg for Strict<F> {
+    type Output = Strict<F>;
     #[inline]
     #[track_caller]
-    fn neg(self) -> Unwrapped<F> {
-        Unwrapped((self.0).strict_neg())
+    fn neg(self) -> Strict<F> {
+        Strict((self.0).strict_neg())
     }
 }
 
-impl<F: Fixed> Neg for &Unwrapped<F> {
-    type Output = Unwrapped<F>;
+impl<F: Fixed> Neg for &Strict<F> {
+    type Output = Strict<F>;
     #[inline]
     #[track_caller]
-    fn neg(self) -> Unwrapped<F> {
-        Unwrapped((self.0).strict_neg())
+    fn neg(self) -> Strict<F> {
+        Strict((self.0).strict_neg())
     }
 }
 op! { strict_add, Add add, AddAssign add_assign }
@@ -2659,24 +2664,24 @@ op! { strict_mul, Mul mul, MulAssign mul_assign }
 op! { strict_div, Div div, DivAssign div_assign }
 op! { strict_rem, Rem rem, RemAssign rem_assign }
 
-impl<F> Not for Unwrapped<F>
+impl<F> Not for Strict<F>
 where
     F: Not<Output = F>,
 {
-    type Output = Unwrapped<F>;
+    type Output = Strict<F>;
     #[inline]
-    fn not(self) -> Unwrapped<F> {
-        Unwrapped((self.0).not())
+    fn not(self) -> Strict<F> {
+        Strict((self.0).not())
     }
 }
-impl<F> Not for &Unwrapped<F>
+impl<F> Not for &Strict<F>
 where
     for<'a> &'a F: Not<Output = F>,
 {
-    type Output = Unwrapped<F>;
+    type Output = Strict<F>;
     #[inline]
-    fn not(self) -> Unwrapped<F> {
-        Unwrapped((self.0).not())
+    fn not(self) -> Strict<F> {
+        Strict((self.0).not())
     }
 }
 op_bitwise! { BitAnd bitand, BitAndAssign bitand_assign }
@@ -2692,123 +2697,123 @@ op_shift! {
     i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize
 }
 
-impl<F: Fixed> Sum<Unwrapped<F>> for Unwrapped<F> {
+impl<F: Fixed> Sum<Strict<F>> for Strict<F> {
     #[track_caller]
-    fn sum<I>(iter: I) -> Unwrapped<F>
+    fn sum<I>(iter: I) -> Strict<F>
     where
-        I: Iterator<Item = Unwrapped<F>>,
+        I: Iterator<Item = Strict<F>>,
     {
-        iter.fold(Unwrapped(F::ZERO), Add::add)
+        iter.fold(Strict(F::ZERO), Add::add)
     }
 }
 
-impl<'a, F: 'a + Fixed> Sum<&'a Unwrapped<F>> for Unwrapped<F> {
+impl<'a, F: 'a + Fixed> Sum<&'a Strict<F>> for Strict<F> {
     #[track_caller]
-    fn sum<I>(iter: I) -> Unwrapped<F>
+    fn sum<I>(iter: I) -> Strict<F>
     where
-        I: Iterator<Item = &'a Unwrapped<F>>,
+        I: Iterator<Item = &'a Strict<F>>,
     {
-        iter.fold(Unwrapped(F::ZERO), Add::add)
+        iter.fold(Strict(F::ZERO), Add::add)
     }
 }
 
-impl<F: Fixed> Product<Unwrapped<F>> for Unwrapped<F> {
+impl<F: Fixed> Product<Strict<F>> for Strict<F> {
     #[track_caller]
-    fn product<I>(mut iter: I) -> Unwrapped<F>
+    fn product<I>(mut iter: I) -> Strict<F>
     where
-        I: Iterator<Item = Unwrapped<F>>,
+        I: Iterator<Item = Strict<F>>,
     {
         match iter.next() {
             None => match 1.overflowing_to_fixed() {
                 (_, true) => panic!("overflow"),
-                (ans, false) => Unwrapped(ans),
+                (ans, false) => Strict(ans),
             },
             Some(first) => iter.fold(first, Mul::mul),
         }
     }
 }
 
-impl<'a, F: 'a + Fixed> Product<&'a Unwrapped<F>> for Unwrapped<F> {
+impl<'a, F: 'a + Fixed> Product<&'a Strict<F>> for Strict<F> {
     #[track_caller]
-    fn product<I>(mut iter: I) -> Unwrapped<F>
+    fn product<I>(mut iter: I) -> Strict<F>
     where
-        I: Iterator<Item = &'a Unwrapped<F>>,
+        I: Iterator<Item = &'a Strict<F>>,
     {
         match iter.next() {
             None => match 1.overflowing_to_fixed() {
                 (_, true) => panic!("overflow"),
-                (ans, false) => Unwrapped(ans),
+                (ans, false) => Strict(ans),
             },
             Some(first) => iter.fold(*first, Mul::mul),
         }
     }
 }
 
-// The following cannot be implemented for Unwrapped<F> where F: Fixed,
+// The following cannot be implemented for Strict<F> where F: Fixed,
 // otherwise there will be a conflicting implementation error. For
 // example we cannot implement both these without triggering E0119:
 //
-//     impl<F: Fixed> Op<F::Bits> for Unwrapped<F> { /* ... */ }
-//     impl<F: Fixed> Op<&F::Bits> for Unwrapped<F> { /* ... */ }
+//     impl<F: Fixed> Op<F::Bits> for Strict<F> { /* ... */ }
+//     impl<F: Fixed> Op<&F::Bits> for Strict<F> { /* ... */ }
 //
 // To work around this, we provide implementations like this:
 //
-//     impl<Frac> Op<i8> for Unwrapped<FixedI8<Frac>> { /* ... */ }
-//     impl<Frac> Op<&i8> for Unwrapped<FixedI8<Frac>> { /* ... */ }
-//     impl<Frac> Op<i16> for Unwrapped<FixedI16<Frac>> { /* ... */ }
-//     impl<Frac> Op<&i16> for Unwrapped<FixedI16<Frac>> { /* ... */ }
+//     impl<Frac> Op<i8> for Strict<FixedI8<Frac>> { /* ... */ }
+//     impl<Frac> Op<&i8> for Strict<FixedI8<Frac>> { /* ... */ }
+//     impl<Frac> Op<i16> for Strict<FixedI16<Frac>> { /* ... */ }
+//     impl<Frac> Op<&i16> for Strict<FixedI16<Frac>> { /* ... */ }
 //     ...
 
 macro_rules! op_bits {
     (
-        $Fixed:ident($Bits:ident $(, $LeEqU:ident)*)::$unwrapped:ident,
+        $Fixed:ident($Bits:ident $(, $LeEqU:ident)*)::$strict:ident,
         $Op:ident $op:ident,
         $OpAssign:ident $op_assign:ident
     ) => {
-        impl<Frac $(: $LeEqU)*> $Op<$Bits> for Unwrapped<$Fixed<Frac>> {
-            type Output = Unwrapped<$Fixed<Frac>>;
+        impl<Frac $(: $LeEqU)*> $Op<$Bits> for Strict<$Fixed<Frac>> {
+            type Output = Strict<$Fixed<Frac>>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: $Bits) -> Unwrapped<$Fixed<Frac>> {
-                Unwrapped((self.0).$unwrapped(other))
+            fn $op(self, other: $Bits) -> Strict<$Fixed<Frac>> {
+                Strict((self.0).$strict(other))
             }
         }
-        impl<Frac $(: $LeEqU)*> $Op<$Bits> for &Unwrapped<$Fixed<Frac>> {
-            type Output = Unwrapped<$Fixed<Frac>>;
+        impl<Frac $(: $LeEqU)*> $Op<$Bits> for &Strict<$Fixed<Frac>> {
+            type Output = Strict<$Fixed<Frac>>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: $Bits) -> Unwrapped<$Fixed<Frac>> {
-                Unwrapped((self.0).$unwrapped(other))
+            fn $op(self, other: $Bits) -> Strict<$Fixed<Frac>> {
+                Strict((self.0).$strict(other))
             }
         }
-        impl<Frac $(: $LeEqU)*> $Op<&$Bits> for Unwrapped<$Fixed<Frac>> {
-            type Output = Unwrapped<$Fixed<Frac>>;
+        impl<Frac $(: $LeEqU)*> $Op<&$Bits> for Strict<$Fixed<Frac>> {
+            type Output = Strict<$Fixed<Frac>>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: &$Bits) -> Unwrapped<$Fixed<Frac>> {
-                Unwrapped((self.0).$unwrapped(*other))
+            fn $op(self, other: &$Bits) -> Strict<$Fixed<Frac>> {
+                Strict((self.0).$strict(*other))
             }
         }
-        impl<Frac $(: $LeEqU)*> $Op<&$Bits> for &Unwrapped<$Fixed<Frac>> {
-            type Output = Unwrapped<$Fixed<Frac>>;
+        impl<Frac $(: $LeEqU)*> $Op<&$Bits> for &Strict<$Fixed<Frac>> {
+            type Output = Strict<$Fixed<Frac>>;
             #[inline]
             #[track_caller]
-            fn $op(self, other: &$Bits) -> Unwrapped<$Fixed<Frac>> {
-                Unwrapped((self.0).$unwrapped(*other))
+            fn $op(self, other: &$Bits) -> Strict<$Fixed<Frac>> {
+                Strict((self.0).$strict(*other))
             }
         }
-        impl<Frac $(: $LeEqU)*> $OpAssign<$Bits> for Unwrapped<$Fixed<Frac>> {
+        impl<Frac $(: $LeEqU)*> $OpAssign<$Bits> for Strict<$Fixed<Frac>> {
             #[inline]
             #[track_caller]
             fn $op_assign(&mut self, other: $Bits) {
-                self.0 = (self.0).$unwrapped(other);
+                self.0 = (self.0).$strict(other);
             }
         }
-        impl<Frac $(: $LeEqU)*> $OpAssign<&$Bits> for Unwrapped<$Fixed<Frac>> {
+        impl<Frac $(: $LeEqU)*> $OpAssign<&$Bits> for Strict<$Fixed<Frac>> {
             #[inline]
             #[track_caller]
             fn $op_assign(&mut self, other: &$Bits) {
-                self.0 = (self.0).$unwrapped(*other);
+                self.0 = (self.0).$strict(*other);
             }
         }
     };

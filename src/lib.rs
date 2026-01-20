@@ -397,10 +397,10 @@ mod saturating;
 #[cfg(feature = "serde")]
 mod serdeize;
 mod sqrt;
+mod strict;
 pub mod traits;
 mod traits_bits;
 pub mod types;
-mod unwrapped;
 mod wrapping;
 
 pub use crate::f128::private::F128;
@@ -409,13 +409,14 @@ pub use crate::from_str::ParseFixedError;
 pub use crate::impl_num_traits::RadixParseFixedError;
 use crate::log::Base;
 pub use crate::saturating::Saturating;
+#[allow(deprecated)]
+pub use crate::strict::{Strict, Unwrapped};
 use crate::traits::{FromFixed, ToFixed};
 use crate::types::extra::{
     Diff, IsLessOrEqual, LeEqU8, LeEqU16, LeEqU32, LeEqU64, LeEqU128, Sum, True, U0, U4, U5, U6,
     U7, U8, U12, U13, U14, U15, U16, U28, U29, U30, U31, U32, U60, U61, U62, U63, U64, U124, U125,
     U126, U127, U128, Unsigned,
 };
-pub use crate::unwrapped::Unwrapped;
 pub use crate::wrapping::Wrapping;
 use core::hash::{Hash, Hasher};
 use core::marker::PhantomData;

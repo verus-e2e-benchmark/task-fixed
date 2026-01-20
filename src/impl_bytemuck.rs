@@ -16,7 +16,7 @@
 use crate::types::extra::{LeEqU8, LeEqU16, LeEqU32, LeEqU64, LeEqU128};
 use crate::{
     FixedI8, FixedI16, FixedI32, FixedI64, FixedI128, FixedU8, FixedU16, FixedU32, FixedU64,
-    FixedU128, Unwrapped, Wrapping,
+    FixedU128, Strict, Wrapping,
 };
 use bytemuck::{Contiguous, Pod, TransparentWrapper, Zeroable};
 
@@ -40,19 +40,19 @@ macro_rules! unsafe_impl_traits {
         }
         unsafe impl<Frac: $LeEqU> TransparentWrapper<$Fixed<Frac>> for Wrapping<$Fixed<Frac>> {}
 
-        unsafe impl<Frac: $LeEqU> Zeroable for Unwrapped<$Fixed<Frac>> {}
-        unsafe impl<Frac: $LeEqU> Pod for Unwrapped<$Fixed<Frac>> {}
-        unsafe impl<Frac: $LeEqU> Contiguous for Unwrapped<$Fixed<Frac>> {
+        unsafe impl<Frac: $LeEqU> Zeroable for Strict<$Fixed<Frac>> {}
+        unsafe impl<Frac: $LeEqU> Pod for Strict<$Fixed<Frac>> {}
+        unsafe impl<Frac: $LeEqU> Contiguous for Strict<$Fixed<Frac>> {
             type Int = $Inner;
             const MAX_VALUE: $Inner = $Inner::MAX;
             const MIN_VALUE: $Inner = $Inner::MIN;
         }
-        unsafe impl<Frac: $LeEqU> TransparentWrapper<$Fixed<Frac>> for Unwrapped<$Fixed<Frac>> {}
+        unsafe impl<Frac: $LeEqU> TransparentWrapper<$Fixed<Frac>> for Strict<$Fixed<Frac>> {}
     };
 }
 
 // SAFETY: all fixed-point numbers are repr(transparent) over primitive integer
-// types which are both Pod and Zeroable, and Wrapping and Unwrapped are both
+// types which are both Pod and Zeroable, and Wrapping and Strict are both
 // repr(transparent) over fixed-point numbers.
 unsafe_impl_traits! { FixedI8, LeEqU8, i8 }
 unsafe_impl_traits! { FixedI16, LeEqU16, i16 }
