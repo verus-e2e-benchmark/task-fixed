@@ -16,7 +16,7 @@
 use crate::types::extra::{LeEqU8, LeEqU16, LeEqU32, LeEqU64, LeEqU128};
 use crate::{
     FixedI8, FixedI16, FixedI32, FixedI64, FixedI128, FixedU8, FixedU16, FixedU32, FixedU64,
-    FixedU128, Unwrapped, Wrapping,
+    FixedU128, Strict, Wrapping,
 };
 use serde::de::{Deserialize, Deserializer, Error as DeError};
 use serde::ser::{Serialize, Serializer};
@@ -54,7 +54,7 @@ macro_rules! serde_fixed {
             }
         }
 
-        impl<Frac: $LeEqU> Serialize for Unwrapped<$Fixed<Frac>> {
+        impl<Frac: $LeEqU> Serialize for Strict<$Fixed<Frac>> {
             fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
                 self.0.serialize(serializer)
             }
@@ -119,9 +119,9 @@ macro_rules! serde_fixed {
             }
         }
 
-        impl<'de, Frac: $LeEqU> Deserialize<'de> for Unwrapped<$Fixed<Frac>> {
+        impl<'de, Frac: $LeEqU> Deserialize<'de> for Strict<$Fixed<Frac>> {
             fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                $Fixed::deserialize(deserializer).map(Unwrapped)
+                $Fixed::deserialize(deserializer).map(Strict)
             }
         }
     };
