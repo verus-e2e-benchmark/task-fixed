@@ -8,6 +8,10 @@ as-is, without any warranty. -->
 # Version 1.30.0 (unreleased)
 
   * The crate now requires rustc version 1.85.0 or later.
+  * All methods starting with `unwrapped_` were renamed to start with `strict_`.
+    The old method names are deprecated.
+  * The [`Unwrapped`][u-1-30] wrapper was renamed to [`Strict`][s-1-30]. The old
+    name is deprecated.
   * Bug fix: the `compat-readonly-static` [optional feature][feat-1-30] was
     added to fix an issue on some platforms where statics are readonly ([issue
     74], [merge request 14]).
@@ -29,6 +33,8 @@ as-is, without any warranty. -->
 [merge request 15]: https://gitlab.com/tspiteri/fixed/-/merge_requests/15
 [nt-0-2-ce]: https://docs.rs/num-traits/^0.2/num_traits/ops/euclid/trait.CheckedEuclid.html
 [nt-0-2-e]: https://docs.rs/num-traits/^0.2/num_traits/ops/euclid/trait.Euclid.html
+[s-1-30]: https://docs.rs/fixed/~1.30/fixed/struct.Strict.html
+[u-1-30]: https://docs.rs/fixed/~1.30/fixed/struct.Unwrapped.html
 
 # Version 1.29.0 (2025-02-26)
 
