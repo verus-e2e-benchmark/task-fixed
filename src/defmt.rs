@@ -51,6 +51,17 @@ macro_rules! impl_fixed_defmt {
                     defmt::write!(f, "{}", defmt::Display2Format(self));
                 }
             }
+
+            impl<Frac> defmt::Format for crate::Saturating<crate::$Base<Frac>>
+            where
+                crate::Saturating<crate::$Base<Frac>>: core::fmt::Display,
+            {
+                #[inline]
+                fn format(&self, f: defmt::Formatter<'_>) {
+                    // Safe & infallible; we rely on the existing `Display` impl.
+                    defmt::write!(f, "{}", defmt::Display2Format(self));
+                }
+            }
         )+
     };
 }
