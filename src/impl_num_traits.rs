@@ -28,6 +28,7 @@ use num_traits::bounds::Bounded;
 use num_traits::cast::{FromPrimitive, ToPrimitive};
 use num_traits::float::FloatConst;
 use num_traits::identities::{ConstOne, ConstZero, One, Zero};
+use num_traits::ops::euclid::{CheckedEuclid, Euclid};
 
 use core::error::Error;
 use num_traits::Num;
@@ -189,6 +190,18 @@ macro_rules! impl_traits {
             }
         }
 
+        impl<Frac: $LeEqU> Euclid for $Fixed<Frac> {
+            #[inline]
+            fn div_euclid(&self, v: &Self) -> Self {
+                (*self).div_euclid(*v)
+            }
+
+            #[inline]
+            fn rem_euclid(&self, v: &Self) -> Self {
+                (*self).rem_euclid(*v)
+            }
+        }
+
         impl<Frac> CheckedAdd for $Fixed<Frac> {
             #[inline]
             fn checked_add(&self, v: &Self) -> Option<Self> {
@@ -242,6 +255,18 @@ macro_rules! impl_traits {
             #[inline]
             fn checked_shr(&self, rhs: u32) -> Option<Self> {
                 (*self).checked_shr(rhs)
+            }
+        }
+
+        impl<Frac: $LeEqU> CheckedEuclid for $Fixed<Frac> {
+            #[inline]
+            fn checked_div_euclid(&self, v: &Self) -> Option<Self> {
+                (*self).checked_div_euclid(*v)
+            }
+
+            #[inline]
+            fn checked_rem_euclid(&self, v: &Self) -> Option<Self> {
+                (*self).checked_rem_euclid(*v)
             }
         }
 

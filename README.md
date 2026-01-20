@@ -105,13 +105,19 @@ The conversions supported cover the following cases.
   * The [*az* crate] dependency was updated to [version 1.3][az-1-3].
   * The new [`defmt`][feat-1-30] optional feature was added to support logging
     using the [*defmt* crate] ([issue 70]).
+  * For the experimental feature [`num-traits`][feat-exp-1-30], the following
+    traits were implemented for all fixed-point numbers:
+      * [`Euclid`][nt-0-2-e], [`CheckedEuclid`][nt-0-2-ce]
 
 [az-1-2]: https://docs.rs/az/~1.2/az/index.html
 [feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
+[feat-exp-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#experimental-optional-features
 [issue 70]: https://gitlab.com/tspiteri/fixed/-/issues/70
 [issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
 [merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
 [merge request 15]: https://gitlab.com/tspiteri/fixed/-/merge_requests/15
+[nt-0-2-ce]: https://docs.rs/num-traits/^0.2/num_traits/ops/euclid/trait.CheckedEuclid.html
+[nt-0-2-e]: https://docs.rs/num-traits/^0.2/num_traits/ops/euclid/trait.Euclid.html
 
 ### Version 1.29.0 news (2025-02-26)
 
