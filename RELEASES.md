@@ -5,7 +5,7 @@ modification, are permitted in any medium without royalty provided the
 copyright notice and this notice are preserved. This file is offered
 as-is, without any warranty. -->
 
-# Version 1.30.0 (unreleased)
+# Version 1.30.0 (2026-01-20)
 
   * The crate now requires rustc version 1.85.0 or later.
   * All methods starting with `unwrapped_` were renamed to start with `strict_`.
@@ -24,7 +24,7 @@ as-is, without any warranty. -->
     traits were implemented for all fixed-point numbers:
       * [`Euclid`][nt-0-2-e], [`CheckedEuclid`][nt-0-2-ce]
 
-[az-1-2]: https://docs.rs/az/~1.2/az/index.html
+[az-1-3]: https://docs.rs/az/~1.3/az/index.html
 [feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
 [feat-exp-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#experimental-optional-features
 [issue 70]: https://gitlab.com/tspiteri/fixed/-/issues/70
