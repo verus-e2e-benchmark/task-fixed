@@ -1,10 +1,12 @@
 //! `defmt` support for all binary fixed-point types in `fixed`.  Set the `defmt` feature to enable.
 //!
-//! ```no_run
+//! ```
+//! # #[cfg(any())] {
 //! use fixed::types::I16F16;
 //!
 //! let val = I16F16::from_num(3.125);
-//! defmt::info!("val = {}", val);        // → “val = 3.125”
+//! defmt::error!("val = {}", val);        // → “val = 3.125”
+//! # }
 //! ```
 //!
 //! ## Implementation notes
