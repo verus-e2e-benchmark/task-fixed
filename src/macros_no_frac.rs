@@ -4357,7 +4357,7 @@ Panics if the result does not fit.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-assert_eq!(Fix::from_num(-5).unwrapped_abs(), Fix::from_num(5));
+assert_eq!(Fix::from_num(-5).strict_abs(), Fix::from_num(5));
 ```
 
 The following panics because of overflow.
@@ -4366,13 +4366,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MIN.unwrapped_abs();
+let _overflow = Fix::MIN.strict_abs();
 ```
 ";
                     #[inline]
                     #[track_caller]
                     #[must_use]
-                    pub const fn unwrapped_abs(self) -> $Self<Frac> {
+                    pub const fn strict_abs(self) -> $Self<Frac> {
                         match self.checked_abs() {
                             Some(s) => s,
                             None => panic!("overflow"),
@@ -4637,7 +4637,7 @@ type Fix = ", stringify!($Self), "<U4>;
 let three_eights = Fix::from_bits(0b0110);
 // 1/2 is 0.1000
 let half = Fix::from_bits(0b1000);
-assert_eq!(three_eights.unwrapped_next_power_of_two(), half);
+assert_eq!(three_eights.strict_next_power_of_two(), half);
 ```
 
 The following panics because of overflow.
@@ -4646,13 +4646,13 @@ The following panics because of overflow.
 use fixed::types::extra::U4;
 use fixed::", stringify!($Self), ";
 type Fix = ", stringify!($Self), "<U4>;
-let _overflow = Fix::MAX.unwrapped_next_power_of_two();
+let _overflow = Fix::MAX.strict_next_power_of_two();
 ```
 ";
                     #[inline]
                     #[track_caller]
                     #[must_use]
-                    pub const fn unwrapped_next_power_of_two(self) -> $Self<Frac> {
+                    pub const fn strict_next_power_of_two(self) -> $Self<Frac> {
                         match self.checked_next_power_of_two() {
                             Some(s) => s,
                             None => panic!("overflow"),
@@ -4679,7 +4679,7 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type UFix = ", stringify!($USelf), "<U4>;")]
-                /// assert_eq!(Fix::from_num(-5).unwrapped_add_unsigned(UFix::from_num(3)), -2);
+                /// assert_eq!(Fix::from_num(-5).strict_add_unsigned(UFix::from_num(3)), -2);
                 /// ```
                 ///
                 /// The following panics because of overflow.
@@ -4691,12 +4691,12 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type UFix = ", stringify!($USelf), "<U4>;")]
-                /// let _overflow = Fix::MAX.unwrapped_add_unsigned(UFix::DELTA);
+                /// let _overflow = Fix::MAX.strict_add_unsigned(UFix::DELTA);
                 /// ```
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_add_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
+                pub const fn strict_add_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
                     match self.checked_add_unsigned(rhs) {
                         Some(s) => s,
                         None => panic!("overflow"),
@@ -4719,7 +4719,7 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type UFix = ", stringify!($USelf), "<U4>;")]
-                /// assert_eq!(Fix::from_num(3).unwrapped_sub_unsigned(UFix::from_num(5)), -2);
+                /// assert_eq!(Fix::from_num(3).strict_sub_unsigned(UFix::from_num(5)), -2);
                 /// ```
                 ///
                 /// The following panics because of overflow.
@@ -4731,12 +4731,12 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type UFix = ", stringify!($USelf), "<U4>;")]
-                /// let _overflow = Fix::MIN.unwrapped_sub_unsigned(UFix::DELTA);
+                /// let _overflow = Fix::MIN.strict_sub_unsigned(UFix::DELTA);
                 /// ```
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_sub_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
+                pub const fn strict_sub_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
                     match self.checked_sub_unsigned(rhs) {
                         Some(s) => s,
                         None => panic!("overflow"),
@@ -4762,7 +4762,7 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type IFix = ", stringify!($ISelf), "<U4>;")]
-                /// assert_eq!(Fix::from_num(5).unwrapped_add_signed(IFix::from_num(-3)), 2);
+                /// assert_eq!(Fix::from_num(5).strict_add_signed(IFix::from_num(-3)), 2);
                 /// ```
                 ///
                 /// The following panics because of overflow.
@@ -4774,12 +4774,12 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type IFix = ", stringify!($ISelf), "<U4>;")]
-                /// let _overflow = Fix::from_num(2).unwrapped_add_signed(IFix::from_num(-3));
+                /// let _overflow = Fix::from_num(2).strict_add_signed(IFix::from_num(-3));
                 /// ```
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_add_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
+                pub const fn strict_add_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
                     match self.checked_add_signed(rhs) {
                         Some(s) => s,
                         None => panic!("overflow"),
@@ -4802,7 +4802,7 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type IFix = ", stringify!($ISelf), "<U4>;")]
-                /// assert_eq!(Fix::from_num(5).unwrapped_sub_signed(IFix::from_num(-3)), 8);
+                /// assert_eq!(Fix::from_num(5).strict_sub_signed(IFix::from_num(-3)), 8);
                 /// ```
                 ///
                 /// The following panics because of overflow.
@@ -4814,12 +4814,12 @@ let _overflow = Fix::MAX.unwrapped_next_power_of_two();
                 )]
                 #[doc = concat!("type Fix = ", stringify!($Self), "<U4>;")]
                 #[doc = concat!("type IFix = ", stringify!($ISelf), "<U4>;")]
-                /// let _overflow = Fix::from_num(2).unwrapped_sub_signed(IFix::from_num(3));
+                /// let _overflow = Fix::from_num(2).strict_sub_signed(IFix::from_num(3));
                 /// ```
                 #[inline]
                 #[track_caller]
                 #[must_use]
-                pub const fn unwrapped_sub_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
+                pub const fn strict_sub_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
                     match self.checked_sub_signed(rhs) {
                         Some(s) => s,
                         None => panic!("overflow"),
@@ -5818,6 +5818,103 @@ assert_eq!(
                 end: $Self<Frac>,
             ) -> $Self<RetFrac> {
                 self.strict_inv_lerp(start, end)
+            }
+
+            if_signed! {
+                $Signedness;
+                /// Strict absolute value. Returns the absolute value, panicking
+                /// on overflow.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_abs`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_abs(self) -> $Self<Frac> {
+                    self.strict_abs()
+                }
+            }
+
+            if_unsigned! {
+                $Signedness;
+                /// Returns the smallest power of two that is ≥&nbsp;`self`,
+                /// panicking if the next power of two is too large to
+                /// represent.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_next_power_of_two`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_next_power_of_two(self) -> $Self<Frac> {
+                    self.strict_next_power_of_two()
+                }
+            }
+
+            if_signed! {
+                $Signedness;
+                /// Strict addition with an unsigned fixed-point number.
+                /// Returns the sum, panicking on overflow.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_add_unsigned`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_add_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
+                    self.strict_add_unsigned(rhs)
+                }
+
+                /// Strict subtraction with an unsigned fixed-point number.
+                /// Returns the difference, panicking on overflow.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_sub_unsigned`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_sub_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
+                    self.strict_sub_unsigned(rhs)
+                }
+            }
+
+            if_unsigned! {
+                $Signedness;
+                /// Strict addition with a signed fixed-point number.
+                /// Returns the sum, panicking on overflow.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_add_signed`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_add_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
+                    self.strict_add_signed(rhs)
+                }
+
+                /// Strict subtraction with a signed fixed-point number.
+                /// Returns the difference, panicking on overflow.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_sub_signed`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_sub_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
+                    self.strict_sub_signed(rhs)
+                }
             }
         }
     };

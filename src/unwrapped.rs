@@ -2015,7 +2015,7 @@ impl<F: FixedSigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn abs(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_abs())
+        Unwrapped(self.0.strict_abs())
     }
 
     /// Returns a number representing the sign of `self`.
@@ -2052,7 +2052,7 @@ impl<F: FixedSigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn signum(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_signum())
+        Unwrapped(self.0.strict_signum())
     }
 
     /// Addition with an unsigned fixed-point number.
@@ -2086,7 +2086,7 @@ impl<F: FixedSigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn add_unsigned(self, rhs: F::Unsigned) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_add_unsigned(rhs))
+        Unwrapped(self.0.strict_add_unsigned(rhs))
     }
 
     /// Subtraction with an unsigned fixed-point number.
@@ -2120,7 +2120,7 @@ impl<F: FixedSigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn sub_unsigned(self, rhs: F::Unsigned) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_sub_unsigned(rhs))
+        Unwrapped(self.0.strict_sub_unsigned(rhs))
     }
 }
 
@@ -2243,7 +2243,7 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn next_power_of_two(self) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_next_power_of_two())
+        Unwrapped(self.0.strict_next_power_of_two())
     }
 
     /// Addition with an signed fixed-point number.
@@ -2277,7 +2277,7 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn add_signed(self, rhs: F::Signed) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_add_signed(rhs))
+        Unwrapped(self.0.strict_add_signed(rhs))
     }
 
     /// Subtraction with an signed fixed-point number.
@@ -2311,7 +2311,7 @@ impl<F: FixedUnsigned> Unwrapped<F> {
     #[track_caller]
     #[must_use]
     pub fn sub_signed(self, rhs: F::Signed) -> Unwrapped<F> {
-        Unwrapped(self.0.unwrapped_sub_signed(rhs))
+        Unwrapped(self.0.strict_sub_signed(rhs))
     }
 }
 

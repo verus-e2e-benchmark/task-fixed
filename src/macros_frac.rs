@@ -2249,7 +2249,7 @@ let _overflow = OneIntBit::from_num(0.5).strict_signum();
                     #[inline]
                     #[track_caller]
                     #[must_use]
-                    pub const fn unwrapped_signum(self) -> $Self<Frac> {
+                    pub const fn strict_signum(self) -> $Self<Frac> {
                         let (ans, overflow) = self.overflowing_signum();
                         assert!(!overflow, "overflow");
                         ans
@@ -3405,6 +3405,23 @@ assert_eq!(
                 } else {
                     None
                 };
+            }
+
+            if_signed! {
+                $Signedness;
+                /// Strict signum. Returns a number representing the sign of
+                /// `self`, panicking on overflow.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the result does not fit.
+                #[deprecated(since = "1.30.0", note = "renamed to `strict_signum`")]
+                #[inline]
+                #[track_caller]
+                #[must_use]
+                pub const fn unwrapped_signum(self) -> $Self<Frac> {
+                    self.strict_signum()
+                }
             }
 
             /// Strict multiplication. Returns the product, panicking on overflow.
