@@ -124,7 +124,7 @@ The conversions supported cover the following cases.
 [nt-0-2-ce]: https://docs.rs/num-traits/^0.2/num_traits/ops/euclid/trait.CheckedEuclid.html
 [nt-0-2-e]: https://docs.rs/num-traits/^0.2/num_traits/ops/euclid/trait.Euclid.html
 [s-1-30]: https://docs.rs/fixed/~1.30/fixed/struct.Strict.html
-[u-1-30]: https://docs.rs/fixed/~1.30/fixed/struct.Unwrapped.html
+[u-1-30]: https://docs.rs/fixed/~1.30/fixed/type.Unwrapped.html
 
 ### Other releases
 
