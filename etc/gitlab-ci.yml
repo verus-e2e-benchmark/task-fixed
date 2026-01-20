@@ -32,8 +32,8 @@ x86_64-gnulinux:
     - cargo/
   script:
   - rustup toolchain install --profile minimal beta-$TARGET $MSRV-$TARGET nightly-$TARGET
-  - cargo +beta-$TARGET test --features "fail-on-warnings arbitrary borsh num-traits serde std"
-  - cargo +beta-$TARGET test --release --features "fail-on-warnings arbitrary borsh num-traits serde std"
+  - cargo +beta-$TARGET test --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
+  - cargo +beta-$TARGET test --release --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
   - cargo +$MSRV-$TARGET test --lib --features "fail-on-warnings num-traits std"
   - cargo +$MSRV-$TARGET test --release --lib --features "fail-on-warnings num-traits std"
   - cargo +nightly-$TARGET test --features "fail-on-warnings nightly-float"
@@ -50,8 +50,8 @@ i686-gnulinux:
     - cargo/
   script:
   - rustup toolchain install --profile minimal beta-$TARGET $MSRV-$TARGET nightly-$TARGET --force-non-host
-  - cargo +beta-$TARGET test --features "fail-on-warnings arbitrary borsh num-traits serde std"
-  - cargo +beta-$TARGET test --release --features "fail-on-warnings arbitrary borsh num-traits serde std"
+  - cargo +beta-$TARGET test --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
+  - cargo +beta-$TARGET test --release --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
   - cargo +$MSRV-$TARGET test --lib --features "fail-on-warnings num-traits std"
   - cargo +$MSRV-$TARGET test --release --lib --features "fail-on-warnings num-traits std"
   - cargo +nightly-$TARGET test --features "fail-on-warnings nightly-float"
@@ -70,10 +70,12 @@ x86_64-gnulinux-tidy:
   - rustup toolchain install --profile minimal beta-$TARGET
   - rustup component add --toolchain beta-$TARGET rustfmt clippy
   - cargo +beta-$TARGET fmt -- --check
-  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary borsh num-traits serde std"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary"
-  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings num-traits"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings borsh"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings compat-readonly-static"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings defmt"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings num-traits"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings serde"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings serde-str"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings std"
@@ -93,10 +95,12 @@ i686-gnulinux-tidy:
   - rustup toolchain install --profile minimal beta-$TARGET --force-non-host
   - rustup component add --toolchain beta-$TARGET rustfmt clippy
   - cargo +beta-$TARGET fmt -- --check
-  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary borsh num-traits serde std"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary"
-  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings num-traits"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings borsh"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings compat-readonly-static"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings defmt"
+  - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings num-traits"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings serde"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings serde-str"
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings std"
@@ -116,7 +120,7 @@ x86_64-gnulinux-tarpaulin:
   script:
   - rustup toolchain install --profile minimal beta-$TARGET
   - cargo +beta-$TARGET install --version 0.32.0 --locked cargo-tarpaulin
-  - cargo +beta-$TARGET tarpaulin --verbose --ignore-tests --fail-under $REQ_COVERAGE --exclude-files build.rs --features "arbitrary borsh num-traits serde std"
+  - cargo +beta-$TARGET tarpaulin --verbose --ignore-tests --fail-under $REQ_COVERAGE --exclude-files build.rs --features "arbitrary borsh defmt num-traits serde std"
   only:
   - ci
 
@@ -133,7 +137,7 @@ pages:
   - rm -rf public
   - mkdir public
   - cp etc/index.html public
-  - cargo +nightly-$TARGET doc --no-deps --features "arbitrary borsh num-traits serde std" -Z rustdoc-map
+  - cargo +nightly-$TARGET doc --no-deps --features "arbitrary borsh defmt num-traits serde std" -Z rustdoc-map
   - mv target/doc public/dev
   artifacts:
     paths:

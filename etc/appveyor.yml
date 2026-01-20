@@ -36,8 +36,8 @@ before_test:
   - bash -c "if [ -d $USERPROFILE/.cargo/registry/cache ]; then cd $USERPROFILE/.cargo/registry; find cache -name \*.crate | sort; fi"
 
 test_script:
-  - cargo +beta-%TARGET% clippy --all-targets --features "fail-on-warnings arbitrary borsh num-traits serde std"
-  - cargo +beta-%TARGET% test --release --features "fail-on-warnings arbitrary borsh num-traits serde std"
+  - cargo +beta-%TARGET% clippy --all-targets --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
+  - cargo +beta-%TARGET% test --release --features "fail-on-warnings arbitrary borsh defmt num-traits serde std"
   - cargo +%MSRV%-%TARGET% test --lib --features "fail-on-warnings num-traits std"
 
 after_test:
