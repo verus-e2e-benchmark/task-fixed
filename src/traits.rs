@@ -4195,7 +4195,7 @@ where
     #[deprecated(since = "1.30.0", note = "renamed to `strict_abs`")]
     #[track_caller]
     #[must_use]
-    fn unwrapped_abs(self) -> Self  {
+    fn unwrapped_abs(self) -> Self {
         self.strict_abs()
     }
 

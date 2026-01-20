@@ -66,9 +66,7 @@ macro_rules! cast {
             }
         }
 
-        impl<FracSrc: $LeEqUSrc, FracDst: $LeEqUDst> StrictCast<$Dst<FracDst>>
-            for $Src<FracSrc>
-        {
+        impl<FracSrc: $LeEqUSrc, FracDst: $LeEqUDst> StrictCast<$Dst<FracDst>> for $Src<FracSrc> {
             #[inline]
             #[track_caller]
             fn strict_cast(self) -> $Dst<FracDst> {
