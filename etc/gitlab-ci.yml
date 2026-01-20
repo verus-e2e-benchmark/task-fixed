@@ -6,7 +6,7 @@
 # without any warranty.
 
 variables:
-  MSRV: 1.83.0
+  MSRV: 1.85.0
 
 before_script:
   - getconf LONG_BIT
@@ -49,7 +49,7 @@ i686-gnulinux:
     paths:
     - cargo/
   script:
-  - rustup toolchain install --profile minimal beta-$TARGET $MSRV-$TARGET nightly-$TARGET
+  - rustup toolchain install --profile minimal beta-$TARGET $MSRV-$TARGET nightly-$TARGET --force-non-host
   - cargo +beta-$TARGET test --features "fail-on-warnings arbitrary borsh num-traits serde std"
   - cargo +beta-$TARGET test --release --features "fail-on-warnings arbitrary borsh num-traits serde std"
   - cargo +$MSRV-$TARGET test --lib --features "fail-on-warnings num-traits std"
@@ -90,7 +90,7 @@ i686-gnulinux-tidy:
     paths:
     - cargo/
   script:
-  - rustup toolchain install --profile minimal beta-$TARGET
+  - rustup toolchain install --profile minimal beta-$TARGET --force-non-host
   - rustup component add --toolchain beta-$TARGET rustfmt clippy
   - cargo +beta-$TARGET fmt -- --check
   - cargo +beta-$TARGET clippy --all-targets --features "fail-on-warnings arbitrary borsh num-traits serde std"
