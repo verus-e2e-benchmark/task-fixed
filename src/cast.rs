@@ -20,7 +20,9 @@ use crate::{
     F128, F128Bits, FixedI8, FixedI16, FixedI32, FixedI64, FixedI128, FixedU8, FixedU16, FixedU32,
     FixedU64, FixedU128,
 };
-use az::{Cast, CheckedCast, OverflowingCast, SaturatingCast, UnwrappedCast, WrappingCast};
+use az::{
+    Cast, CheckedCast, OverflowingCast, SaturatingCast, StrictCast, UnwrappedCast, WrappingCast,
+};
 use half::{bf16 as half_bf16, f16 as half_f16};
 
 macro_rules! cast {
@@ -61,6 +63,16 @@ macro_rules! cast {
             #[inline]
             fn overflowing_cast(self) -> ($Dst<FracDst>, bool) {
                 self.overflowing_to_num()
+            }
+        }
+
+        impl<FracSrc: $LeEqUSrc, FracDst: $LeEqUDst> StrictCast<$Dst<FracDst>>
+            for $Src<FracSrc>
+        {
+            #[inline]
+            #[track_caller]
+            fn strict_cast(self) -> $Dst<FracDst> {
+                self.unwrapped_to_num()
             }
         }
 
@@ -111,6 +123,14 @@ macro_rules! cast {
             }
         }
 
+        impl<Frac: $LeEqU> StrictCast<$Dst> for $Fixed<Frac> {
+            #[inline]
+            #[track_caller]
+            fn strict_cast(self) -> $Dst {
+                self.unwrapped_to_num()
+            }
+        }
+
         impl<Frac: $LeEqU> UnwrappedCast<$Dst> for $Fixed<Frac> {
             #[inline]
             #[track_caller]
@@ -153,6 +173,14 @@ macro_rules! cast {
             #[inline]
             fn overflowing_cast(self) -> ($Fixed<Frac>, bool) {
                 <$Fixed<Frac>>::overflowing_from_num(self)
+            }
+        }
+
+        impl<Frac: $LeEqU> StrictCast<$Fixed<Frac>> for $Src {
+            #[inline]
+            #[track_caller]
+            fn strict_cast(self) -> $Fixed<Frac> {
+                <$Fixed<Frac>>::unwrapped_from_num(self)
             }
         }
 
