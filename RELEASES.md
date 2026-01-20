@@ -14,9 +14,12 @@ as-is, without any warranty. -->
   * Bug fix: some numbers were being formatted incorrectly when using a defined
     precision ([merge request 15]).
   * The [*az* crate] dependency was updated to [version 1.3][az-1-3].
+  * The new [`defmt`][feat-1-30] optional feature was added to support logging
+    using the [*defmt* crate] ([issue 70]).
 
 [az-1-2]: https://docs.rs/az/~1.2/az/index.html
 [feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
+[issue 70]: https://gitlab.com/tspiteri/fixed/-/issues/70
 [issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
 [merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
 [merge request 15]: https://gitlab.com/tspiteri/fixed/-/merge_requests/15
@@ -1546,6 +1549,7 @@ Contributors
 [*az* crate]: https://crates.io/crates/az
 [*borsh* crate]: https://crates.io/crates/borsh
 [*bytemuck* crate]: https://crates.io/crates/bytemuck
+[*defmt* crate]: https://crates.io/crates/defmt
 [*half* crate]: https://crates.io/crates/half
 [*num-traits* crate]: https://crates.io/crates/num-traits
 [*typenum* crate]: https://crates.io/crates/typenum

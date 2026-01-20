@@ -203,11 +203,16 @@ The *fixed* crate has these optional feature:
     formatting flags in atomic statics. Note that this may incur a small
     performance overhead when formatting many numbers using the hexadecimal
     debug specifiers `{:x?}` or `{:X?}`.
- 4. `serde`, disabled by default. This provides serialization support for the
+ 4. `defmt`, disabled by default. This implements formatting using the [*defmt*
+    crate]. Note that the implementation delegates to the [`Display`] trait.
+    This means formatting is performed on the device and the resulting string is
+    sent over the wire. To minimize log bandwidth, you can transmit the integer
+    representation, for example `value.to_bits()`, and then decode on the host.
+ 5. `serde`, disabled by default. This provides serialization support for the
     fixed-point types. This feature requires the [*serde* crate].
- 5. `std`, disabled by default. This is for features that are not possible under
+ 6. `std`, disabled by default. This is for features that are not possible under
     `no_std`: currently this is only required for the `serde-str` feature.
- 6. `serde-str`, disabled by default. Fixed-point numbers are serialized as
+ 7. `serde-str`, disabled by default. Fixed-point numbers are serialized as
     strings showing the value when using human-readable formats. This feature
     requires the `serde` and the `std` optional features. **Warning:** numbers
     serialized when this feature is enabled cannot be deserialized when this

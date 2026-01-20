@@ -103,9 +103,12 @@ The conversions supported cover the following cases.
   * Bug fix: some numbers were being formatted incorrectly when using a defined
     precision ([merge request 15]).
   * The [*az* crate] dependency was updated to [version 1.3][az-1-3].
+  * The new [`defmt`][feat-1-30] optional feature was added to support logging
+    using the [*defmt* crate] ([issue 70]).
 
 [az-1-2]: https://docs.rs/az/~1.2/az/index.html
 [feat-1-30]: https://docs.rs/fixed/~1.30/fixed/index.html#optional-features
+[issue 70]: https://gitlab.com/tspiteri/fixed/-/issues/70
 [issue 74]: https://gitlab.com/tspiteri/fixed/-/issues/74
 [merge request 14]: https://gitlab.com/tspiteri/fixed/-/merge_requests/14
 [merge request 15]: https://gitlab.com/tspiteri/fixed/-/merge_requests/15
@@ -294,11 +297,16 @@ The *fixed* crate has these optional feature:
     formatting flags in atomic statics. Note that this may incur a small
     performance overhead when formatting many numbers using the hexadecimal
     debug specifiers `{:x?}` or `{:X?}`.
- 4. `serde`, disabled by default. This provides serialization support for the
+ 4. `defmt`, disabled by default. This implements formatting using the [*defmt*
+    crate]. Note that the implementation delegates to the [`Display`] trait.
+    This means formatting is performed on the device and the resulting string is
+    sent over the wire. To minimize log bandwidth, you can transmit the integer
+    representation, for example `value.to_bits()`, and then decode on the host.
+ 5. `serde`, disabled by default. This provides serialization support for the
     fixed-point types. This feature requires the [*serde* crate].
- 5. `std`, disabled by default. This is for features that are not possible under
+ 6. `std`, disabled by default. This is for features that are not possible under
     `no_std`: currently this is only required for the `serde-str` feature.
- 6. `serde-str`, disabled by default. Fixed-point numbers are serialized as
+ 7. `serde-str`, disabled by default. Fixed-point numbers are serialized as
     strings showing the value when using human-readable formats. This feature
     requires the `serde` and the `std` optional features. **Warning:** numbers
     serialized when this feature is enabled cannot be deserialized when this
@@ -363,6 +371,7 @@ shall be dual licensed as above, without any additional terms or conditions.
 [*arbitrary* crate]: https://crates.io/crates/arbitrary
 [*borsh* crate]: https://crates.io/crates/borsh
 [*cordic* crate]: https://crates.io/crates/cordic
+[*defmt* crate]: https://crates.io/crates/defmt
 [*fixed* crate]: https://crates.io/crates/fixed
 [*half* crate]: https://crates.io/crates/half
 [*num-traits* crate]: https://crates.io/crates/num-traits
