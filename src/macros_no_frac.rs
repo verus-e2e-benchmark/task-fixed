@@ -1343,11 +1343,7 @@ assert_eq!(Fix::from_num(7.5).rem_euclid(Fix::from_num(2)), Fix::from_num(1.5));
             #[inline]
             #[must_use = "this returns the result of the operation, without modifying the original"]
             pub const fn unbounded_shl(self, rhs: u32) -> $Self<Frac> {
-                if rhs < $n {
-                    Self::from_bits(self.to_bits() << rhs)
-                } else {
-                    Self::ZERO
-                }
+                Self::from_bits(self.to_bits().unbounded_shl(rhs))
             }
 
             /// Unbounded shift right. Computes `self >> rhs`, without bounding
@@ -1383,15 +1379,7 @@ assert_eq!(Fix::from_num(7.5).rem_euclid(Fix::from_num(2)), Fix::from_num(1.5));
             #[inline]
             #[must_use = "this returns the result of the operation, without modifying the original"]
             pub const fn unbounded_shr(self, rhs: u32) -> $Self<Frac> {
-                if rhs < $n {
-                    Self::from_bits(self.to_bits() >> rhs)
-                } else {
-                    if_signed_unsigned!(
-                        $Signedness,
-                        Self::wrapping_shr(self, $n - 1),
-                        Self::ZERO,
-                    )
-                }
+                Self::from_bits(self.to_bits().unbounded_shr(rhs))
             }
 
             if_signed! {
