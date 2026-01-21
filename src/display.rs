@@ -106,12 +106,12 @@ impl Buffer {
                 }
 
                 // At this point, buf.frac_nbits can be greater than fmt.precision().
-                if let Some(max) = max_frac_digits {
-                    if self.frac_digits > max {
-                        let frac = self.frac();
-                        update_truncation(truncation, &frac[max..]);
-                        self.frac_digits = max;
-                    }
+                if let Some(max) = max_frac_digits
+                    && self.frac_digits > max
+                {
+                    let frac = self.frac();
+                    update_truncation(truncation, &frac[max..]);
+                    self.frac_digits = max;
                 }
             }
         }
