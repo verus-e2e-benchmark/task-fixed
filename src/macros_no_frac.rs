@@ -1534,6 +1534,11 @@ This method is the same as [`dist`] for unsigned fixed-point numbers.
             comment! {
                 "Returns the mean of `self` and `other`.
 
+This method rounds the result down towards &minus;∞. This is different from the
+standard library [`midpoint`][", stringify!($Inner), "::midpoint], which rounds
+towards 0. Rounding down preserves translation invariance, that is
+`(a + t).mean(b + t)` = `a.mean(b) + t`.
+
 # Examples
 
 ```rust
@@ -1549,6 +1554,7 @@ assert_eq!(Fix::from_num(3).mean(Fix::from_num(4)), Fix::from_num(3.5));
                 },
                 "```
 ";
+                #[doc(alias = "midpoint")]
                 #[inline]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
                 pub const fn mean(self, other: $Self<Frac>) -> $Self<Frac> {
