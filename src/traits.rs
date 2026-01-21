@@ -4213,8 +4213,8 @@ where
     /// # Safety
     ///
     /// This results in undefined behavior when
-    /// `self`&nbsp;=&nbsp;[`MIN`][Self::MIN], that is when
-    /// [`checked_neg`][Self::checked_neg] would return [`None`].
+    /// `self`&nbsp;=&nbsp;[`MIN`][Fixed::MIN], that is when
+    /// [`checked_neg`][Fixed::checked_neg] would return [`None`].
     unsafe fn unchecked_neg(self) -> Self;
 
     /// Strict absolute value. Returns the absolute value, panicking on overflow.
