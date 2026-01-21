@@ -94,6 +94,10 @@ The conversions supported cover the following cases.
 
 ## What’s new
 
+### Version 1.31.0 news (not before 2026-03-05)
+
+  * The crate now requires rustc version 1.93.0 or later.
+
 ### Version 1.30.0 news (2026-01-20)
 
   * The crate now requires rustc version 1.85.0 or later.
@@ -218,7 +222,7 @@ crate, add it as a dependency inside [*Cargo.toml*]:
 fixed = "1.30"
 ```
 
-The *fixed* crate requires rustc version 1.85.0 or later.
+The *fixed* crate requires rustc version 1.93.0 or later.
 
 ## Optional features
 
