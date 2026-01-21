@@ -589,7 +589,7 @@ assert_eq!(f.trailing_zeros(), 5);
                 #[inline]
                 #[must_use]
                 pub const fn cast_unsigned(self) -> $USelf<Frac> {
-                    $USelf::from_bits(self.to_bits() as $UInner)
+                    $USelf::from_bits(self.to_bits().cast_unsigned())
                 }
             }
 
@@ -609,7 +609,7 @@ assert_eq!(f.trailing_zeros(), 5);
                 #[inline]
                 #[must_use]
                 pub const fn cast_signed(self) -> $ISelf<Frac> {
-                    $ISelf::from_bits(self.to_bits() as $IInner)
+                    $ISelf::from_bits(self.to_bits().cast_signed())
                 }
             }
 
