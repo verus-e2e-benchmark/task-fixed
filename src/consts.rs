@@ -82,6 +82,17 @@ fn print(doc: &str, name: &str, val: Float) {
     println!();
 }
 
+fn print_alias(doc: &str, name: &str, val: Float, alias: &str) {
+    println!("/// {} = {}…", doc, decimal_string(&val, 6));
+    println!("// {} = {}...", name, decimal_string(&val, 40));
+    println!("#[doc(alias = \"{alias}\")]");
+    let int_bits = val.get_exp().unwrap().max(0);
+    let frac_bits = 128 - int_bits;
+    print!("pub const {}: U{}F{} = U{1}F{2}", name, int_bits, frac_bits,);
+    println!("::from_bits({});", hex_bits(&val, frac_bits));
+    println!();
+}
+
 fn float<T>(t: T) -> Float
 where
     Float: Assign<T>,
@@ -125,10 +136,10 @@ fn main() {
     print("log<sub>10</sub> e", "LOG10_E", float(1).exp().log10());
     print("ln 2", "LN_2", float(2).ln());
     print("ln 10", "LN_10", float(10).ln());
-    print("The golden ratio, φ", "PHI", float(1.25).sqrt() + 0.5);
+    print_alias("The golden ratio, φ", "PHI", float(1.25).sqrt() + 0.5, "GOLDEN_RATIO");
     print("The golden ratio conjugate, Φ = 1/φ", "FRAC_1_PHI", float(1.25).sqrt() - 0.5);
     print("√φ", "SQRT_PHI", (float(1.25).sqrt() + 0.5f32).sqrt());
-    print("The Euler-Mascheroni constant, γ", "GAMMA", float(Constant::Euler));
+    print_alias("The Euler-Mascheroni constant, γ", "GAMMA", float(Constant::Euler), "EULER_GAMMA");
     print("Catalan’s constant", "CATALAN", float(Constant::Catalan));
 }
 ```
@@ -276,6 +287,7 @@ pub const LN_10: U2F126 = U2F126::from_bits(0x935D_8DDD_AAA8_AC16_EA56_D62B_82D3
 
 /// The golden ratio, φ = 1.61803…
 // PHI = 1.618033988749894848204586834365638117720...
+#[doc(alias = "GOLDEN_RATIO")]
 pub const PHI: U1F127 = U1F127::from_bits(0xCF1B_BCDC_BFA5_3E0A_F9CE_6030_2E76_E41A);
 
 /// The golden ratio conjugate, Φ = 1/φ = 0.618033…
@@ -288,6 +300,7 @@ pub const SQRT_PHI: U1F127 = U1F127::from_bits(0xA2D1_8A35_4422_AF49_2AA2_8089_0
 
 /// The Euler-Mascheroni constant, γ = 0.577215…
 // GAMMA = 0.5772156649015328606065120900824024310421...
+#[doc(alias = "EULER_GAMMA")]
 pub const GAMMA: U0F128 = U0F128::from_bits(0x93C4_67E3_7DB0_C7A4_D1BE_3F81_0152_CB56);
 
 /// Catalan’s constant = 0.915965…

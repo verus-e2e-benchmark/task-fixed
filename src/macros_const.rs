@@ -181,6 +181,7 @@ const _ERROR: ", stringify!($Self), "<U", $nm1, "> = ", stringify!($Self), "::ON
                 pub const FRAC_1_PHI: $Self<Frac> = Self::from_const(consts::FRAC_1_PHI);
 
                 /// The Euler-Mascheroni constant, γ = 0.577215…
+                #[doc(alias = "EULER_GAMMA")]
                 pub const GAMMA: $Self<Frac> = Self::from_const(consts::GAMMA);
 
                 /// Catalan’s constant = 0.915965…
@@ -281,6 +282,7 @@ assert_eq!(Fix::ONE, Fix::from_num(1));
                 pub const LOG2_E: $Self<Frac> = Self::from_const(consts::LOG2_E);
 
                 /// The golden ratio, φ = 1.61803…
+                #[doc(alias = "GOLDEN_RATIO")]
                 pub const PHI: $Self<Frac> = Self::from_const(consts::PHI);
 
                 /// √φ = 1.27201…
