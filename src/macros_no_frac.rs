@@ -5505,6 +5505,21 @@ assert_eq!(
                 }
             }
 
+            if_signed! {
+                $Signedness;
+                /// Unchecked negation. Computes &minus;`self`, assuming
+                /// overflow cannot occur.
+                ///
+                /// # Safety
+                ///
+                /// This results in undefined behavior when
+                /// `self`&nbsp;=&nbsp;[`MIN`][Self::MIN], that is when
+                /// [`checked_neg`][Self::checked_neg] would return [`None`].
+                pub const unsafe fn unchecked_neg(self) -> $Self<Frac> {
+                    Self::from_bits(unsafe { self.to_bits().unchecked_neg() })
+                }
+            }
+
             /// Unchecked addition. Computes `self`&nbsp;+&nbsp;`rhs`, assuming
             /// overflow cannot occur.
             ///
@@ -5551,6 +5566,32 @@ assert_eq!(
             }]
             pub const unsafe fn unchecked_sub(self, rhs: $Self<Frac>) -> $Self<Frac> {
                 Self::from_bits(unsafe { self.to_bits().unchecked_sub(rhs.to_bits()) })
+            }
+
+            /// Unchecked shift left. Shifts `self` by `rhs` bits to the left,
+            /// assuming that
+            #[doc = concat!("`rhs`&nbsp;\\<&nbsp;", $n, ".")]
+            ///
+            /// # Safety
+            ///
+            /// This results in undefined behavior if
+            #[doc = concat!("`rhs`&nbsp;≥&nbsp;", $n, ",")]
+            /// that is when [`checked_shl`][Self::checked_shl] would return [`None`].
+            pub const unsafe fn unchecked_shl(self, rhs: u32) -> $Self<Frac> {
+                Self::from_bits(unsafe { self.to_bits().unchecked_shl(rhs) })
+            }
+
+            /// Unchecked shift right. Shifts `self` by `rhs` bits to the right,
+            /// assuming that
+            #[doc = concat!("`rhs`&nbsp;\\<&nbsp;", $n, ".")]
+            ///
+            /// # Safety
+            ///
+            /// This results in undefined behavior if
+            #[doc = concat!("`rhs`&nbsp;≥&nbsp;", $n, ",")]
+            /// that is when [`checked_shr`][Self::checked_shr] would return [`None`].
+            pub const unsafe fn unchecked_shr(self, rhs: u32) -> $Self<Frac> {
+                Self::from_bits(unsafe { self.to_bits().unchecked_shr(rhs) })
             }
 
             /// Unchecked multiplication by an integer. Computes

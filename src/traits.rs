@@ -3341,6 +3341,26 @@ where
     /// `self`&nbsp;&minus;&nbsp;`rhs`&nbsp;\<&nbsp;[`MIN`][Self::MIN].
     unsafe fn unchecked_sub(self, rhs: Self) -> Self;
 
+    /// Unchecked shift left. Shifts `self` by `rhs` bits to the left, assuming
+    /// that `rhs` is less than the number of bits in `self.
+    ///
+    /// # Safety
+    ///
+    /// This results in undefined behavior if `rhs` is larger than or equal to
+    /// the number of bits in `self`, that is when
+    /// [`checked_shl`][Self::checked_shl] would return [`None`].
+    unsafe fn unchecked_shl(self, rhs: u32) -> Self;
+
+    /// Unchecked shift right. Shifts `self` by `rhs` bits to the right,
+    /// assuming that `rhs` is less than the number of bits in `self.
+    ///
+    /// # Safety
+    ///
+    /// This results in undefined behavior if `rhs` is larger than or equal to
+    /// the number of bits in `self`, that is when
+    /// [`checked_shr`][Self::checked_shr] would return [`None`].
+    unsafe fn unchecked_shr(self, rhs: u32) -> Self;
+
     /// Unchecked multiplication by an integer. Computes
     /// `self`&nbsp;×&nbsp;`rhs`, assuming overflow cannot occur.
     ///
@@ -4186,6 +4206,16 @@ where
     /// <code>FixedI32::[overflowing\_sub\_unsigned][FixedI32::overflowing_sub_unsigned]</code>.
     #[must_use]
     fn overflowing_sub_unsigned(self, rhs: Self::Unsigned) -> (Self, bool);
+
+    /// Unchecked negation. Computes &minus;`self`, assuming overflow cannot
+    /// occur.
+    ///
+    /// # Safety
+    ///
+    /// This results in undefined behavior when
+    /// `self`&nbsp;=&nbsp;[`MIN`][Self::MIN], that is when
+    /// [`checked_neg`][Self::checked_neg] would return [`None`].
+    unsafe fn unchecked_neg(self) -> Self;
 
     /// Strict absolute value. Returns the absolute value, panicking on overflow.
     ///
@@ -5230,6 +5260,8 @@ macro_rules! impl_fixed {
             }
             trait_delegate! { unsafe fn unchecked_add(self, rhs: Self) -> Self }
             trait_delegate! { unsafe fn unchecked_sub(self, rhs: Self) -> Self }
+            trait_delegate! { unsafe fn unchecked_shl(self, rhs: u32) -> Self }
+            trait_delegate! { unsafe fn unchecked_shr(self, rhs: u32) -> Self }
             trait_delegate! { unsafe fn unchecked_mul_int(self, rhs: Self::Bits) -> Self }
         }
 
@@ -5450,6 +5482,7 @@ macro_rules! impl_fixed {
                 trait_delegate! {
                     fn overflowing_sub_unsigned(self, rhs: Self::Unsigned) -> (Self, bool)
                 }
+                trait_delegate! { unsafe fn unchecked_neg(self) -> Self }
             }
         }
 
