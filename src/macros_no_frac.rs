@@ -3948,10 +3948,7 @@ let _overflow = Fix::from_num(5).strict_neg();",
                 #[track_caller]
                 #[must_use]
                 pub const fn strict_neg(self) -> $Self<Frac> {
-                    match self.checked_neg() {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_neg())
                 }
             }
 
@@ -3984,10 +3981,7 @@ let _overflow = Fix::MAX.strict_add(Fix::DELTA);
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
                 pub const fn strict_add(self, rhs: $Self<Frac>) -> $Self<Frac> {
-                    match self.checked_add(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_add(rhs.to_bits()))
                 }
             }
 
@@ -4027,10 +4021,7 @@ let _overflow = Fix::MIN.strict_sub(Fix::DELTA);
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
                 pub const fn strict_sub(self, rhs: $Self<Frac>) -> $Self<Frac> {
-                    match self.checked_sub(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_sub(rhs.to_bits()))
                 }
             }
 
@@ -4070,7 +4061,7 @@ let _divisor_is_zero = Fix::from_num(1.5).strict_rem(Fix::ZERO);
                             return Self::ZERO;
                         }
                     }
-                    Self::from_bits(self.to_bits() % rhs_bits)
+                    Self::from_bits(self.to_bits().strict_rem(rhs_bits))
                 }
             }
 
@@ -4166,10 +4157,7 @@ let _overflow = Fix::MAX.strict_mul_int(4);
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
                 pub const fn strict_mul_int(self, rhs: $Inner) -> $Self<Frac> {
-                    match self.checked_mul_int(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_mul(rhs))
                 }
             }
 
@@ -4297,10 +4285,7 @@ let _overflow = Fix::ONE.strict_shl(", $n, ");
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
                 pub const fn strict_shl(self, rhs: u32) -> $Self<Frac> {
-                    match self.checked_shl(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_shl(rhs))
                 }
             }
 
@@ -4333,10 +4318,7 @@ let _overflow = Fix::ONE.strict_shr(", $n, ");
                 #[track_caller]
                 #[must_use = "this returns the result of the operation, without modifying the original"]
                 pub const fn strict_shr(self, rhs: u32) -> $Self<Frac> {
-                    match self.checked_shr(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_shr(rhs))
                 }
             }
 
@@ -4373,10 +4355,7 @@ let _overflow = Fix::MIN.strict_abs();
                     #[track_caller]
                     #[must_use]
                     pub const fn strict_abs(self) -> $Self<Frac> {
-                        match self.checked_abs() {
-                            Some(s) => s,
-                            None => panic!("overflow"),
-                        }
+                        Self::from_bits(self.to_bits().strict_abs())
                     }
                 }
             }
@@ -4697,10 +4676,7 @@ let _overflow = Fix::MAX.strict_next_power_of_two();
                 #[track_caller]
                 #[must_use]
                 pub const fn strict_add_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
-                    match self.checked_add_unsigned(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_add_unsigned(rhs.to_bits()))
                 }
 
                 /// Strict subtraction with an unsigned fixed-point number.
@@ -4737,10 +4713,7 @@ let _overflow = Fix::MAX.strict_next_power_of_two();
                 #[track_caller]
                 #[must_use]
                 pub const fn strict_sub_unsigned(self, rhs: $USelf<Frac>) -> $Self<Frac> {
-                    match self.checked_sub_unsigned(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_sub_unsigned(rhs.to_bits()))
                 }
             }
 
@@ -4780,10 +4753,7 @@ let _overflow = Fix::MAX.strict_next_power_of_two();
                 #[track_caller]
                 #[must_use]
                 pub const fn strict_add_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
-                    match self.checked_add_signed(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_add_signed(rhs.to_bits()))
                 }
 
                 /// Strict subtraction with a signed fixed-point number.
@@ -4820,10 +4790,7 @@ let _overflow = Fix::MAX.strict_next_power_of_two();
                 #[track_caller]
                 #[must_use]
                 pub const fn strict_sub_signed(self, rhs: $ISelf<Frac>) -> $Self<Frac> {
-                    match self.checked_sub_signed(rhs) {
-                        Some(s) => s,
-                        None => panic!("overflow"),
-                    }
+                    Self::from_bits(self.to_bits().strict_sub_signed(rhs.to_bits()))
                 }
             }
 
