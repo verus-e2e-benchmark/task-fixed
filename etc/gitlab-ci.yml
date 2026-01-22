@@ -136,7 +136,7 @@ pages:
   - rustup toolchain install --profile minimal nightly-$TARGET
   - rm -rf public
   - mkdir public
-  - cp etc/index.html public
+  - cp etc/{fixed.svg,index.html} public
   - cargo +nightly-$TARGET doc --no-deps --features "arbitrary borsh defmt num-traits serde std" -Z rustdoc-map
   - mv target/doc public/dev
   artifacts:
