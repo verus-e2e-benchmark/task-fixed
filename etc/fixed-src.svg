@@ -7,7 +7,7 @@
    viewBox="0 0 33.866666 33.866668"
    version="1.1"
    id="svg8"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
    sodipodi:docname="fixed-src.svg"
    inkscape:export-filename="fixed.png"
    inkscape:export-xdpi="300"
@@ -29,7 +29,7 @@
        inverse="true"
        flatten="false"
        hide_clip="false"
-       message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+       message="" />
     <inkscape:path-effect
        effect="powerclip"
        id="path-effect1252"
@@ -38,28 +38,23 @@
        inverse="true"
        flatten="false"
        hide_clip="false"
-       message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+       message="" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath299">
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;line-height:6.10576px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';letter-spacing:0px;word-spacing:0px;fill:#0072b2;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         x="20.717939"
-         y="285.34137"
-         id="text303"><tspan
-           sodipodi:role="line"
-           id="tspan301"
-           x="20.717939"
-           y="285.34137"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-opacity:1">28</tspan></text>
+       id="clipPath5">
+      <circle
+         style="fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.504669;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle6"
+         cx="16.933334"
+         cy="280.06665"
+         r="16.933334" />
     </clipPath>
     <clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath318">
+       id="clipPath9">
       <circle
          style="fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.504669;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         id="circle320"
+         id="circle9"
          cx="16.933334"
          cy="280.06665"
          r="16.933334" />
@@ -72,19 +67,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="13.523417"
-     inkscape:cy="72.920387"
+     inkscape:zoom="7.9999999"
+     inkscape:cx="29.6875"
+     inkscape:cy="67.937501"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="px"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
+     inkscape:window-width="3090"
+     inkscape:window-height="1313"
      inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-bbox="true"
      inkscape:snap-nodes="true"
@@ -97,7 +92,13 @@
      inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid10" />
+       id="grid10"
+       originx="0"
+       originy="0"
+       spacingy="1.0583333"
+       spacingx="1.0583333"
+       units="px"
+       empspacing="4" />
     <sodipodi:guide
        position="4.2333333,4.4979168"
        orientation="1,0"
@@ -113,11 +114,6 @@
        orientation="1,0"
        id="guide4539"
        inkscape:locked="false" />
-    <sodipodi:guide
-       position="11.90625,16.933334"
-       orientation="0.009999519,-0.99995"
-       id="guide4541"
-       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -127,7 +123,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -142,40 +137,45 @@
        cx="16.933334"
        cy="280.06665"
        r="16.933334" />
-    <path
-       id="rect1588-3"
-       style="fill:#0072b2;stroke-width:0.529167"
-       d="m 15.345829,283.50622 h 3.175 c 0,0 0,0.79376 0.52917,1.8521 h -4.23333 c 0.52916,-1.05834 0.52916,-1.8521 0.52916,-1.8521 z"
-       sodipodi:nodetypes="ccccc" />
-    <circle
-       style="fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.504668;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4492-3"
-       cx="16.933334"
-       cy="280.06665"
-       r="16.933334"
-       clip-path="url(#clipPath299)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:33.8667px;line-height:12.2115px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';letter-spacing:0px;word-spacing:0px;fill:#0072b2;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="11.853333"
-       y="283.75388"
-       id="text1010-7"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;line-height:6.10576px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';letter-spacing:0px;word-spacing:0px;fill:#0072b2;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="20.717939"
+       y="285.34137"
+       id="text5"
+       clip-path="url(#clipPath9)"><tspan
          sodipodi:role="line"
-         id="tspan1008-9"
-         x="11.853333"
-         y="283.75388"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:33.8667px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-opacity:1">.</tspan></text>
+         id="tspan5"
+         x="20.717939"
+         y="285.34137"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-opacity:1">28</tspan></text>
+    <path
+       style="fill:#0072b2;fill-opacity:1;stroke-width:0.264583"
+       d="m 15.345833,285.35832 h 3.175001 l 1.5875,-2.74963 -1.5875,-2.74973 -3.175001,10e-5 -1.587499,2.74963 z"
+       id="path10"
+       sodipodi:nodetypes="ccccccc" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;line-height:6.10576px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3, Bold';letter-spacing:0px;word-spacing:0px;fill:#0072b2;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
        x="-4.6820688"
        y="285.34137"
        id="text1010"
-       clip-path="url(#clipPath318)"><tspan
+       clip-path="url(#clipPath5)"><tspan
          sodipodi:role="line"
          id="tspan1008"
          x="-4.6820688"
          y="285.34137"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333335px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3, Bold';fill:#0072b2;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-opacity:1;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">06</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28.2222px;line-height:10.1763px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';letter-spacing:0px;word-spacing:0px;fill:#005b8e;fill-opacity:1;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="12.699987"
+       y="284.88055"
+       id="text1010-7"><tspan
+         sodipodi:role="line"
+         id="tspan1008-9"
+         x="12.699987"
+         y="284.88055"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:28.2222px;line-height:10.1763px;font-family:'Source Sans 3';-inkscape-font-specification:'Source Sans 3 Bold';fill:#005b8e;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-opacity:1">.</tspan></text>
   </g>
 </svg>
