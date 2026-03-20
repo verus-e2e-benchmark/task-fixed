@@ -201,6 +201,37 @@ target type has the same number of integer bits and a larger number of
 fractional bits. Converting from [`I4F12`] to [`I4F4`] cannot use [`From`] as we
 have less fractional bits, so we use [`from_num`] instead.
 
+## Comparing fixed-point numbers
+
+With floating-point numbers like [`f32`], checking two numbers for equality can
+require calculating both the absolute difference
+(<span style="white-space: nowrap;">|<i>a</i> &minus; <i>b</i>|</span>)
+and the relative difference
+(<span style="white-space: nowrap;">|<i>a</i> &minus; <i>b</i>| / <i>a</i></span>)
+to account for rounding errors and different precisions.
+
+With fixed-point numbers, this is simpler. Since the point is fixed, and very
+tiny numbers simply underflow to zero, it is usually enough to just check that
+the absolute difference between two numbers is smaller than a specific
+threshold.
+
+You can do this using [`saturating_dist`] and [`DELTA`]. For example to ensure
+that the difference between two numbers is less than
+<span style="white-space: nowrap;">4 × <i>Δ</i></span>:
+
+```rust
+use fixed::types::I20F12;
+
+let a = I20F12::from_num(1.5);
+// b is not exactly 1.5 because of rounding errors
+let b = a.sqrt() * a.sqrt();
+// check for equality by comparing to 4 × Δ
+assert!(a.saturating_dist(b) < 4 * I20F12::DELTA);
+```
+
+Note that [`saturating_dist`] was used instead of [`dist`] to avoid overflow if
+<i>a</i> and <i>b</i> are very different, for example [`MIN`] and [`MAX`].
+
 ## Writing fixed-point constants and values literally
 
 The [`lit`] method, which is available as a `const` function, can be used to
@@ -340,6 +371,7 @@ shall be dual licensed as above, without any additional terms or conditions.
 [U24]: https://docs.rs/fixed/~1.30/fixed/types/extra/type.U24.html
 [U32]: https://docs.rs/fixed/~1.30/fixed/types/extra/type.U32.html
 [`Binary`]: https://doc.rust-lang.org/nightly/core/fmt/trait.Binary.html
+[`DELTA`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#associatedconstant.DELTA
 [`Display`]: https://doc.rust-lang.org/nightly/core/fmt/trait.Display.html
 [`Error`]: https://doc.rust-lang.org/nightly/std/error/trait.Error.html
 [`FixedI128`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI128.html
@@ -365,6 +397,8 @@ shall be dual licensed as above, without any additional terms or conditions.
 [`LossyInto`]: https://docs.rs/fixed/~1.30/fixed/traits/trait.LossyInto.html
 [`LowerExp`]: https://doc.rust-lang.org/nightly/core/fmt/trait.LowerExp.html
 [`LowerHex`]: https://doc.rust-lang.org/nightly/core/fmt/trait.LowerHex.html
+[`MAX`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#associatedconstant.MAX
+[`MIN`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#associatedconstant.MIN
 [`Octal`]: https://doc.rust-lang.org/nightly/core/fmt/trait.Octal.html
 [`ToFixed`]: https://docs.rs/fixed/~1.30/fixed/traits/trait.ToFixed.html
 [`U20F12`]: https://docs.rs/fixed/~1.30/fixed/types/type.U20F12.html
@@ -373,12 +407,15 @@ shall be dual licensed as above, without any additional terms or conditions.
 [`az`]: https://docs.rs/az/^1/az/index.html
 [`bytemuck`]: https://docs.rs/bytemuck/^1/bytemuck/index.html
 [`checked_from_num`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.checked_from_num
+[`dist`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.dist
+[`f32`]: https://doc.rust-lang.org/nightly/core/primitive.f32.html
 [`from_num`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.from_num
 [`from_str_binary`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.from_str_binary
 [`from_str_hex`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.from_str_hex
 [`from_str_octal`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.from_str_octal
 [`i32`]: https://doc.rust-lang.org/nightly/core/primitive.i32.html
 [`lit`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.lit
+[`saturating_dist`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.saturating_dist
 [`to_num`]: https://docs.rs/fixed/~1.30/fixed/struct.FixedI32.html#method.to_num
 [`u32`]: https://doc.rust-lang.org/nightly/core/primitive.u32.html
 [half::bf16]: https://docs.rs/half/^2/half/struct.bf16.html

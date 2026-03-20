@@ -154,6 +154,37 @@ target type has the same number of integer bits and a larger number of
 fractional bits. Converting from [`I4F12`] to [`I4F4`] cannot use [`From`] as we
 have less fractional bits, so we use [`from_num`] instead.
 
+## Comparing fixed-point numbers
+
+With floating-point numbers like [`f32`], checking two numbers for equality can
+require calculating both the absolute difference
+(<span style="white-space: nowrap;">|<i>a</i> &minus; <i>b</i>|</span>)
+and the relative difference
+(<span style="white-space: nowrap;">|<i>a</i> &minus; <i>b</i>| / <i>a</i></span>)
+to account for rounding errors and different precisions.
+
+With fixed-point numbers, this is simpler. Since the point is fixed, and very
+tiny numbers simply underflow to zero, it is usually enough to just check that
+the absolute difference between two numbers is smaller than a specific
+threshold.
+
+You can do this using [`saturating_dist`] and [`DELTA`]. For example to ensure
+that the difference between two numbers is less than
+<span style="white-space: nowrap;">4 × <i>Δ</i></span>:
+
+```rust
+use fixed::types::I20F12;
+
+let a = I20F12::from_num(1.5);
+// b is not exactly 1.5 because of rounding errors
+let b = a.sqrt() * a.sqrt();
+// check for equality by comparing to 4 × Δ
+assert!(a.saturating_dist(b) < 4 * I20F12::DELTA);
+```
+
+Note that [`saturating_dist`] was used instead of [`dist`] to avoid overflow if
+<i>a</i> and <i>b</i> are very different, for example [`MIN`] and [`MAX`].
+
 ## Writing fixed-point constants and values literally
 
 The [`lit`] method, which is available as a `const` function, can be used to
@@ -288,6 +319,7 @@ shall be dual licensed as above, without any additional terms or conditions.
 [U0]: crate::types::extra::U0
 [U24]: crate::types::extra::U24
 [`Binary`]: core::fmt::Binary
+[`DELTA`]: FixedI32::DELTA
 [`Display`]: core::fmt::Display
 [`FromStr`]: core::str::FromStr
 [`I20F12`]: crate::types::I20F12
@@ -299,16 +331,20 @@ shall be dual licensed as above, without any additional terms or conditions.
 [`LossyInto`]: traits::LossyInto
 [`LowerExp`]: core::fmt::LowerExp
 [`LowerHex`]: core::fmt::LowerHex
+[`MAX`]: FixedI32::MAX
+[`MIN`]: FixedI32::MIN
 [`Octal`]: core::fmt::Octal
 [`U20F12`]: types::U20F12
 [`UpperExp`]: core::fmt::UpperExp
 [`UpperHex`]: core::fmt::UpperHex
 [`checked_from_num`]: FixedI32::checked_from_num
+[`dist`]: FixedI32::dist
 [`from_num`]: FixedI32::from_num
 [`from_str_binary`]: FixedI32::from_str_binary
 [`from_str_hex`]: FixedI32::from_str_hex
 [`from_str_octal`]: FixedI32::from_str_octal
 [`lit`]: FixedI32::lit
+[`saturating_dist`]: FixedI32::saturating_dist
 [`to_num`]: FixedI32::to_num
 */
 #![cfg_attr(not(feature = "std"), no_std)]
