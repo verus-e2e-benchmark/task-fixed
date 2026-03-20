@@ -15,25 +15,39 @@ The [*fixed* crate] provides fixed-point numbers.
   * [`FixedI64`] and [`FixedU64`] are 64-bit fixed-point numbers.
   * [`FixedI128`] and [`FixedU128`] are 128-bit fixed-point numbers.
 
-An <i>n</i>-bit fixed-point number has <i>f</i>&nbsp;=&nbsp;`Frac` fractional
-bits where 0&nbsp;≤&nbsp;<i>f</i>&nbsp;≤&nbsp;<i>n</i>, and
-<i>n</i>&nbsp;&minus;&nbsp;<i>f</i> integer bits. For example,
-<code>[FixedI32]\<[U24]></code> is a 32-bit signed fixed-point number with
-<i>n</i>&nbsp;=&nbsp;32 total bits, <i>f</i>&nbsp;=&nbsp;24 fractional bits, and
-<i>n</i>&nbsp;&minus;&nbsp;<i>f</i>&nbsp;=&nbsp;8 integer bits.
-<code>[FixedI32]\<[U0]></code> behaves like [`i32`], and
+An <i>n</i>-bit fixed-point number has
+<span style="white-space: nowrap;"><i>f</i> = `Frac`</span>
+fractional bits where
+<span style="white-space: nowrap;">0 ≤ <i>f</i> ≤ <i>n</i></span>,
+and
+<span style="white-space: nowrap;"><i>n</i> &minus; <i>f</i></span>
+integer bits. For example, <code>[FixedI32]\<[U24]></code> is a 32-bit signed
+fixed-point number with
+<span style="white-space: nowrap;"><i>n</i> = 32</span>
+total bits,
+<span style="white-space: nowrap;"><i>f</i> = 24</span>
+fractional bits, and
+<span style="white-space: nowrap;"><i>n</i> &minus; <i>f</i> = 8</span>
+integer bits. <code>[FixedI32]\<[U0]></code> behaves like [`i32`], and
 <code>[FixedU32]\<[U0]></code> behaves like [`u32`].
 
 The difference between any two successive representable numbers is constant
 throughout the possible range for a fixed-point number:
-<i>Δ</i>&nbsp;=&nbsp;1/2<sup><i>f</i></sup>. When <i>f</i>&nbsp;=&nbsp;0, like
-in <code>[FixedI32]\<[U0]></code>, <i>Δ</i>&nbsp;=&nbsp;1 because representable
-numbers are integers, and the difference between two successive integers is 1.
-When <i>f</i>&nbsp;=&nbsp;<i>n</i>, <i>Δ</i>&nbsp;=&nbsp;1/2<sup><i>n</i></sup>
-and the value lies in the range &minus;0.5&nbsp;≤&nbsp;<i>x</i>&nbsp;<&nbsp;0.5
+<span style="white-space: nowrap;"><i>Δ</i> = 1/2<sup><i>f</i></sup></span>.
+When
+<span style="white-space: nowrap;"><i>f</i> = 0</span>,
+like in <code>[FixedI32]\<[U0]></code>,
+<span style="white-space: nowrap;"><i>Δ</i> = 1</span>
+because representable numbers are integers, and the difference between two
+successive integers is 1. When
+<span style="white-space: nowrap;"><i>f</i> = <i>n</i></span>,
+<span style="white-space: nowrap;"><i>Δ</i> = 1/2<sup><i>n</i></sup></span>
+and the value lies in the range
+<span style="white-space:
+nowrap;">&minus;0.5 ≤ <i>x</i> < 0.5</span>
 for signed numbers like <code>[FixedI32]\<[U32]></code>, and in the range
-0&nbsp;≤&nbsp;<i>x</i>&nbsp;<&nbsp;1 for unsigned numbers like
-<code>[FixedU32]\<[U32]></code>.
+<span style="white-space: nowrap;">0 ≤ <i>x</i> < 1</span>
+for unsigned numbers like <code>[FixedU32]\<[U32]></code>.
 
 The main features are
 
