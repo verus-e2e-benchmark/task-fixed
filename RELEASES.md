@@ -5,7 +5,7 @@ modification, are permitted in any medium without royalty provided the
 copyright notice and this notice are preserved. This file is offered
 as-is, without any warranty. -->
 
-# Version 1.31.0 (not before 2026-03-05)
+# Version 1.31.0 (2026-03-20)
 
   * The crate now requires rustc version 1.93.0 or later.
   * The [`unchecked_neg`][f-un-1-31] method was added to all signed fixed-point
@@ -14,12 +14,11 @@ as-is, without any warranty. -->
     [`Fixed`][tf-1-31] trait:
       * [`unchecked_shl`][f-ushl-1-31], [`unchecked_shr`][f-ushr-1-31]
 
-[f-ua-1-28]: https://docs.rs/fixed/~1.28/fixed/struct.FixedI32.html#method.unchecked_add
-[f-un-1-31]: https://tspiteri.gitlab.io/fixed/dev/fixed/struct.FixedI32.html#method.unchecked_neg
-[f-ushl-1-31]: https://tspiteri.gitlab.io/fixed/dev/fixed/struct.FixedI32.html#method.unchecked_shl
-[f-ushr-1-31]: https://tspiteri.gitlab.io/fixed/dev/fixed/struct.FixedI32.html#method.unchecked_shr
-[tf-1-31]: https://tspiteri.gitlab.io/fixed/dev/fixed/traits/trait.Fixed.html
-[tfs-1-31]: https://tspiteri.gitlab.io/fixed/dev/fixed/traits/trait.FixedSigned.html
+[f-un-1-31]: https://docs.rs/fixed/~1.31/fixed/struct.FixedI32.html#method.unchecked_neg
+[f-ushl-1-31]: https://docs.rs/fixed/~1.31/fixed/struct.FixedI32.html#method.unchecked_shl
+[f-ushr-1-31]: https://docs.rs/fixed/~1.31/fixed/struct.FixedI32.html#method.unchecked_shr
+[tf-1-31]: https://docs.rs/fixed/~1.31/fixed/traits/trait.Fixed.html
+[tfs-1-31]: https://docs.rs/fixed/~1.31/fixed/traits/trait.FixedSigned.html
 
 # Version 1.30.0 (2026-01-20)
 
